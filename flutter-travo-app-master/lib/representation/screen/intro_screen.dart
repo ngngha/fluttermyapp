@@ -32,20 +32,20 @@ class _IntroScreenState extends State<IntroScreen> {
 
   final List<Widget> listPage = [
     ItemIntroWidget(
-      title: 'Book a flight',
-      description: 'Found a flight that matches your destination and schedule? Book it instantly.',
+      title: 'Quản lý công việc',
+      description: 'Lợi ích 1',
       sourceImage: AssetHelper.slide1,
       aligment: Alignment.centerRight,
     ),
     ItemIntroWidget(
-      title: 'Find a hotel room',
-      description: 'Select the day, book your room. We give you the best price.',
+      title: 'Quản lý công việc',
+      description: 'Lợi ích 2',
       sourceImage: AssetHelper.slide2,
       aligment: Alignment.center,
     ),
     ItemIntroWidget(
-      title: 'Enjoy your trip',
-      description: 'Easy discovering new places and share these between your friends and travel together.',
+      title: 'Quản lý công việc',
+      description: 'Lợi ích 3',
       sourceImage: AssetHelper.slide3,
       aligment: Alignment.centerLeft,
     ),

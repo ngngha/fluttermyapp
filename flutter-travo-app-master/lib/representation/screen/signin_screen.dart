@@ -18,42 +18,16 @@ class SignInScreenState extends State<SignInScreen> {
   final _formKey = GlobalKey<FormState>();
   TextEditingController _emailController = TextEditingController();
   TextEditingController _passwordController = TextEditingController();
-  // bool loading = false;
 
   late FirebaseAuth auth;
 
   @override
   void initState() {
     super.initState();
-    // auth = FirebaseAuth.instance;
-    // auth.authStateChanges().listen((User? user) {
-    //   if (user == null) {
-    //     debugPrint('User is currently signed out!');
-    //   } else {
-    //     debugPrint('User is signed in!');
-    //   }
-    // });
   }
 
   @override
   Widget build(BuildContext context) {
-
-    // void showAlertDialog(BuildContext context) {
-    //   showDialog(
-    //       context: context,
-    //       builder: (BuildContext context) {
-    //         return AlertDialog(
-    //           content: Container(
-    //             width: mq.size.width / 1.2,
-    //             height: mq.size.height / 4,
-    //             color: Colors.blueGrey[100],
-    //           ),
-    //         );
-    //       });
-    // }
-
-    // final ButtonStyle style =
-    //     ;
 
     // String image;
     return Scaffold(
@@ -67,12 +41,6 @@ class SignInScreenState extends State<SignInScreen> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                //     ImageHelper.loadFromAsset(
-                //   AssetHelper.logo,
-                //   width: double.infinity,
-                //   fit: BoxFit.fitWidth,
-                //   radius: BorderRadius.circular(kItemPadding),
-                // ),
                     Image.asset('assets/images/logo.jpg', height: 150, width: 200),
                 const Text(
                   'Xin chào,',
@@ -95,12 +63,14 @@ class SignInScreenState extends State<SignInScreen> {
                   padding: const EdgeInsets.symmetric(vertical: 10),
                   child: SizedBox(
                     width: 350,
-                    height: 50,
+                    height: 60,
                     child: TextFormField(
                       controller: _emailController,
+                      validator: (val) => val!.length == 0
+                          ? 'Email là trường bắt buộc'
+                          : null,
                       decoration: const InputDecoration(
                         border: UnderlineInputBorder(),
-                        // labelText: 'Email',
                         hintText: "Email đăng nhập",
                         prefixIcon: Icon(Icons.mail, color: Colors.teal),
                       ),
@@ -149,8 +119,13 @@ class SignInScreenState extends State<SignInScreen> {
                               backgroundColor: Colors.teal,
                               textStyle: const TextStyle(fontSize: 20)),
                           onPressed: () async {
-                            signUserEmailAndPassword();
-                            // showAlertDialog(context);
+                            if (_formKey.currentState!.validate()) {
+                              signUserEmailAndPassword();
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                    content: Text('Đăng nhập thành công')),
+                              );
+                            }
                           },
                           child: const Text('Đăng nhập'),
                         ),

@@ -1,15 +1,10 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-// import 'package:flutter_custom_dialog/flutter_custom_dialog.dart';
-// import 'package:myapp/data/database.dart';
-// import 'package:myapp/theme/loading.dart';
-// import 'package:myapp/theme/routes.dart';
 import 'package:travo_app_source/representation/screen/signin_screen.dart';
 
 class SignUpScreen extends StatefulWidget {
-  // const SignUpScreen({super.key});
-    const SignUpScreen({Key? key}) : super(key: key);
-    static String routeName = '/signup_screen';
+  const SignUpScreen({Key? key}) : super(key: key);
+  static String routeName = '/signup_screen';
 
   @override
   State<SignUpScreen> createState() => SignUpScreenState();
@@ -28,18 +23,10 @@ class SignUpScreenState extends State<SignUpScreen> {
   void initState() {
     super.initState();
     auth = FirebaseAuth.instance;
-    //   auth.authStateChanges().listen((User? user) {
-    //     if (user == null) {
-    //       debugPrint('User is currently signed out!');
-    //     } else {
-    //       debugPrint('User is signed in!');
-    //     }
-    //   });
   }
 
   @override
   Widget build(BuildContext context) {
-    // final mq = MediaQuery.of(context);
 
     return Scaffold(
         body: Form(
@@ -86,6 +73,9 @@ class SignUpScreenState extends State<SignUpScreen> {
                     height: 50,
                     child: TextFormField(
                       controller: emailController,
+                      validator: (val) => val!.isEmpty
+                          ? 'Email là trường bắt buộc'
+                          : null,
                       decoration: const InputDecoration(
                         border: UnderlineInputBorder(),
                         // labelText: 'Email',
@@ -131,9 +121,8 @@ class SignUpScreenState extends State<SignUpScreen> {
                     child: TextFormField(
                       obscureText: _isObscure,
                       controller: repasswordController,
-                      validator: (val) => val!.length < 6
-                          ? 'Mật khẩu phải có ít nhất 6 kí tự'
-                          : null,
+                      validator: (val) =>
+                          val != passwordController.text ? 'Khong dung' : null,
                       decoration: InputDecoration(
                           border: const UnderlineInputBorder(),
                           hintText: "Nhập lại mật khẩu",
@@ -165,7 +154,13 @@ class SignUpScreenState extends State<SignUpScreen> {
                               backgroundColor: Colors.teal,
                               textStyle: const TextStyle(fontSize: 20)),
                           onPressed: () async {
-                            createUserEmailAndPassword();
+                            if (_formKey.currentState!.validate()) {
+                              createUserEmailAndPassword();
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                    content: Text('Đăng kí thành công')),
+                              );
+                            }
                           },
                           child: const Text('Đăng kí'),
                         ),
@@ -178,7 +173,8 @@ class SignUpScreenState extends State<SignUpScreen> {
                           ),
                           MaterialButton(
                             onPressed: () {
-                              Navigator.of(context).pushNamed(SignInScreen.routeName);
+                              Navigator.of(context)
+                                  .pushNamed(SignInScreen.routeName);
                             },
                             child: const Text("Đăng nhập",
                                 style: TextStyle(
@@ -200,57 +196,22 @@ class SignUpScreenState extends State<SignUpScreen> {
 
   void createUserEmailAndPassword() async {
     try {
-      var userCredential = await FirebaseAuth.instance.createUserWithEmailAndPassword(
-          email: emailController.text, password: passwordController.text);
+      var userCredential = await FirebaseAuth.instance
+          .createUserWithEmailAndPassword(
+              email: emailController.text, password: passwordController.text);
       final name = usernameController.text;
       await userCredential.user?.updateDisplayName(name);
       User? updateUser = FirebaseAuth.instance.currentUser;
       updateUser!.updateDisplayName(usernameController.text);
-      // userSetup(usernameController.text);
-      // YYNoticeDialog();
-      if (userCredential.user != null) {
-        // if (!userCredential.user!.emailVerified) {
-        //   await userCredential.user?.sendEmailVerification();
-        // await myUser.updateDisplayName(usernameController.text);
+      if (userCredential.user != null && !userCredential.user!.emailVerified) {
+        await userCredential.user?.sendEmailVerification();
         Navigator.of(context).pushReplacementNamed(SignInScreen.routeName);
-        // } else {
-        //   debugPrint('User mail is confirmed');
+      } else {
+        debugPrint('User mail is confirmed');
       }
       debugPrint(userCredential.toString());
     } catch (e) {
       debugPrint(e.toString());
     }
   }
-//   YYDialog YYNoticeDialog() {
-//   return YYDialog().build()
-//     ..width = 120
-//     ..height = 110
-//     ..backgroundColor = Colors.black.withOpacity(0.8)
-//     ..borderRadius = 10.0
-//     ..widget(Padding(
-//       padding: EdgeInsets.only(top: 21),
-//       child: Image.asset(
-//         'images/success.png',
-//         width: 38,
-//         height: 38,
-//       ),
-//     ))
-//     ..widget(Padding(
-//       padding: EdgeInsets.only(top: 10),
-//       child: Text(
-//         "Success",
-//         style: TextStyle(
-//           fontSize: 15,
-//           color: Colors.white,
-//         ),
-//       ),
-//     ))
-//     ..animatedFunc = (child, animation) {
-//       return ScaleTransition(
-//         child: child,
-//         scale: Tween(begin: 0.0, end: 1.0).animate(animation),
-//       );
-//     }
-//     ..show();
-// }
 }
