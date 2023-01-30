@@ -66,8 +66,8 @@ class SignInScreenState extends State<SignInScreen> {
                     height: 60,
                     child: TextFormField(
                       controller: _emailController,
-                      validator: (val) => val!.length == 0
-                          ? 'Email là trường bắt buộc'
+                      validator: (val) => val!.isEmpty||!val.contains("@")
+                          ? 'Phải là email hợp lệ'
                           : null,
                       decoration: const InputDecoration(
                         border: UnderlineInputBorder(),
@@ -85,7 +85,7 @@ class SignInScreenState extends State<SignInScreen> {
                     child: TextFormField(
                       obscureText: _isObscure,
                       controller: _passwordController,
-                      validator: (val) => val!.length < 6
+                      validator: (val) => val!.length < 6 
                           ? 'Mật khẩu phải có ít nhất 6 kí tự'
                           : null,
                       decoration: InputDecoration(

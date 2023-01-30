@@ -1,37 +1,38 @@
 {
   "project_info": {
-    "project_number": "198982603432",
-    "project_id": "flutter-firebase-9cc09",
-    "storage_bucket": "flutter-firebase-9cc09.appspot.com"
+    "project_number": "292493347587",
+    "firebase_url": "https://myapp-d987e-default-rtdb.asia-southeast1.firebasedatabase.app",
+    "project_id": "myapp-d987e",
+    "storage_bucket": "myapp-d987e.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:198982603432:android:eb7dfe45dacadb6071689d",
+        "mobilesdk_app_id": "1:292493347587:android:d549c3519f24d767203736",
         "android_client_info": {
           "package_name": "com.example.travo_app_source"
         }
       },
       "oauth_client": [
         {
-          "client_id": "198982603432-vfc0k3rqlcpu6fbrha4skd8h6ejlv7ju.apps.googleusercontent.com",
+          "client_id": "292493347587-15v9u32nte1dt1s4ho9mrv0f1dk3a3jo.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyD4xZjBo7UtiedJD8qXt9-3j0bIlk0ta1o"
+          "current_key": "AIzaSyDnYrBdnNDwIa2WROnTGvRPoHFTrL3zAAo"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "198982603432-vfc0k3rqlcpu6fbrha4skd8h6ejlv7ju.apps.googleusercontent.com",
+              "client_id": "292493347587-15v9u32nte1dt1s4ho9mrv0f1dk3a3jo.apps.googleusercontent.com",
               "client_type": 3
             },
             {
-              "client_id": "198982603432-83ug4p9mtnk0d0ob6f7inj829g6f4f4s.apps.googleusercontent.com",
+              "client_id": "292493347587-ufur12qg204dl78o97eshhnmcqdf4qje.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
                 "bundle_id": "hannoutlook.myapp"
@@ -43,31 +44,31 @@
     },
     {
       "client_info": {
-        "mobilesdk_app_id": "1:198982603432:android:cf4fab66156e8cab71689d",
+        "mobilesdk_app_id": "1:292493347587:android:9e10874eed377688203736",
         "android_client_info": {
-          "package_name": "hannoutlook.flutter_firebase"
+          "package_name": "hannoutlook.myapp"
         }
       },
       "oauth_client": [
         {
-          "client_id": "198982603432-vfc0k3rqlcpu6fbrha4skd8h6ejlv7ju.apps.googleusercontent.com",
+          "client_id": "292493347587-15v9u32nte1dt1s4ho9mrv0f1dk3a3jo.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyD4xZjBo7UtiedJD8qXt9-3j0bIlk0ta1o"
+          "current_key": "AIzaSyDnYrBdnNDwIa2WROnTGvRPoHFTrL3zAAo"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "198982603432-vfc0k3rqlcpu6fbrha4skd8h6ejlv7ju.apps.googleusercontent.com",
+              "client_id": "292493347587-15v9u32nte1dt1s4ho9mrv0f1dk3a3jo.apps.googleusercontent.com",
               "client_type": 3
             },
             {
-              "client_id": "198982603432-83ug4p9mtnk0d0ob6f7inj829g6f4f4s.apps.googleusercontent.com",
+              "client_id": "292493347587-ufur12qg204dl78o97eshhnmcqdf4qje.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
                 "bundle_id": "hannoutlook.myapp"

@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="hannoutlook.myapp">
+    package="com.example.travo_app_source">
    <application
         android:label="travo_app_source"
         android:name="${applicationName}"

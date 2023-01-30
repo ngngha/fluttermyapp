@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:travo_app_source/core/constants/textstyle_ext.dart';
 import 'package:travo_app_source/core/helpers/asset_helper.dart';
 import 'package:travo_app_source/core/helpers/image_helper.dart';
+import 'package:travo_app_source/representation/screen/listproject.dart';
 import 'package:travo_app_source/representation/widgets/app_bar_container.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
@@ -15,8 +16,8 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-
-  Widget _buildItemCategory(Widget icon, Color color, Function() onTap, String title) {
+  Widget _buildItemCategory(
+      Widget icon, Color color, Function() onTap, String title) {
     return GestureDetector(
       onTap: onTap,
       child: Column(
@@ -27,7 +28,9 @@ class _HomeScreenState extends State<HomeScreen> {
               vertical: kMediumPadding,
             ),
             child: icon,
-            decoration: BoxDecoration(color: color.withOpacity(0.2), borderRadius: BorderRadius.circular(kItemPadding)),
+            decoration: BoxDecoration(
+                color: color.withOpacity(0.2),
+                borderRadius: BorderRadius.circular(kItemPadding)),
           ),
           SizedBox(
             height: kItemPadding,
@@ -37,7 +40,6 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
     );
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -52,14 +54,16 @@ class _HomeScreenState extends State<HomeScreen> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text('Hi!', style: TextStyles.defaultStyle.fontHeader.whiteTextColor.bold),
-                SizedBox(
-                  height: kMediumPadding,
-                ),
-                Text(
-                  'Chào mừng bạn',
-                  style: TextStyles.defaultStyle.fontCaption.whiteTextColor,
-                )
+                Text('Xin chào, !',
+                    style:
+                        TextStyles.defaultStyle.fontHeader.whiteTextColor.bold),
+                // SizedBox(
+                //   height: 10,
+                // ),
+                // Text(
+                //   'Chào mừng bạn',
+                //   style: TextStyles.defaultStyle.fontCaption.whiteTextColor,
+                // )
               ],
             ),
             Spacer(),
@@ -98,46 +102,40 @@ class _HomeScreenState extends State<HomeScreen> {
             children: [
               Expanded(
                 child: _buildItemCategory(
-                  ImageHelper.loadFromAsset(
-                    AssetHelper.icoCalendal,
-                    width: kDefaultIconSize,
-                    height: kDefaultIconSize,
-                    tintColor: Colors.teal
-                  ),
-                  Colors.teal,
-                  () {
-                    // Navigator.of(context).pushNamed(HomeScreen.routeName);
-                  },
-                  'Dự án'
-                ),
+                    SizedBox(
+                      width: kDefaultIconSize,
+                      height: kDefaultIconSize,
+                      child:
+                          Icon(FontAwesomeIcons.listCheck, color: Colors.teal),
+                    ),
+                    Colors.teal, () {
+                  Navigator.of(context).pushNamed(ListProject.routeName);
+                }, 'Dự án'),
               ),
               SizedBox(width: kDefaultPadding),
               Expanded(
                 child: _buildItemCategory(
-                  ImageHelper.loadFromAsset(
-                    AssetHelper.icoProject,
-                    width: kDefaultIconSize,
-                    height: kDefaultIconSize,
-                    tintColor: Colors.teal
-                  ),
-                  Colors.teal,
-                  () {},
-                  'Task'
-                ),
+                    SizedBox(
+                      width: kDefaultIconSize,
+                      height: kDefaultIconSize,
+                      child:
+                          Icon(FontAwesomeIcons.thumbtack, color: Colors.teal),
+                    ),
+                    Colors.teal,
+                    () {},
+                    'Task'),
               ),
               SizedBox(width: kDefaultPadding),
               Expanded(
                 child: _buildItemCategory(
-                  ImageHelper.loadFromAsset(
-                    AssetHelper.icoHotelPlane,
-                    width: kDefaultIconSize,
-                    height: kDefaultIconSize,
-                    tintColor: Colors.teal
-                  ),
-                  Colors.teal,
-                  () {},
-                  'Nhân viên'
-                ),
+                    SizedBox(
+                      width: kDefaultIconSize,
+                      height: kDefaultIconSize,
+                      child: Icon(FontAwesomeIcons.user, color: Colors.teal),
+                    ),
+                    Colors.teal,
+                    () {},
+                    'Nhân viên'),
               ),
             ],
           ),

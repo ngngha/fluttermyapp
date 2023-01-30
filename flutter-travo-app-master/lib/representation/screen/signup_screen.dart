@@ -12,6 +12,9 @@ class SignUpScreen extends StatefulWidget {
 
 class SignUpScreenState extends State<SignUpScreen> {
   bool _isObscure = true;
+  // final bool emailValid =
+  // RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
+  //   .hasMatch();
   final _formKey = GlobalKey<FormState>();
   TextEditingController usernameController = TextEditingController();
   TextEditingController emailController = TextEditingController();
@@ -27,7 +30,6 @@ class SignUpScreenState extends State<SignUpScreen> {
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
         body: Form(
       key: _formKey,
@@ -73,9 +75,15 @@ class SignUpScreenState extends State<SignUpScreen> {
                     height: 50,
                     child: TextFormField(
                       controller: emailController,
-                      validator: (val) => val!.isEmpty
-                          ? 'Email là trường bắt buộc'
+                      validator: (val) => val!.isEmpty || !val.contains("@")
+                          ? 'Phải là email hợp lệ'
                           : null,
+                      // keyboardType: _isEmail ? TextInputType.emailAddress : TextInputType.text,
+                      // validator: (value) {
+                      //   if(!FormFieldValidator.is){
+                      //     return 'Nhập email khả dụng'
+                      //   }
+                      // },
                       decoration: const InputDecoration(
                         border: UnderlineInputBorder(),
                         // labelText: 'Email',
@@ -121,8 +129,16 @@ class SignUpScreenState extends State<SignUpScreen> {
                     child: TextFormField(
                       obscureText: _isObscure,
                       controller: repasswordController,
-                      validator: (val) =>
-                          val != passwordController.text ? 'Khong dung' : null,
+                      validator: (value) {
+                        if(value!.isEmpty || value.length<6){
+                          return 'Mật khẩu phải có ít nhất 6 kí tự';
+                        }else if(value != passwordController.text){
+                          return 'Mật khẩu không khớp';
+                        } return null;
+                      },
+                      //  (val) => val != passwordController.text
+                      //     ? 'Mật khẩu không khớp'
+                      //     : null,
                       decoration: InputDecoration(
                           border: const UnderlineInputBorder(),
                           hintText: "Nhập lại mật khẩu",

@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:travo_app_source/representation/screen/addproject.dart';
 import 'package:travo_app_source/representation/screen/intro_screen.dart';
+import 'package:travo_app_source/representation/screen/listproject.dart';
 import 'package:travo_app_source/representation/screen/loginHome.dart';
 import 'package:travo_app_source/representation/screen/logout_screen.dart';
 import 'package:travo_app_source/representation/screen/main_app.dart';
-import 'package:travo_app_source/representation/screen/profile.dart';
 import 'package:travo_app_source/representation/screen/signin_screen.dart';
 import 'package:travo_app_source/representation/screen/signup_screen.dart';
 
@@ -13,6 +14,8 @@ final Map<String, WidgetBuilder> routes = {
   SignInScreen.routeName: (context) => SignInScreen(),
   SignUpScreen.routeName: (context) => SignUpScreen(),
   MainApp.routeName: (context) => MainApp(),
+  ListProject.routeName: (context) => ListProject(),
+  AddProject.routeName: (context) => AddProject(),
   LogOut.routeName: (context) => LogOut(),
 };
 
