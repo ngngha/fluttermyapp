@@ -70,7 +70,8 @@ class DefaultFirebaseOptions {
     messagingSenderId: '198982603432',
     projectId: 'flutter-firebase-9cc09',
     storageBucket: 'flutter-firebase-9cc09.appspot.com',
-    iosClientId: '198982603432-7f7p5mq3v0vr8v9huish0f3vf9sfhlam.apps.googleusercontent.com',
+    iosClientId:
+        '198982603432-7f7p5mq3v0vr8v9huish0f3vf9sfhlam.apps.googleusercontent.com',
     iosBundleId: 'com.example.travoAppSource',
   );
 }

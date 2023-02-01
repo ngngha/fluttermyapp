@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:travo_app_source/core/constants/color_palatte.dart';
+import 'package:travo_app_source/representation/widgets/list_project.dart';
 import 'package:travo_app_source/representation/screen/logout_screen.dart';
 
 import 'home_screen.dart';
@@ -50,7 +51,7 @@ class _MainAppState extends State<MainApp> {
         index: _currentIndex,
         children: [
           HomeScreen(),
-          Container(),
+          ListProject(),
           Container(),
           LogOut(),
         ],

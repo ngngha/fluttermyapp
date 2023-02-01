@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:travo_app_source/core/constants/textstyle_ext.dart';
 import 'package:travo_app_source/core/helpers/asset_helper.dart';
 import 'package:travo_app_source/core/helpers/image_helper.dart';
-import 'package:travo_app_source/representation/screen/listproject.dart';
+import 'package:travo_app_source/representation/widgets/list_project.dart';
 import 'package:travo_app_source/representation/widgets/app_bar_container.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 

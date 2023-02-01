@@ -2,7 +2,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:travo_app_source/core/constants/color_palatte.dart';
-import 'package:travo_app_source/representation/screen/home_screen.dart';
 import 'package:travo_app_source/representation/screen/main_app.dart';
 import 'package:travo_app_source/representation/screen/opening_screen.dart';
 import 'package:travo_app_source/routes.dart';
@@ -38,18 +37,19 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.teal,
         primaryColor: ColorPalette.primaryColor,
         scaffoldBackgroundColor: ColorPalette.backgroundScaffoldColor,
-        backgroundColor: ColorPalette.backgroundScaffoldColor,
+        dialogBackgroundColor: ColorPalette.backgroundScaffoldColor,
       ),
       routes: routes,
       debugShowCheckedModeBanner: false,
       onGenerateRoute: generateRoutes,
-      home:  auth ? MainApp() :
-      Builder(
-        builder: (context) {
-          SizeConfig.init(context);
-          return  OpeningView();
-        }, 
-      ),
+      home: auth
+          ? MainApp()
+          : Builder(
+              builder: (context) {
+                SizeConfig.init(context);
+                return OpeningView();
+              },
+            ),
     );
   }
 }

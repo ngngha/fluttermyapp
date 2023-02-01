@@ -5,13 +5,13 @@ import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'package:travo_app_source/core/constants/dimension_constants.dart';
 import 'package:travo_app_source/core/constants/textstyle_ext.dart';
 import 'package:travo_app_source/core/helpers/asset_helper.dart';
-import 'package:travo_app_source/representation/screen/loginHome.dart';
+import 'package:travo_app_source/representation/widgets/login_check.dart';
 import 'package:travo_app_source/representation/widgets/item_intro_widget.dart';
 
 class IntroScreen extends StatefulWidget {
   const IntroScreen({Key? key}) : super(key: key);
 
-  static String routeName = '/intro_screen';
+  static const String routeName = '/intro_screen';
 
   @override
   State<IntroScreen> createState() => _IntroScreenState();
@@ -79,9 +79,11 @@ class _IntroScreenState extends State<IntroScreen> {
                 GestureDetector(
                   onTap: () {
                     if (_pageController.page == 2) {
-                      Navigator.of(context).pushNamed(LogInhome.routeName);
+                      Navigator.of(context).pushNamed(LoginCheck.routeName);
                     } else {
-                      _pageController.nextPage(duration: Duration(milliseconds: 200), curve: Curves.easeIn);
+                      _pageController.nextPage(
+                          duration: Duration(milliseconds: 200),
+                          curve: Curves.easeIn);
                     }
                   },
                   child: Container(
@@ -89,7 +91,9 @@ class _IntroScreenState extends State<IntroScreen> {
                       color: Colors.teal,
                       borderRadius: BorderRadius.circular(kMediumPadding),
                     ),
-                    padding: EdgeInsets.symmetric(horizontal: kMediumPadding * 2, vertical: kDefaultPadding),
+                    padding: EdgeInsets.symmetric(
+                        horizontal: kMediumPadding * 2,
+                        vertical: kDefaultPadding),
                     child: StreamBuilder<int>(
                       initialData: 0,
                       stream: _streamController.stream,

@@ -23,7 +23,7 @@ class ItemIntroWidget extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Container( 
+        Container(
           alignment: aligment,
           child: ImageHelper.loadFromAsset(
             sourceImage,

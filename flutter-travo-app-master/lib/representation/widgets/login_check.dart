@@ -2,50 +2,36 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:travo_app_source/representation/screen/signin_screen.dart';
 
-class LogInhome extends StatefulWidget {
-  const LogInhome({Key? key}) : super(key: key);
-  static String routeName = '/login_screen';
+class LoginCheck extends StatefulWidget {
+  const LoginCheck({Key? key}) : super(key: key);
+  static const String routeName = '/login_check';
 
   @override
-  State<LogInhome> createState() => _LogInhomeState();
+  State<LoginCheck> createState() => _LoginCheckState();
 }
 
-class _LogInhomeState extends State<LogInhome> {
-  
-Future<FirebaseApp> _initializeFirebase() async {
-
+class _LoginCheckState extends State<LoginCheck> {
+  Future<FirebaseApp> _initializeFirebase() async {
     FirebaseApp firebaseApp = await Firebase.initializeApp();
 
     return firebaseApp;
-
   }
-
+                          
   @override
   Widget build(BuildContext context) {
-     return Scaffold(
-
+    return Scaffold(
       body: FutureBuilder(
-
         future: _initializeFirebase(),
-
         builder: (context, snapshot) {
-
           if (snapshot.connectionState == ConnectionState.done) {
-
             return const SignInScreen();
-
           }
 
           return const Center(
-
             child: CircularProgressIndicator(),
-
           );
-
         },
-
       ),
-
     );
   }
 }

@@ -4,7 +4,7 @@ import 'package:travo_app_source/representation/screen/signin_screen.dart';
 
 class SignUpScreen extends StatefulWidget {
   const SignUpScreen({Key? key}) : super(key: key);
-  static String routeName = '/signup_screen';
+  static const String routeName = '/signup_screen';
 
   @override
   State<SignUpScreen> createState() => SignUpScreenState();
@@ -12,9 +12,6 @@ class SignUpScreen extends StatefulWidget {
 
 class SignUpScreenState extends State<SignUpScreen> {
   bool _isObscure = true;
-  // final bool emailValid =
-  // RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
-  //   .hasMatch();
   final _formKey = GlobalKey<FormState>();
   TextEditingController usernameController = TextEditingController();
   TextEditingController emailController = TextEditingController();
@@ -37,7 +34,7 @@ class SignUpScreenState extends State<SignUpScreen> {
         SliverFillRemaining(
           hasScrollBody: false,
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 35),
+            padding: EdgeInsets.symmetric(horizontal: 35),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -53,15 +50,14 @@ class SignUpScreenState extends State<SignUpScreen> {
                   height: 30,
                 ),
                 Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 10),
+                  padding: EdgeInsets.symmetric(vertical: 10),
                   child: SizedBox(
                     width: 350,
                     height: 50,
                     child: TextFormField(
                       controller: usernameController,
-                      decoration: const InputDecoration(
+                      decoration: InputDecoration(
                         border: UnderlineInputBorder(),
-                        // labelText: 'Email',
                         hintText: "Họ tên",
                         prefixIcon: Icon(Icons.person, color: Colors.teal),
                       ),
@@ -69,7 +65,7 @@ class SignUpScreenState extends State<SignUpScreen> {
                   ),
                 ),
                 Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 10),
+                  padding: EdgeInsets.symmetric(vertical: 10),
                   child: SizedBox(
                     width: 350,
                     height: 50,
@@ -78,15 +74,8 @@ class SignUpScreenState extends State<SignUpScreen> {
                       validator: (val) => val!.isEmpty || !val.contains("@")
                           ? 'Phải là email hợp lệ'
                           : null,
-                      // keyboardType: _isEmail ? TextInputType.emailAddress : TextInputType.text,
-                      // validator: (value) {
-                      //   if(!FormFieldValidator.is){
-                      //     return 'Nhập email khả dụng'
-                      //   }
-                      // },
-                      decoration: const InputDecoration(
+                      decoration: InputDecoration(
                         border: UnderlineInputBorder(),
-                        // labelText: 'Email',
                         hintText: "Email đăng nhập",
                         prefixIcon: Icon(Icons.mail, color: Colors.teal),
                       ),
@@ -94,7 +83,7 @@ class SignUpScreenState extends State<SignUpScreen> {
                   ),
                 ),
                 Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 10),
+                  padding: EdgeInsets.symmetric(vertical: 10),
                   child: SizedBox(
                     width: 350,
                     height: 50,
@@ -122,7 +111,7 @@ class SignUpScreenState extends State<SignUpScreen> {
                   ),
                 ),
                 Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 10),
+                  padding: EdgeInsets.symmetric(vertical: 10),
                   child: SizedBox(
                     width: 350,
                     height: 50,
@@ -130,15 +119,13 @@ class SignUpScreenState extends State<SignUpScreen> {
                       obscureText: _isObscure,
                       controller: repasswordController,
                       validator: (value) {
-                        if(value!.isEmpty || value.length<6){
+                        if (value!.isEmpty || value.length < 6) {
                           return 'Mật khẩu phải có ít nhất 6 kí tự';
-                        }else if(value != passwordController.text){
+                        } else if (value != passwordController.text) {
                           return 'Mật khẩu không khớp';
-                        } return null;
+                        }
+                        return null;
                       },
-                      //  (val) => val != passwordController.text
-                      //     ? 'Mật khẩu không khớp'
-                      //     : null,
                       decoration: InputDecoration(
                           border: const UnderlineInputBorder(),
                           hintText: "Nhập lại mật khẩu",
@@ -157,7 +144,7 @@ class SignUpScreenState extends State<SignUpScreen> {
                   ),
                 ),
                 Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 60),
+                  padding: EdgeInsets.symmetric(vertical: 60),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -215,10 +202,10 @@ class SignUpScreenState extends State<SignUpScreen> {
       var userCredential = await FirebaseAuth.instance
           .createUserWithEmailAndPassword(
               email: emailController.text, password: passwordController.text);
+      final user = FirebaseAuth.instance.currentUser;
       final name = usernameController.text;
       await userCredential.user?.updateDisplayName(name);
-      User? updateUser = FirebaseAuth.instance.currentUser;
-      updateUser!.updateDisplayName(usernameController.text);
+      user!.updateDisplayName(usernameController.text);
       if (userCredential.user != null && !userCredential.user!.emailVerified) {
         await userCredential.user?.sendEmailVerification();
         Navigator.of(context).pushReplacementNamed(SignInScreen.routeName);

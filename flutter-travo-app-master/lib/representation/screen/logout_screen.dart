@@ -55,9 +55,9 @@ class _LogOutState extends State<LogOut> {
     ));
   }
 
-  void logOut() async{
+  void logOut() async {
     await FirebaseAuth.instance.signOut();
     Navigator.of(context).pushReplacement(
-     MaterialPageRoute(builder: ((context) => SignInScreen())));
+        MaterialPageRoute(builder: ((context) => SignInScreen())));
   }
 }

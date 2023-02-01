@@ -6,14 +6,13 @@ import 'package:travo_app_source/representation/screen/signup_screen.dart';
 
 class SignInScreen extends StatefulWidget {
   const SignInScreen({Key? key}) : super(key: key);
-  static String routeName = '/signin_screen';
+  static const String routeName = '/signin_screen';
 
   @override
   State<SignInScreen> createState() => SignInScreenState();
 }
 
 class SignInScreenState extends State<SignInScreen> {
-  
   bool _isObscure = true;
   final _formKey = GlobalKey<FormState>();
   TextEditingController _emailController = TextEditingController();
@@ -28,7 +27,6 @@ class SignInScreenState extends State<SignInScreen> {
 
   @override
   Widget build(BuildContext context) {
-
     // String image;
     return Scaffold(
         body: Form(
@@ -41,7 +39,7 @@ class SignInScreenState extends State<SignInScreen> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                    Image.asset('assets/images/logo.jpg', height: 150, width: 200),
+                Image.asset('assets/images/logo.jpg', height: 150, width: 200),
                 const Text(
                   'Xin chào,',
                   style: TextStyle(
@@ -66,14 +64,15 @@ class SignInScreenState extends State<SignInScreen> {
                     height: 60,
                     child: TextFormField(
                       controller: _emailController,
-                      validator: (val) => val!.isEmpty||!val.contains("@")
+                      validator: (val) => val!.isEmpty || !val.contains("@")
                           ? 'Phải là email hợp lệ'
                           : null,
-                      decoration: const InputDecoration(
-                        border: UnderlineInputBorder(),
-                        hintText: "Email đăng nhập",
-                        prefixIcon: Icon(Icons.mail, color: Colors.teal),
-                      ),
+                      decoration: InputDecoration(
+                          hintText: "Email đăng nhập",
+                          prefixIcon: Icon(
+                            Icons.email,
+                            color: Colors.teal,
+                          )),
                     ),
                   ),
                 ),
@@ -85,7 +84,7 @@ class SignInScreenState extends State<SignInScreen> {
                     child: TextFormField(
                       obscureText: _isObscure,
                       controller: _passwordController,
-                      validator: (val) => val!.length < 6 
+                      validator: (val) => val!.length < 6
                           ? 'Mật khẩu phải có ít nhất 6 kí tự'
                           : null,
                       decoration: InputDecoration(
@@ -138,7 +137,8 @@ class SignInScreenState extends State<SignInScreen> {
                           ),
                           MaterialButton(
                             onPressed: () {
-                              Navigator.of(context).pushNamed(SignUpScreen.routeName);
+                              Navigator.of(context)
+                                  .pushNamed(SignUpScreen.routeName);
                             },
                             child: const Text("Đăng ký",
                                 style: TextStyle(
@@ -160,8 +160,9 @@ class SignInScreenState extends State<SignInScreen> {
 
   void signUserEmailAndPassword() async {
     try {
-      var userCredential = await FirebaseAuth.instance.signInWithEmailAndPassword(
-          email: _emailController.text, password: _passwordController.text);
+      var userCredential = await FirebaseAuth.instance
+          .signInWithEmailAndPassword(
+              email: _emailController.text, password: _passwordController.text);
       debugPrint(userCredential.toString());
       if (userCredential.user != null) {
         SharedPreferences prefs = await SharedPreferences.getInstance();

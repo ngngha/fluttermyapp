@@ -42,9 +42,9 @@ class _OpeningViewState extends State<OpeningView> {
         //   ),
         // ),
         // Positioned.fill(
-          // child: ImageHelper.loadFromAsset(
-            // AssetHelper.circleSplash,
-          // ),
+        // child: ImageHelper.loadFromAsset(
+        // AssetHelper.circleSplash,
+        // ),
         // ),
       ],
     );

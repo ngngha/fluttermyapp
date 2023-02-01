@@ -16,7 +16,8 @@ class AppBarContainer extends StatelessWidget {
     this.paddingContent = const EdgeInsets.symmetric(
       horizontal: kMediumPadding,
     ),
-  })  : assert(title != null || titleString != null, 'title or titleString can\'t be null'),
+  })  : assert(title != null || titleString != null,
+            'title or titleString can\'t be null'),
         super(key: key);
 
   final Widget child;
@@ -68,14 +69,17 @@ class AppBarContainer extends StatelessWidget {
                               children: [
                                 Text(
                                   titleString ?? '',
-                                  style: TextStyles.defaultStyle.fontHeader.whiteTextColor.bold,
+                                  style: TextStyles.defaultStyle.fontHeader
+                                      .whiteTextColor.bold,
                                 ),
                                 if (subTitleString != null)
                                   Padding(
-                                    padding: const EdgeInsets.only(top: kMediumPadding),
+                                    padding: const EdgeInsets.only(
+                                        top: kMediumPadding),
                                     child: Text(
                                       subTitleString!,
-                                      style: TextStyles.defaultStyle.fontCaption.whiteTextColor,
+                                      style: TextStyles.defaultStyle.fontCaption
+                                          .whiteTextColor,
                                     ),
                                   ),
                               ],
@@ -103,10 +107,12 @@ class AppBarContainer extends StatelessWidget {
               flexibleSpace: Stack(
                 children: [
                   Container(
-                    decoration: 
-                    BoxDecoration(
+                    decoration: BoxDecoration(
                       gradient: const LinearGradient(
-                        colors: [Colors.teal, Color.fromARGB(255, 57, 128, 111)],
+                        colors: [
+                          Colors.teal,
+                          Color.fromARGB(255, 57, 128, 111)
+                        ],
                       ),
                       borderRadius: BorderRadius.only(
                         bottomLeft: Radius.circular(25),
