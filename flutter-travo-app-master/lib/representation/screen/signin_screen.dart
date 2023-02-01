@@ -15,8 +15,8 @@ class SignInScreen extends StatefulWidget {
 class SignInScreenState extends State<SignInScreen> {
   bool _isObscure = true;
   final _formKey = GlobalKey<FormState>();
-  TextEditingController _emailController = TextEditingController();
-  TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
 
   late FirebaseAuth auth;
 
@@ -27,7 +27,6 @@ class SignInScreenState extends State<SignInScreen> {
 
   @override
   Widget build(BuildContext context) {
-    // String image;
     return Scaffold(
         body: Form(
       key: _formKey,
@@ -61,26 +60,29 @@ class SignInScreenState extends State<SignInScreen> {
                   padding: const EdgeInsets.symmetric(vertical: 10),
                   child: SizedBox(
                     width: 350,
-                    height: 60,
+                    // height: 70,
                     child: TextFormField(
                       controller: _emailController,
                       validator: (val) => val!.isEmpty || !val.contains("@")
                           ? 'Phải là email hợp lệ'
                           : null,
                       decoration: InputDecoration(
-                          hintText: "Email đăng nhập",
-                          prefixIcon: Icon(
-                            Icons.email,
-                            color: Colors.teal,
-                          )),
+                        contentPadding: EdgeInsets.only(top: 15),
+                        border: OutlineInputBorder(),
+                        hintText: "Email đăng nhập",
+                        prefixIcon: Icon(
+                          Icons.email,
+                          color: Colors.teal,
+                        ),
+                      ),
                     ),
                   ),
                 ),
                 Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 10),
+                  padding: const EdgeInsets.symmetric(vertical: 20),
                   child: SizedBox(
                     width: 350,
-                    height: 50,
+                    // height: 70,
                     child: TextFormField(
                       obscureText: _isObscure,
                       controller: _passwordController,
@@ -88,7 +90,8 @@ class SignInScreenState extends State<SignInScreen> {
                           ? 'Mật khẩu phải có ít nhất 6 kí tự'
                           : null,
                       decoration: InputDecoration(
-                          border: const UnderlineInputBorder(),
+                          border: const OutlineInputBorder(),
+                          contentPadding: EdgeInsets.only(top: 15),
                           hintText: "Mật khẩu",
                           prefixIcon: const Icon(Icons.key, color: Colors.teal),
                           suffixIcon: IconButton(
@@ -105,7 +108,7 @@ class SignInScreenState extends State<SignInScreen> {
                   ),
                 ),
                 Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 50),
+                  padding: const EdgeInsets.symmetric(vertical: 20),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.stretch,

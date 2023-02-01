@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:travo_app_source/data/model/project_model.dart';
 import 'package:travo_app_source/representation/screen/add_project_screen.dart';
 import 'package:travo_app_source/representation/screen/intro_screen.dart';
-import 'package:travo_app_source/representation/widgets/list_project.dart';
+import 'package:travo_app_source/representation/screen/list_project_screen.dart';
 import 'package:travo_app_source/representation/widgets/login_check.dart';
 import 'package:travo_app_source/representation/screen/logout_screen.dart';
 import 'package:travo_app_source/representation/screen/main_app.dart';
@@ -43,6 +43,12 @@ MaterialPageRoute<dynamic>? generateRoutes(RouteSettings settings) {
         builder: (context) => SignUpScreen(),
       );
     case (ListProject.routeName):
+      return MaterialPageRoute<dynamic>(
+        settings: settings,
+        builder: (context) => ListProject(
+        ),
+      );
+    case (AddProject.routeName):
       final project =
           settings.arguments == null ? null : (settings.arguments as Project);
       return MaterialPageRoute<dynamic>(
@@ -51,23 +57,6 @@ MaterialPageRoute<dynamic>? generateRoutes(RouteSettings settings) {
           projectModal: project,
         ),
       );
-    // case CheckOutScreen.routeName:
-    //   final RoomModel roomModel = (settings.arguments as RoomModel);
-    //   return MaterialPageRoute<dynamic>(
-    //     settings: settings,
-    //     builder: (context) => CheckOutScreen(
-    //       roomModel: roomModel,
-    //     ),
-    //   );
-
-    // case HotelBookingScreen.routeName:
-    //   final String? destination = (settings.arguments as String?);
-    //   return MaterialPageRoute<dynamic>(
-    //     settings: settings,
-    //     builder: (context) => HotelBookingScreen(
-    //       destination: destination,
-    //     ),
-    //   );
     default:
       return null;
   }

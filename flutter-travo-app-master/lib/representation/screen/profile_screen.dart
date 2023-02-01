@@ -9,12 +9,11 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class ProfileScreenState extends State<ProfileScreen> {
-  // String get imagePath => null;
 
   @override
   Widget build(BuildContext context) {
-    // final color = Theme.of(context).colorScheme.primary;
-
-    return Scaffold();
+    return Scaffold(
+      
+    );
   }
 }

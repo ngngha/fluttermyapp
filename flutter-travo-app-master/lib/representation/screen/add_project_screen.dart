@@ -4,7 +4,7 @@ import 'package:travo_app_source/data/model/project_model.dart';
 
 class AddProject extends StatefulWidget {
   const AddProject({Key? key, this.projectModal}) : super(key: key);
-  static String routeName = '/add_project_screen';
+  static const String routeName = '/add_project_screen';
   final Project? projectModal;
 
   @override
@@ -57,7 +57,6 @@ class _AddProjectState extends State<AddProject> {
                       padding: const EdgeInsets.symmetric(vertical: 10),
                       child: SizedBox(
                         width: 350,
-                        height: 50,
                         child: TextFormField(
                           controller: projectNameController,
                           validator: (val) =>
@@ -76,7 +75,6 @@ class _AddProjectState extends State<AddProject> {
                       padding: const EdgeInsets.symmetric(vertical: 10),
                       child: SizedBox(
                         width: 350,
-                        height: 50,
                         child: TextFormField(
                           controller: userController,
                           validator: (val) =>
@@ -138,18 +136,21 @@ class _AddProjectState extends State<AddProject> {
                             child: SizedBox(
                               width: 350,
                               height: 50,
-                              child: ElevatedButton(
-                                  style: ElevatedButton.styleFrom(
-                                      backgroundColor: Colors.teal,
-                                      textStyle: const TextStyle(fontSize: 20)),
-                                  onPressed: () async {
-                                    // final name = projectNameController.text;
-                                    if (_formKey.currentState!.validate()) {
-                                      deleteProject(
-                                          name: projectNameController!.text);
-                                    }
-                                  },
-                                  child: Text('Xóa')),
+                              child: widget.projectModal == null
+                                  ? null
+                                  : ElevatedButton(
+                                      style: ElevatedButton.styleFrom(
+                                          backgroundColor: Colors.teal,
+                                          textStyle:
+                                              const TextStyle(fontSize: 20)),
+                                      onPressed: () async {
+                                        if (_formKey.currentState!.validate()) {
+                                          deleteProject(
+                                              name:
+                                                  projectNameController!.text);
+                                        }
+                                      },
+                                      child: Text('Xóa')),
                             ),
                           ),
                         ],

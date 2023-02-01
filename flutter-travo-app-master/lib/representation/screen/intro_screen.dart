@@ -32,14 +32,15 @@ class _IntroScreenState extends State<IntroScreen> {
 
   final List<Widget> listPage = [
     ItemIntroWidget(
-      title: 'Quản lý công việc',
-      description: 'Lợi ích 1',
+      title: 'Quản lý dự án, quản lý công việc online',
+      description:
+          'Tạo mới, theo dõi, kiểm soát dự án, công việc của bạn mọi lúc mọi nơi theo công nghệ trực tuyến.',
       sourceImage: AssetHelper.slide1,
       aligment: Alignment.centerRight,
     ),
     ItemIntroWidget(
-      title: 'Quản lý công việc',
-      description: 'Lợi ích 2',
+      title: 'Trợ lý ảo thông minh',
+      description: 'Thông báo theo thời gian thực, không bỏ lỡ bất kỳ công việc nào.',
       sourceImage: AssetHelper.slide2,
       aligment: Alignment.center,
     ),

@@ -1,8 +1,9 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:travo_app_source/core/constants/textstyle_ext.dart';
 import 'package:travo_app_source/core/helpers/asset_helper.dart';
 import 'package:travo_app_source/core/helpers/image_helper.dart';
-import 'package:travo_app_source/representation/widgets/list_project.dart';
+import 'package:travo_app_source/representation/screen/list_project_screen.dart';
 import 'package:travo_app_source/representation/widgets/app_bar_container.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
@@ -10,12 +11,19 @@ import '../../core/constants/dimension_constants.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
+  
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  final FirebaseAuth auth = FirebaseAuth.instance;
+//   void inputData() {
+//   final User? user = auth.currentUser;
+//   final uid = user!.uid;
+//   // here you write the codes to input the data into firestore
+// }
   Widget _buildItemCategory(
       Widget icon, Color color, Function() onTap, String title) {
     return GestureDetector(
@@ -46,7 +54,7 @@ class _HomeScreenState extends State<HomeScreen> {
     return AppBarContainer(
       titleString: 'home',
       title: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: kItemPadding),
+        padding: EdgeInsets.symmetric(horizontal: kItemPadding),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
@@ -54,7 +62,7 @@ class _HomeScreenState extends State<HomeScreen> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text('Xin chào, !',
+                Text('Xin chào, ${auth.currentUser!.displayName}!',
                     style:
                         TextStyles.defaultStyle.fontHeader.whiteTextColor.bold),
                 // SizedBox(

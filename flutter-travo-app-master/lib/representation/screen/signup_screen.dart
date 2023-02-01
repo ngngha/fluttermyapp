@@ -53,11 +53,12 @@ class SignUpScreenState extends State<SignUpScreen> {
                   padding: EdgeInsets.symmetric(vertical: 10),
                   child: SizedBox(
                     width: 350,
-                    height: 50,
+                    //  height: 50,
                     child: TextFormField(
                       controller: usernameController,
                       decoration: InputDecoration(
-                        border: UnderlineInputBorder(),
+                        border: OutlineInputBorder(),
+                        contentPadding: EdgeInsets.only(top: 15),
                         hintText: "Họ tên",
                         prefixIcon: Icon(Icons.person, color: Colors.teal),
                       ),
@@ -68,14 +69,15 @@ class SignUpScreenState extends State<SignUpScreen> {
                   padding: EdgeInsets.symmetric(vertical: 10),
                   child: SizedBox(
                     width: 350,
-                    height: 50,
+                    //  height: 50,
                     child: TextFormField(
                       controller: emailController,
                       validator: (val) => val!.isEmpty || !val.contains("@")
                           ? 'Phải là email hợp lệ'
                           : null,
                       decoration: InputDecoration(
-                        border: UnderlineInputBorder(),
+                        border: OutlineInputBorder(),
+                        contentPadding: EdgeInsets.only(top: 15),
                         hintText: "Email đăng nhập",
                         prefixIcon: Icon(Icons.mail, color: Colors.teal),
                       ),
@@ -86,7 +88,7 @@ class SignUpScreenState extends State<SignUpScreen> {
                   padding: EdgeInsets.symmetric(vertical: 10),
                   child: SizedBox(
                     width: 350,
-                    height: 50,
+                    //  height: 50,
                     child: TextFormField(
                       obscureText: _isObscure,
                       controller: passwordController,
@@ -94,7 +96,8 @@ class SignUpScreenState extends State<SignUpScreen> {
                           ? 'Mật khẩu phải có ít nhất 6 kí tự'
                           : null,
                       decoration: InputDecoration(
-                          border: const UnderlineInputBorder(),
+                          border: const OutlineInputBorder(),
+                          contentPadding: EdgeInsets.only(top: 15),
                           hintText: "Mật khẩu",
                           prefixIcon: const Icon(Icons.key, color: Colors.teal),
                           suffixIcon: IconButton(
@@ -114,7 +117,7 @@ class SignUpScreenState extends State<SignUpScreen> {
                   padding: EdgeInsets.symmetric(vertical: 10),
                   child: SizedBox(
                     width: 350,
-                    height: 50,
+                    //  height: 50,
                     child: TextFormField(
                       obscureText: _isObscure,
                       controller: repasswordController,
@@ -127,7 +130,8 @@ class SignUpScreenState extends State<SignUpScreen> {
                         return null;
                       },
                       decoration: InputDecoration(
-                          border: const UnderlineInputBorder(),
+                          border: const OutlineInputBorder(),
+                          contentPadding: EdgeInsets.only(top: 15),
                           hintText: "Nhập lại mật khẩu",
                           prefixIcon: const Icon(Icons.key, color: Colors.teal),
                           suffixIcon: IconButton(
@@ -144,7 +148,7 @@ class SignUpScreenState extends State<SignUpScreen> {
                   ),
                 ),
                 Padding(
-                  padding: EdgeInsets.symmetric(vertical: 60),
+                  padding: EdgeInsets.symmetric(vertical: 30),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.stretch,
