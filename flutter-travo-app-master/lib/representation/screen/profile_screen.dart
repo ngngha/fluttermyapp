@@ -1,7 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:travo_app_source/core/constants/dimension_constants.dart';
 import 'package:travo_app_source/core/helpers/asset_helper.dart';
 import 'package:travo_app_source/core/helpers/image_helper.dart';
 import 'package:travo_app_source/data/model/user_model.dart';
@@ -19,6 +18,7 @@ class ProfileScreen extends StatefulWidget {
 class ProfileScreenState extends State<ProfileScreen> {
   final FirebaseAuth auth = FirebaseAuth.instance;
   final FirebaseFirestore firestore = FirebaseFirestore.instance;
+  // final String id;
   @override
   void initState() {
     super.initState();
@@ -42,7 +42,7 @@ class ProfileScreenState extends State<ProfileScreen> {
             : null,
       ),
       body: StreamBuilder<List<Users>>(
-        stream: readProject(),
+        // stream: readProject(),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             final projects = snapshot.data!;
@@ -59,11 +59,8 @@ class ProfileScreenState extends State<ProfileScreen> {
     );
   }
 
-  Stream<List<Users>> readProject() => FirebaseFirestore.instance
-      .collection('users')
-      .snapshots()
-      .map((snapshot) =>
-          snapshot.docs.map((doc) => Users.fromJson(doc.data())).toList());
+  // Stream<List<Users>> readProject() => FirebaseFirestore.instance
+  //     .collection('users').where('id', isEqualTo: id).snapshots();
   Widget buildProject(Users users) => Column(
         children: [
           CircleAvatar(
