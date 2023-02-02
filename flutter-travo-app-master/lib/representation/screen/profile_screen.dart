@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -19,6 +21,7 @@ class ProfileScreenState extends State<ProfileScreen> {
   final FirebaseAuth auth = FirebaseAuth.instance;
   final FirebaseFirestore firestore = FirebaseFirestore.instance;
   // final String id;
+  List filterState= [];
   @override
   void initState() {
     super.initState();
@@ -26,6 +29,7 @@ class ProfileScreenState extends State<ProfileScreen> {
 
   @override
   Widget build(BuildContext context) {
+    
     return Scaffold(
       appBar: AppBar(
         title: Text('Trang cá nhân'),
@@ -41,14 +45,11 @@ class ProfileScreenState extends State<ProfileScreen> {
               ]
             : null,
       ),
-      body: StreamBuilder<List<Users>>(
-        // stream: readProject(),
+      body: FutureBuilder<Users?>(
+        future: readUserInfo(auth.currentUser!.uid),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
-            final projects = snapshot.data!;
-            return ListView(
-              children: projects.map(buildProject).toList(),
-            );
+            return buildProject(snapshot.data as Users);
           } else if (snapshot.hasError) {
             return Text(snapshot.toString());
           } else {
@@ -59,44 +60,59 @@ class ProfileScreenState extends State<ProfileScreen> {
     );
   }
 
-  // Stream<List<Users>> readProject() => FirebaseFirestore.instance
-  //     .collection('users').where('id', isEqualTo: id).snapshots();
-  Widget buildProject(Users users) => Column(
-        children: [
-          CircleAvatar(
-            radius: 50,
-            child: ImageHelper.loadFromAsset(
-              AssetHelper.person,
+  Future<Users?> readUserInfo(String id) async{ 
+    final result = await FirebaseFirestore.instance
+      .collection('users').where('id', isEqualTo: id)
+      .get();
+      
+    final List<Users> list = result.docs.map((e) => Users.fromJson(e.data())).toList();
+
+    //  List<Users> filterState = result.docs.map((e)=>e.data()).toList() as List<Users> ;
+      return list.isEmpty ? null : list.first;}
+      // .map((snapshot) =>
+      //     snapshot.docs.map((doc) => Users.fromJson(doc.data())).toList());
+  Widget buildProject(Users users) => Align(
+    alignment: Alignment.center,
+    child: Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      
+          children: [
+            CircleAvatar(
+              radius: 50,
+              child: ImageHelper.loadFromAsset(
+                AssetHelper.person,
+              ),
             ),
-          ),
-          Text(users.username,
-              style: TextStyle(
-                color: Colors.teal,
-              )),
-          SizedBox(
-            height: 20,
-            width: 200,
-            child: Divider(
-              color: Colors.teal.shade700,
+            Text(users.username,
+                style: TextStyle(
+                  color: Colors.teal,
+                )),
+            SizedBox(
+              height: 20,
+              width: 200,
+              child: Divider(
+                color: Colors.teal.shade700,
+              ),
             ),
-          ),
-          Text(users.email),
-          Text(users.detail),
-          SizedBox(
-            width: 350,
-            height: 50,
-            child: ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.teal,
-                  textStyle: const TextStyle(fontSize: 20)),
-              onPressed: () async {
-                logOut();
-              },
-              child: const Text('Đăng xuất'),
+            Text(users.email),
+            Text(users.detail),
+            
+            SizedBox(
+              width: 350,
+              height: 50,
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.teal,
+                    textStyle: const TextStyle(fontSize: 20)),
+                onPressed: () async {
+                  logOut();
+                },
+                child: const Text('Đăng xuất'),
+              ),
             ),
-          ),
-        ],
-      );
+          ],
+        ),
+  );
   void logOut() async {
     await FirebaseAuth.instance.signOut();
     Navigator.of(context).pushReplacement(

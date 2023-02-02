@@ -212,9 +212,9 @@ class SignUpScreenState extends State<SignUpScreen> {
       final name = usernameController.text;
       await userCredential.user?.updateDisplayName(name);
       user!.updateDisplayName(usernameController.text);
-      final docUser = FirebaseFirestore.instance.collection('users').doc();
+      final docUser = FirebaseFirestore.instance.collection('users').doc(auth.currentUser!.uid);
     final userInfo = Users(
-      id: docUser.id,
+      id: auth.currentUser!.uid,
       username: name,
       email: emailController.text,
     );

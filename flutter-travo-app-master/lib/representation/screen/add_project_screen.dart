@@ -1,6 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:travo_app_source/data/model/project_model.dart';
+import 'package:travo_app_source/data/model/user_model.dart';
 
 class AddProject extends StatefulWidget {
   const AddProject({Key? key, this.projectModal}) : super(key: key);
@@ -72,24 +74,54 @@ class _AddProjectState extends State<AddProject> {
                         ),
                       ),
                     ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 10),
-                      child: SizedBox(
-                        width: 350,
-                        child: TextFormField(
-                          controller: userController,
-                          validator: (val) =>
-                              val!.isEmpty ? 'Không được bỏ trống' : null,
-                          decoration: InputDecoration(
-                              border: OutlineInputBorder(),
-                              hintText: 'Người phụ trách',
-                              prefixIcon: Icon(
-                                Icons.person,
-                                color: Colors.teal,
-                              )),
-                        ),
-                      ),
+                    StreamBuilder<List<Users>>(
+                      stream: readUser(),
+                      builder: ((context, snapshot) {
+                        if (!snapshot.hasData) {
+                          return const CircularProgressIndicator();
+                        } else {
+                          List<DropdownMenuItem<Users>> currentItems = [];
+                          snapshot.data?.forEach((element) {
+                            currentItems.add(
+                              DropdownMenuItem(
+                                value: element,
+                                child: Text(element.username),
+                              ),
+                            );
+                          });
+                          Users? currentItem;
+                          return StatefulBuilder(builder: (context, setState) {
+                            return DropdownButton<Users>(
+                              value: currentItem,
+                              items: currentItems,
+                              onChanged: (value) {
+                                setState(() {
+                                  currentItem = value;
+                                });
+                              },
+                            );
+                          });
+                        }
+                      }),
                     ),
+                    // Padding(
+                    //   padding: const EdgeInsets.symmetric(vertical: 10),
+                    //   child: SizedBox(
+                    //     width: 350,
+                    //     child: TextFormField(
+                    //       controller: userController,
+                    //       validator: (val) =>
+                    //           val!.isEmpty ? 'Không được bỏ trống' : null,
+                    //       decoration: InputDecoration(
+                    //           border: OutlineInputBorder(),
+                    //           hintText: 'Người phụ trách',
+                    //           prefixIcon: Icon(
+                    //             Icons.person,
+                    //             color: Colors.teal,
+                    //           )),
+                    //     ),
+                    //   ),
+                    // ),
                     Padding(
                       padding: const EdgeInsets.symmetric(vertical: 10),
                       child: SizedBox(
@@ -164,6 +196,21 @@ class _AddProjectState extends State<AddProject> {
           ]),
         ));
   }
+
+  Stream<List<Users>> readUser() => FirebaseFirestore.instance
+      .collection('users')
+      .snapshots()
+      .map((snapshot) =>
+          snapshot.docs.map((doc) => Users.fromJson(doc.data())).toList());
+  // Future<Users?> readUserInfo(String id) async {
+  //   final result = await FirebaseFirestore.instance
+  //       .collection('users')
+  //       .where('id', isEqualTo: id)
+  //       .get();
+  //   final List<Users> list =
+  //       result.docs.map((e) => Users.fromJson(e.data())).toList();
+  //   return list.isEmpty ? null : list.first;
+  // }
 
   void createProject({required name}) async {
     final docProject = FirebaseFirestore.instance.collection('project').doc();
