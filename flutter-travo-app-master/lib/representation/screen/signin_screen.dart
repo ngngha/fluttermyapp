@@ -123,10 +123,6 @@ class SignInScreenState extends State<SignInScreen> {
                           onPressed: () async {
                             if (_formKey.currentState!.validate()) {
                               signUserEmailAndPassword();
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
-                                    content: Text('Đăng nhập thành công')),
-                              );
                             }
                           },
                           child: const Text('Đăng nhập'),
@@ -166,13 +162,22 @@ class SignInScreenState extends State<SignInScreen> {
       var userCredential = await FirebaseAuth.instance
           .signInWithEmailAndPassword(
               email: _emailController.text, password: _passwordController.text);
+
       debugPrint(userCredential.toString());
       if (userCredential.user != null) {
         SharedPreferences prefs = await SharedPreferences.getInstance();
         prefs.setString('displayName', userCredential.user!.displayName!);
         Navigator.of(context).pushReplacementNamed(MainApp.routeName);
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Đăng nhập thành công')),
+        );
       }
     } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+            content: Text(
+                'Tài khoản không tồn tại, hãy đăng ký để có thể đăng nhập')),
+      );
       debugPrint(e.toString());
     }
   }

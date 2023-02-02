@@ -13,7 +13,7 @@ class AddProject extends StatefulWidget {
 
 class _AddProjectState extends State<AddProject> {
   final _formKey = GlobalKey<FormState>();
-  DateTime? picked;
+  // DateTime? picked;
   TextEditingController? userController;
   TextEditingController? projectNameController;
   TextEditingController? projectDetailController;
@@ -37,6 +37,7 @@ class _AddProjectState extends State<AddProject> {
 
   @override
   Widget build(BuildContext context) {
+    // print(widget.projectModal);
     return Scaffold(
         appBar: AppBar(
           title: widget.projectModal == null

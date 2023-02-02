@@ -1,17 +1,17 @@
-class User {
+class Users {
   String id;
   String username;
   String email;
   String detail;
   DateTime? dateOfBirth;
-  String level;
-  User(
+  String? level;
+  Users(
       {this.id = '',
-      this.username = '' ,
+      this.username = '',
       this.email = '',
       this.detail = '',
       this.dateOfBirth,
-      this.level = ''});
+      this.level});
 
   Map<String, dynamic> toJson() => {
         'id': id,
@@ -21,7 +21,7 @@ class User {
         'dateOfBirth': dateOfBirth,
         'level': level,
       };
-  static User fromJson(Map<String, dynamic> json) => User(
+  static Users fromJson(Map<String, dynamic> json) => Users(
         id: json['id'],
         username: json['username'],
         email: json['email'],

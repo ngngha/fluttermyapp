@@ -4,6 +4,7 @@ import 'package:travo_app_source/core/constants/textstyle_ext.dart';
 import 'package:travo_app_source/core/helpers/asset_helper.dart';
 import 'package:travo_app_source/core/helpers/image_helper.dart';
 import 'package:travo_app_source/representation/screen/list_project_screen.dart';
+import 'package:travo_app_source/representation/screen/profile_screen.dart';
 import 'package:travo_app_source/representation/widgets/app_bar_container.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
@@ -11,7 +12,6 @@ import '../../core/constants/dimension_constants.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
-  
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
@@ -141,9 +141,9 @@ class _HomeScreenState extends State<HomeScreen> {
                       height: kDefaultIconSize,
                       child: Icon(FontAwesomeIcons.user, color: Colors.teal),
                     ),
-                    Colors.teal,
-                    () {},
-                    'Nhân viên'),
+                    Colors.teal, () {
+                  Navigator.of(context).pushNamed(ProfileScreen.routeName);
+                }, 'Nhân viên'),
               ),
             ],
           ),

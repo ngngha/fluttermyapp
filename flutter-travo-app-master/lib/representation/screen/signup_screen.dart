@@ -1,5 +1,7 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:travo_app_source/data/model/user_model.dart';
 import 'package:travo_app_source/representation/screen/signin_screen.dart';
 
 class SignUpScreen extends StatefulWidget {
@@ -210,6 +212,14 @@ class SignUpScreenState extends State<SignUpScreen> {
       final name = usernameController.text;
       await userCredential.user?.updateDisplayName(name);
       user!.updateDisplayName(usernameController.text);
+      final docUser = FirebaseFirestore.instance.collection('users').doc();
+    final userInfo = Users(
+      id: docUser.id,
+      username: name,
+      email: emailController.text,
+    );
+    final json = userInfo.toJson();
+    await docUser.set(json);
       if (userCredential.user != null && !userCredential.user!.emailVerified) {
         await userCredential.user?.sendEmailVerification();
         Navigator.of(context).pushReplacementNamed(SignInScreen.routeName);
