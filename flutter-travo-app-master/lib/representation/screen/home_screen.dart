@@ -1,10 +1,14 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:travo_app_source/core/constants/textstyle_ext.dart';
 import 'package:travo_app_source/core/helpers/asset_helper.dart';
 import 'package:travo_app_source/core/helpers/image_helper.dart';
+import 'package:travo_app_source/data/model/task_model.dart';
 import 'package:travo_app_source/representation/screen/list_project_screen.dart';
+import 'package:travo_app_source/representation/screen/list_task_screen.dart';
 import 'package:travo_app_source/representation/screen/profile_screen.dart';
+import 'package:travo_app_source/representation/screen/task_screen_service.dart';
 import 'package:travo_app_source/representation/widgets/app_bar_container.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
@@ -129,9 +133,9 @@ class _HomeScreenState extends State<HomeScreen> {
                       child:
                           Icon(FontAwesomeIcons.thumbtack, color: Colors.teal),
                     ),
-                    Colors.teal,
-                    () {},
-                    'Task'),
+                    Colors.teal, () {
+                  Navigator.of(context).pushNamed(ListTask.routeName);
+                }, 'Task'),
               ),
               SizedBox(width: kDefaultPadding),
               Expanded(
@@ -147,8 +151,55 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ],
           ),
+          SizedBox(
+            width: kDefaultIconSize,
+            height: kDefaultIconSize,
+          ),
+          Expanded(
+            child: FutureBuilder<List<Task>?>(
+              future: readTaskInfo(auth.currentUser!.uid),
+              builder: (context, snapshot) {
+                if (snapshot.hasData) {
+                  final tasks = snapshot.data!;
+                  return ListView.builder(
+                      itemCount: tasks.length,
+                      itemBuilder: (context, index) {
+                        return ListTile(
+                          leading: Text(tasks[index].title),
+                          title: Text(tasks[index].employee),
+                          subtitle: Text(tasks[index].detail),
+                          onTap: () => {
+                            // print('click'),
+                            Navigator.of(context).pushNamed(
+                                TaskService.routeName,
+                                arguments: tasks[index]),
+                          },
+                        );
+                      });
+                } else if (snapshot.hasError) {
+                  return Text(snapshot.toString());
+                } else {
+                  return Center(
+                    child: Text('Bạn chưa có nhiệm vụ nào'),
+                  );
+                }
+              },
+            ),
+          ),
         ],
       ),
     );
+  }
+
+  Future<List<Task>?> readTaskInfo(String employeeId) async {
+    final result = await FirebaseFirestore.instance
+        .collection('task')
+        .where('employeeId', isEqualTo: employeeId)
+        .get();
+
+    final List<Task> list =
+        result.docs.map((e) => Task.fromJson(e.data())).toList();
+
+    return list.isEmpty ? null : list;
   }
 }

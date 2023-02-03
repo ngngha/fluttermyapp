@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:travo_app_source/data/model/project_model.dart';
 import 'package:travo_app_source/data/model/user_model.dart';
@@ -15,6 +14,7 @@ class AddProject extends StatefulWidget {
 
 class _AddProjectState extends State<AddProject> {
   final _formKey = GlobalKey<FormState>();
+  Users? selected_user;
   // DateTime? picked;
   TextEditingController? userController;
   TextEditingController? projectNameController;
@@ -41,11 +41,23 @@ class _AddProjectState extends State<AddProject> {
   Widget build(BuildContext context) {
     // print(widget.projectModal);
     return Scaffold(
-        appBar: AppBar(
-          title: widget.projectModal == null
-              ? Text('Thêm mới dự án')
-              : Text('Chỉnh sửa dự án'),
-        ),
+        appBar: widget.projectModal == null
+            ? AppBar(
+                title: Text('Thêm mới dự án'),
+              )
+            : AppBar(
+                title: Text('Chỉnh sửa dự án'),
+                actions: [
+                  IconButton(
+                    onPressed: () async {
+                      if (_formKey.currentState!.validate()) {
+                        deleteProject(name: projectNameController!.text);
+                      }
+                    },
+                    icon: Icon(Icons.delete),
+                  )
+                ],
+              ),
         body: Form(
           key: _formKey,
           child: CustomScrollView(scrollDirection: Axis.vertical, slivers: [
@@ -82,6 +94,7 @@ class _AddProjectState extends State<AddProject> {
                         } else {
                           List<DropdownMenuItem<Users>> currentItems = [];
                           snapshot.data?.forEach((element) {
+                            // element = userController!.text as Users;
                             currentItems.add(
                               DropdownMenuItem(
                                 value: element,
@@ -92,11 +105,11 @@ class _AddProjectState extends State<AddProject> {
                           Users? currentItem;
                           return StatefulBuilder(builder: (context, setState) {
                             return DropdownButton<Users>(
-                              value: currentItem,
+                              value: selected_user,
                               items: currentItems,
                               onChanged: (value) {
                                 setState(() {
-                                  currentItem = value;
+                                  selected_user = value;
                                 });
                               },
                             );
@@ -164,28 +177,6 @@ class _AddProjectState extends State<AddProject> {
                                   : Text('Chỉnh sửa'),
                             ),
                           ),
-                          Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 10),
-                            child: SizedBox(
-                              width: 350,
-                              height: 50,
-                              child: widget.projectModal == null
-                                  ? null
-                                  : ElevatedButton(
-                                      style: ElevatedButton.styleFrom(
-                                          backgroundColor: Colors.teal,
-                                          textStyle:
-                                              const TextStyle(fontSize: 20)),
-                                      onPressed: () async {
-                                        if (_formKey.currentState!.validate()) {
-                                          deleteProject(
-                                              name:
-                                                  projectNameController!.text);
-                                        }
-                                      },
-                                      child: Text('Xóa')),
-                            ),
-                          ),
                         ],
                       ),
                     ),
@@ -202,22 +193,13 @@ class _AddProjectState extends State<AddProject> {
       .snapshots()
       .map((snapshot) =>
           snapshot.docs.map((doc) => Users.fromJson(doc.data())).toList());
-  // Future<Users?> readUserInfo(String id) async {
-  //   final result = await FirebaseFirestore.instance
-  //       .collection('users')
-  //       .where('id', isEqualTo: id)
-  //       .get();
-  //   final List<Users> list =
-  //       result.docs.map((e) => Users.fromJson(e.data())).toList();
-  //   return list.isEmpty ? null : list.first;
-  // }
 
   void createProject({required name}) async {
     final docProject = FirebaseFirestore.instance.collection('project').doc();
     final project = Project(
       id: docProject.id,
       name: projectNameController!.text,
-      user: userController!.text,
+      user: selected_user!.username,
       detail: projectDetailController!.text,
     );
     final json = project.toJson();

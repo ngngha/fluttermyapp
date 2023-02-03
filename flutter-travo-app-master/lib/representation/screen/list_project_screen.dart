@@ -54,7 +54,6 @@ class _ListProjectState extends State<ListProject> {
         title: Text(project.user),
         subtitle: Text(project.detail),
         onTap: () => {
-          
           Navigator.of(context)
               .pushNamed(AddProject.routeName, arguments: project),
         },

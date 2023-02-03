@@ -1,12 +1,15 @@
 
 import 'package:flutter/material.dart';
 import 'package:travo_app_source/data/model/project_model.dart';
+import 'package:travo_app_source/data/model/task_model.dart';
 import 'package:travo_app_source/data/model/user_model.dart';
 import 'package:travo_app_source/representation/screen/add_project_screen.dart';
 import 'package:travo_app_source/representation/screen/edit_profile_screen.dart';
 import 'package:travo_app_source/representation/screen/intro_screen.dart';
 import 'package:travo_app_source/representation/screen/list_project_screen.dart';
+import 'package:travo_app_source/representation/screen/list_task_screen.dart';
 import 'package:travo_app_source/representation/screen/profile_screen.dart';
+import 'package:travo_app_source/representation/screen/task_screen_service.dart';
 import 'package:travo_app_source/representation/widgets/login_check.dart';
 import 'package:travo_app_source/representation/screen/main_app.dart';
 import 'package:travo_app_source/representation/screen/signin_screen.dart';
@@ -62,6 +65,24 @@ MaterialPageRoute<dynamic>? generateRoutes(RouteSettings settings) {
         settings: settings,
         builder: (context) => AddProject(
           projectModal: project,
+        ),
+      );
+    case (ListTask.routeName):
+      final task =
+          settings.arguments == null ? null : (settings.arguments as Task);
+      return MaterialPageRoute<dynamic>(
+        settings: settings,
+        builder: (context) => ListTask(
+          taskModal: task,
+        ),
+      );
+    case (TaskService.routeName):
+      final task =
+          settings.arguments == null ? null : (settings.arguments as Task);
+      return MaterialPageRoute<dynamic>(
+        settings: settings,
+        builder: (context) => TaskService(
+          taskModal: task,
         ),
       );
     case (ProfileScreen.routeName):
