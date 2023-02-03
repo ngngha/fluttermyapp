@@ -16,7 +16,7 @@ class _LoginCheckState extends State<LoginCheck> {
 
     return firebaseApp;
   }
-                          
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

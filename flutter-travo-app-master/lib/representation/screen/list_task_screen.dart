@@ -43,8 +43,8 @@ class _ListTaskState extends State<ListTask> {
                     subtitle: Text(tasks[index].projectId),
                     onTap: () => {
                       // print('click'),
-                      Navigator.of(context)
-                          .pushNamed(TaskService.routeName, arguments: tasks[index]),
+                      Navigator.of(context).pushNamed(TaskService.routeName,
+                          arguments: tasks[index]),
                     },
                   );
                 });
@@ -60,22 +60,6 @@ class _ListTaskState extends State<ListTask> {
     );
   }
 
-  // Stream<List<Task>> readTask() => FirebaseFirestore.instance
-  //     // .collection('users')
-  //     // .doc(auth.currentUser!.uid)
-  //     .collection('task')
-  //     .snapshots()
-  //     .map((snapshot) =>
-  //         snapshot.docs.map((doc) => Task.fromJson(doc.data())).toList());
-  // Widget buildTask(Task task) => ListTile(
-  //       leading: Text(task.title),
-  //       title: Text(task.employee)
-  //       subtitle: Text(task.detail),
-  //       onTap: () => {
-  //         Navigator.of(context)
-  //             .pushNamed(TaskService.routeName, arguments: task),
-  //       },
-  //     );
   Future<List<Task>?> readTaskInfo(String employeeId) async {
     final result = await FirebaseFirestore.instance
         .collection('task')

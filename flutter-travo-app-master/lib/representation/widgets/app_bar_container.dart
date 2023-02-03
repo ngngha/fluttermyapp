@@ -120,20 +120,6 @@ class AppBarContainer extends StatelessWidget {
                       ),
                     ),
                   ),
-                  // Positioned(
-                  //   top: 0,
-                  //   left: 0,
-                  //   child: ImageHelper.loadFromAsset(
-                  //     AssetHelper.icoOvalTop,
-                  //   ),
-                  // ),
-                  // Positioned(
-                  //   bottom: 0,
-                  //   right: 0,
-                  //   child: ImageHelper.loadFromAsset(
-                  //     AssetHelper.icoOvalBottom,
-                  //   ),
-                  // ),
                 ],
               ),
               centerTitle: true,

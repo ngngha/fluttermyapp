@@ -23,11 +23,6 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   final FirebaseAuth auth = FirebaseAuth.instance;
-//   void inputData() {
-//   final User? user = auth.currentUser;
-//   final uid = user!.uid;
-//   // here you write the codes to input the data into firestore
-// }
   Widget _buildItemCategory(
       Widget icon, Color color, Function() onTap, String title) {
     return GestureDetector(
@@ -69,13 +64,6 @@ class _HomeScreenState extends State<HomeScreen> {
                 Text('Xin chào, ${auth.currentUser!.displayName}!',
                     style:
                         TextStyles.defaultStyle.fontHeader.whiteTextColor.bold),
-                // SizedBox(
-                //   height: 10,
-                // ),
-                // Text(
-                //   'Chào mừng bạn',
-                //   style: TextStyles.defaultStyle.fontCaption.whiteTextColor,
-                // )
               ],
             ),
             Spacer(),

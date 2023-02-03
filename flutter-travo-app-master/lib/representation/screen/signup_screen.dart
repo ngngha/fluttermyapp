@@ -55,7 +55,6 @@ class SignUpScreenState extends State<SignUpScreen> {
                   padding: EdgeInsets.symmetric(vertical: 10),
                   child: SizedBox(
                     width: 350,
-                    //  height: 50,
                     child: TextFormField(
                       controller: usernameController,
                       decoration: InputDecoration(
@@ -71,7 +70,6 @@ class SignUpScreenState extends State<SignUpScreen> {
                   padding: EdgeInsets.symmetric(vertical: 10),
                   child: SizedBox(
                     width: 350,
-                    //  height: 50,
                     child: TextFormField(
                       controller: emailController,
                       validator: (val) => val!.isEmpty || !val.contains("@")
@@ -90,7 +88,6 @@ class SignUpScreenState extends State<SignUpScreen> {
                   padding: EdgeInsets.symmetric(vertical: 10),
                   child: SizedBox(
                     width: 350,
-                    //  height: 50,
                     child: TextFormField(
                       obscureText: _isObscure,
                       controller: passwordController,
@@ -119,7 +116,6 @@ class SignUpScreenState extends State<SignUpScreen> {
                   padding: EdgeInsets.symmetric(vertical: 10),
                   child: SizedBox(
                     width: 350,
-                    //  height: 50,
                     child: TextFormField(
                       obscureText: _isObscure,
                       controller: repasswordController,
@@ -212,14 +208,16 @@ class SignUpScreenState extends State<SignUpScreen> {
       final name = usernameController.text;
       await userCredential.user?.updateDisplayName(name);
       user!.updateDisplayName(usernameController.text);
-      final docUser = FirebaseFirestore.instance.collection('users').doc(auth.currentUser!.uid);
-    final userInfo = Users(
-      id: auth.currentUser!.uid,
-      username: name,
-      email: emailController.text,
-    );
-    final json = userInfo.toJson();
-    await docUser.set(json);
+      final docUser = FirebaseFirestore.instance
+          .collection('users')
+          .doc(auth.currentUser!.uid);
+      final userInfo = Users(
+        id: auth.currentUser!.uid,
+        username: name,
+        email: emailController.text,
+      );
+      final json = userInfo.toJson();
+      await docUser.set(json);
       if (userCredential.user != null && !userCredential.user!.emailVerified) {
         await userCredential.user?.sendEmailVerification();
         Navigator.of(context).pushReplacementNamed(SignInScreen.routeName);

@@ -60,7 +60,6 @@ class SignInScreenState extends State<SignInScreen> {
                   padding: const EdgeInsets.symmetric(vertical: 10),
                   child: SizedBox(
                     width: 350,
-                    // height: 70,
                     child: TextFormField(
                       controller: _emailController,
                       validator: (val) => val!.isEmpty || !val.contains("@")
@@ -82,7 +81,6 @@ class SignInScreenState extends State<SignInScreen> {
                   padding: const EdgeInsets.symmetric(vertical: 20),
                   child: SizedBox(
                     width: 350,
-                    // height: 70,
                     child: TextFormField(
                       obscureText: _isObscure,
                       controller: _passwordController,

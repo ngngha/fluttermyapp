@@ -15,11 +15,9 @@ class AddProject extends StatefulWidget {
 class _AddProjectState extends State<AddProject> {
   final _formKey = GlobalKey<FormState>();
   Users? selected_user;
-  // DateTime? picked;
   TextEditingController? userController;
   TextEditingController? projectNameController;
   TextEditingController? projectDetailController;
-  // TextEditingController? dateCreateController;
   @override
   void initState() {
     if (widget.projectModal != null) {
@@ -28,7 +26,6 @@ class _AddProjectState extends State<AddProject> {
           TextEditingController(text: widget.projectModal?.name);
       projectDetailController =
           TextEditingController(text: widget.projectModal?.detail);
-      // dateCreateController = TextEditingController(text: widget.projectModal?.name);
     } else {
       userController = TextEditingController();
       projectNameController = TextEditingController();
@@ -94,7 +91,6 @@ class _AddProjectState extends State<AddProject> {
                         } else {
                           List<DropdownMenuItem<Users>> currentItems = [];
                           snapshot.data?.forEach((element) {
-                            // element = userController!.text as Users;
                             currentItems.add(
                               DropdownMenuItem(
                                 value: element,
@@ -102,7 +98,6 @@ class _AddProjectState extends State<AddProject> {
                               ),
                             );
                           });
-                          Users? currentItem;
                           return StatefulBuilder(builder: (context, setState) {
                             return DropdownButton<Users>(
                               value: selected_user,
@@ -117,24 +112,6 @@ class _AddProjectState extends State<AddProject> {
                         }
                       }),
                     ),
-                    // Padding(
-                    //   padding: const EdgeInsets.symmetric(vertical: 10),
-                    //   child: SizedBox(
-                    //     width: 350,
-                    //     child: TextFormField(
-                    //       controller: userController,
-                    //       validator: (val) =>
-                    //           val!.isEmpty ? 'Không được bỏ trống' : null,
-                    //       decoration: InputDecoration(
-                    //           border: OutlineInputBorder(),
-                    //           hintText: 'Người phụ trách',
-                    //           prefixIcon: Icon(
-                    //             Icons.person,
-                    //             color: Colors.teal,
-                    //           )),
-                    //     ),
-                    //   ),
-                    // ),
                     Padding(
                       padding: const EdgeInsets.symmetric(vertical: 10),
                       child: SizedBox(

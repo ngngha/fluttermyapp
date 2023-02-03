@@ -34,19 +34,7 @@ class _OpeningViewState extends State<OpeningView> {
   @override
   Widget build(BuildContext context) {
     return Stack(
-      children: const [
-        // Positioned.fill(
-        //   child: ImageHelper.loadFromAsset(
-        //     AssetHelper.backgroundSplash,
-        //     fit: BoxFit.fitWidth,
-        //   ),
-        // ),
-        // Positioned.fill(
-        // child: ImageHelper.loadFromAsset(
-        // AssetHelper.circleSplash,
-        // ),
-        // ),
-      ],
+      children: const [],
     );
   }
 }

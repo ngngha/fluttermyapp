@@ -18,7 +18,6 @@ class ProfileScreen extends StatefulWidget {
 class ProfileScreenState extends State<ProfileScreen> {
   final FirebaseAuth auth = FirebaseAuth.instance;
   final FirebaseFirestore firestore = FirebaseFirestore.instance;
-  // final String id;
   List filterState = [];
   @override
   void initState() {
@@ -66,12 +65,9 @@ class ProfileScreenState extends State<ProfileScreen> {
     final List<Users> list =
         result.docs.map((e) => Users.fromJson(e.data())).toList();
 
-    //  List<Users> filterState = result.docs.map((e)=>e.data()).toList() as List<Users> ;
     return list.isEmpty ? null : list.first;
   }
 
-  // .map((snapshot) =>
-  //     snapshot.docs.map((doc) => Users.fromJson(doc.data())).toList());
   Widget buildProject(Users users) => Align(
         alignment: Alignment.center,
         child: Column(

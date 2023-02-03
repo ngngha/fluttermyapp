@@ -15,13 +15,11 @@ class TaskService extends StatefulWidget {
 class _TaskServiceState extends State<TaskService> {
   Project? selected_project;
   final _formKey = GlobalKey<FormState>();
-  // DateTime? picked;
   final FirebaseAuth auth = FirebaseAuth.instance;
   final FirebaseFirestore firebase = FirebaseFirestore.instance;
   TextEditingController? employeeController;
   TextEditingController? taskTitleController;
   TextEditingController? taskDetailController;
-  // TextEditingController? dateCreateController;
   @override
   void initState() {
     if (widget.taskModal != null) {
@@ -31,7 +29,6 @@ class _TaskServiceState extends State<TaskService> {
           TextEditingController(text: widget.taskModal?.title);
       taskDetailController =
           TextEditingController(text: widget.taskModal?.detail);
-      // dateCreateController = TextEditingController(text: widget.taskModal?.name);
     } else {
       employeeController = TextEditingController();
       taskTitleController = TextEditingController();
@@ -79,8 +76,6 @@ class _TaskServiceState extends State<TaskService> {
                         } else {
                           List<DropdownMenuItem<Project>> currentItems = [];
                           snapshot.data?.forEach((element) {
-                            // DocumentSnapshot snap = snapshot.data.map((e) => null);
-                            // element = userController!.text as Task;
                             currentItems.add(
                               DropdownMenuItem(
                                 value: element,
@@ -126,8 +121,6 @@ class _TaskServiceState extends State<TaskService> {
                       child: SizedBox(
                         width: 350,
                         child: TextField(
-                          // validator: (val) =>
-                          //     val!.isEmpty ? 'Không được bỏ trống' : null,
                           decoration: InputDecoration(
                               border: OutlineInputBorder(),
                               hintText: '${auth.currentUser!.displayName}',
@@ -166,7 +159,6 @@ class _TaskServiceState extends State<TaskService> {
                                   backgroundColor: Colors.teal,
                                   textStyle: const TextStyle(fontSize: 20)),
                               onPressed: () async {
-                                // final name = taskTitleController.text;
                                 if (_formKey.currentState!.validate()) {
                                   widget.taskModal == null
                                       ? createTask(
@@ -202,7 +194,6 @@ class _TaskServiceState extends State<TaskService> {
     final task = Task(
       id: docTask.id,
       projectId: selected_project!.id,
-      // projectName: selected_project!.name,
       title: taskTitleController!.text,
       employee: auth.currentUser?.displayName ?? '',
       employeeId: auth.currentUser?.uid ?? '',
@@ -223,7 +214,6 @@ class _TaskServiceState extends State<TaskService> {
     final task = Task(
       id: widget.taskModal!.id.toString(),
       projectId: selected_project!.id,
-      // projectName: selected_project!.name,
       title: taskTitleController!.text,
       employee: auth.currentUser?.displayName ?? '',
       employeeId: auth.currentUser?.uid ?? '',
