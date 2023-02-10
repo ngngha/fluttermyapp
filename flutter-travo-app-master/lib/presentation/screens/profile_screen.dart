@@ -3,9 +3,10 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:travo_app_source/core/helpers/asset_helper.dart';
 import 'package:travo_app_source/core/helpers/image_helper.dart';
+import 'package:travo_app_source/core/helpers/local_storage_helper.dart';
 import 'package:travo_app_source/data/model/user_model.dart';
-import 'package:travo_app_source/representation/screen/edit_profile_screen.dart';
-import 'package:travo_app_source/representation/screen/signin_screen.dart';
+import 'package:travo_app_source/presentation/screens/edit_profile_screen.dart';
+import 'package:travo_app_source/presentation/screens/signin_screen.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({Key? key, this.usersModal}) : super(key: key);
@@ -109,6 +110,7 @@ class ProfileScreenState extends State<ProfileScreen> {
         ),
       );
   void logOut() async {
+    LocalStorageHelper.setValue('ignoreIntro', false);
     await FirebaseAuth.instance.signOut();
     Navigator.of(context).pushReplacement(
         MaterialPageRoute(builder: ((context) => SignInScreen())));

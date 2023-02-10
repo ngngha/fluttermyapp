@@ -1,19 +1,18 @@
-
 import 'package:flutter/material.dart';
 import 'package:travo_app_source/data/model/project_model.dart';
 import 'package:travo_app_source/data/model/task_model.dart';
 import 'package:travo_app_source/data/model/user_model.dart';
-import 'package:travo_app_source/representation/screen/add_project_screen.dart';
-import 'package:travo_app_source/representation/screen/edit_profile_screen.dart';
-import 'package:travo_app_source/representation/screen/intro_screen.dart';
-import 'package:travo_app_source/representation/screen/list_project_screen.dart';
-import 'package:travo_app_source/representation/screen/list_task_screen.dart';
-import 'package:travo_app_source/representation/screen/profile_screen.dart';
-import 'package:travo_app_source/representation/screen/task_screen_service.dart';
-import 'package:travo_app_source/representation/widgets/login_check.dart';
-import 'package:travo_app_source/representation/screen/main_app.dart';
-import 'package:travo_app_source/representation/screen/signin_screen.dart';
-import 'package:travo_app_source/representation/screen/signup_screen.dart';
+import 'package:travo_app_source/presentation/screens/add_project_screen.dart';
+import 'package:travo_app_source/presentation/screens/edit_profile_screen.dart';
+import 'package:travo_app_source/presentation/screens/intro_screen.dart';
+import 'package:travo_app_source/presentation/screens/list_project_screen.dart';
+import 'package:travo_app_source/presentation/screens/list_task_screen.dart';
+import 'package:travo_app_source/presentation/screens/profile_screen.dart';
+import 'package:travo_app_source/presentation/screens/task_screen_service.dart';
+import 'package:travo_app_source/presentation/widgets/login_check.dart';
+import 'package:travo_app_source/presentation/screens/main_app.dart';
+import 'package:travo_app_source/presentation/screens/signin_screen.dart';
+import 'package:travo_app_source/presentation/screens/signup_screen.dart';
 
 final Map<String, WidgetBuilder> routes = {
   IntroScreen.routeName: (context) => IntroScreen(),
@@ -21,36 +20,12 @@ final Map<String, WidgetBuilder> routes = {
   SignInScreen.routeName: (context) => SignInScreen(),
   SignUpScreen.routeName: (context) => SignUpScreen(),
   MainApp.routeName: (context) => MainApp(),
-  ListProject.routeName: (context) => ListProject(),
-  // AddProject.routeName: (context) => AddProject(),
-  ProfileScreen.routeName: (context) => ProfileScreen(),
-  EditProfileScreen.routeName: (context) => EditProfileScreen(),
 };
 
 MaterialPageRoute<dynamic>? generateRoutes(RouteSettings settings) {
   switch (settings.name) {
-    case (IntroScreen.routeName):
-      return MaterialPageRoute<dynamic>(
-        settings: settings,
-        builder: (context) => IntroScreen(),
-      );
-    case (LoginCheck.routeName):
-      return MaterialPageRoute<dynamic>(
-        settings: settings,
-        builder: (context) => LoginCheck(),
-      );
-    case (SignInScreen.routeName):
-      return MaterialPageRoute<dynamic>(
-        settings: settings,
-        builder: (context) => SignInScreen(),
-      );
-    case (SignUpScreen.routeName):
-      return MaterialPageRoute<dynamic>(
-        settings: settings,
-        builder: (context) => SignUpScreen(),
-      );
     case (ListProject.routeName):
-    final project =
+      final project =
           settings.arguments == null ? null : (settings.arguments as Project);
       return MaterialPageRoute<dynamic>(
         settings: settings,

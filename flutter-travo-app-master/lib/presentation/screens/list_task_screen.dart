@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:travo_app_source/data/model/task_model.dart';
-import 'package:travo_app_source/representation/screen/task_screen_service.dart';
+import 'package:travo_app_source/presentation/screens/task_screen_service.dart';
 
 class ListTask extends StatefulWidget {
   const ListTask({Key? key, this.taskModal}) : super(key: key);

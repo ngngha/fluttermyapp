@@ -1,8 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:travo_app_source/representation/screen/main_app.dart';
-import 'package:travo_app_source/representation/screen/signup_screen.dart';
+import 'package:travo_app_source/presentation/screens/main_app.dart';
+import 'package:travo_app_source/presentation/screens/signup_screen.dart';
 
 class SignInScreen extends StatefulWidget {
   const SignInScreen({Key? key}) : super(key: key);
@@ -156,27 +156,31 @@ class SignInScreenState extends State<SignInScreen> {
   }
 
   void signUserEmailAndPassword() async {
-    try {
-      var userCredential = await FirebaseAuth.instance
-          .signInWithEmailAndPassword(
-              email: _emailController.text, password: _passwordController.text);
+    if(mounted) {
+      try {
+        var userCredential = await FirebaseAuth.instance
+            .signInWithEmailAndPassword(
+                email: _emailController.text, password: _passwordController.text);
 
-      debugPrint(userCredential.toString());
-      if (userCredential.user != null) {
-        SharedPreferences prefs = await SharedPreferences.getInstance();
-        prefs.setString('displayName', userCredential.user!.displayName!);
-        Navigator.of(context).pushReplacementNamed(MainApp.routeName);
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Đăng nhập thành công')),
-        );
+        debugPrint(userCredential.toString());
+        if (userCredential.user != null) {
+          SharedPreferences prefs = await SharedPreferences.getInstance();
+          prefs.setString('displayName', userCredential.user!.displayName!);
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('Đăng nhập thành công')),
+          );
+          Navigator.of(context).pushReplacementNamed(MainApp.routeName);
+        }
+      } catch (e) {
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+                content: Text(
+                    'Tài khoản không tồn tại, hãy đăng ký để có thể đăng nhập')),
+          );
+        }
+        debugPrint(e.toString());
       }
-    } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-            content: Text(
-                'Tài khoản không tồn tại, hãy đăng ký để có thể đăng nhập')),
-      );
-      debugPrint(e.toString());
     }
   }
 }

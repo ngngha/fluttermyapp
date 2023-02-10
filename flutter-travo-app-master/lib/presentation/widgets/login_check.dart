@@ -1,6 +1,6 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:travo_app_source/representation/screen/signin_screen.dart';
+import 'package:travo_app_source/presentation/screens/signin_screen.dart';
 
 class LoginCheck extends StatefulWidget {
   const LoginCheck({Key? key}) : super(key: key);

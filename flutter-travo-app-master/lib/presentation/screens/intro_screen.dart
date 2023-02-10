@@ -5,8 +5,8 @@ import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'package:travo_app_source/core/constants/dimension_constants.dart';
 import 'package:travo_app_source/core/constants/textstyle_ext.dart';
 import 'package:travo_app_source/core/helpers/asset_helper.dart';
-import 'package:travo_app_source/representation/widgets/login_check.dart';
-import 'package:travo_app_source/representation/widgets/item_intro_widget.dart';
+import 'package:travo_app_source/presentation/widgets/login_check.dart';
+import 'package:travo_app_source/presentation/widgets/item_intro_widget.dart';
 
 class IntroScreen extends StatefulWidget {
   const IntroScreen({Key? key}) : super(key: key);
@@ -40,7 +40,8 @@ class _IntroScreenState extends State<IntroScreen> {
     ),
     ItemIntroWidget(
       title: 'Trợ lý ảo thông minh',
-      description: 'Thông báo theo thời gian thực, không bỏ lỡ bất kỳ công việc nào.',
+      description:
+          'Thông báo theo thời gian thực, không bỏ lỡ bất kỳ công việc nào.',
       sourceImage: AssetHelper.slide2,
       aligment: Alignment.center,
     ),

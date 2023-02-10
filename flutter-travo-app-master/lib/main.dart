@@ -2,8 +2,10 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:travo_app_source/core/constants/color_palatte.dart';
-import 'package:travo_app_source/representation/screen/main_app.dart';
-import 'package:travo_app_source/representation/screen/opening_screen.dart';
+import 'package:travo_app_source/presentation/screens/intro_screen.dart';
+import 'package:travo_app_source/presentation/screens/main_app.dart';
+import 'package:travo_app_source/presentation/screens/opening_screen.dart';
+import 'package:travo_app_source/presentation/screens/splash_screen.dart';
 import 'package:travo_app_source/routes.dart';
 
 import 'core/helpers/size_config.dart';
@@ -34,11 +36,16 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'My App',
       theme: ThemeData(
+        brightness: Brightness.light,
         primarySwatch: Colors.teal,
         primaryColor: ColorPalette.primaryColor,
         scaffoldBackgroundColor: ColorPalette.backgroundScaffoldColor,
         dialogBackgroundColor: ColorPalette.backgroundScaffoldColor,
       ),
+      darkTheme: ThemeData(
+        brightness: Brightness.dark,
+      ),
+      themeMode: ThemeMode.system,
       routes: routes,
       debugShowCheckedModeBanner: false,
       onGenerateRoute: generateRoutes,
@@ -47,7 +54,7 @@ class MyApp extends StatelessWidget {
           : Builder(
               builder: (context) {
                 SizeConfig.init(context);
-                return OpeningView();
+                return SplashScreen();
               },
             ),
     );

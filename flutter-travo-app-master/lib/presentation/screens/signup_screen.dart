@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:travo_app_source/data/model/user_model.dart';
-import 'package:travo_app_source/representation/screen/signin_screen.dart';
+import 'package:travo_app_source/presentation/screens/signin_screen.dart';
 
 class SignUpScreen extends StatefulWidget {
   const SignUpScreen({Key? key}) : super(key: key);

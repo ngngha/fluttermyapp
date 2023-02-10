@@ -25,7 +25,7 @@ mixin AssetHelper {
 
   //Assets in images
   
-  static const String logo = 'assets/images/logo.svg';
+  static const String logo = 'assets/images/logo.jpg';
   static const String backgroundSplash = 'assets/images/background_splash.png';
   static const String circleSplash = 'assets/images/circle_splash.png';
   static const String hotelScreen = 'assets/images/hotel_screen.png';

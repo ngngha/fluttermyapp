@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:travo_app_source/core/constants/color_palatte.dart';
-import 'package:travo_app_source/representation/screen/list_project_screen.dart';
-import 'package:travo_app_source/representation/screen/list_task_screen.dart';
-import 'package:travo_app_source/representation/screen/profile_screen.dart';
+import 'package:travo_app_source/presentation/screens/list_project_screen.dart';
+import 'package:travo_app_source/presentation/screens/list_task_screen.dart';
+import 'package:travo_app_source/presentation/screens/profile_screen.dart';
 
 import 'home_screen.dart';
 
