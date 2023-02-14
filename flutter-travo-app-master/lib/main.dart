@@ -2,9 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:travo_app_source/core/constants/color_palatte.dart';
-import 'package:travo_app_source/presentation/screens/intro_screen.dart';
 import 'package:travo_app_source/presentation/screens/main_app.dart';
-import 'package:travo_app_source/presentation/screens/opening_screen.dart';
 import 'package:travo_app_source/presentation/screens/splash_screen.dart';
 import 'package:travo_app_source/routes.dart';
 
@@ -12,7 +10,9 @@ import 'core/helpers/size_config.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
+  await Firebase.initializeApp(
+      // options: DefaultFirebaseOption\.currentPlatform,
+      );
   FirebaseAuth.instance.authStateChanges().listen((User? user) {
     if (user == null) {
       runApp(const MyApp(auth: false));

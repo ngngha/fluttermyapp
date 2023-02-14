@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:travo_app_source/core/constants/color_palatte.dart';
+import 'package:travo_app_source/presentation/screens/attendance_screen.dart';
 import 'package:travo_app_source/presentation/screens/list_project_screen.dart';
 import 'package:travo_app_source/presentation/screens/list_task_screen.dart';
 import 'package:travo_app_source/presentation/screens/profile_screen.dart';
+import 'package:travo_app_source/presentation/screens/signin_screen.dart';
 
 import 'home_screen.dart';
 
@@ -36,11 +38,15 @@ class _MainAppState extends State<MainApp> {
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.grid_view),
-            label: 'Function',
+            label: 'Project',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.feed),
-            label: 'News',
+            label: 'Task',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.calendar_month),
+            label: 'Attendance',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.person),
@@ -54,6 +60,7 @@ class _MainAppState extends State<MainApp> {
           HomeScreen(),
           ListProject(),
           ListTask(),
+          CalendarScreen(),
           ProfileScreen(),
         ],
       ),

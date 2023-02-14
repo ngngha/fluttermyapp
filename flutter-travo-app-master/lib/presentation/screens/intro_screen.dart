@@ -36,6 +36,7 @@ class _IntroScreenState extends State<IntroScreen> {
       description:
           'Tạo mới, theo dõi, kiểm soát dự án, công việc của bạn mọi lúc mọi nơi theo công nghệ trực tuyến.',
       sourceImage: AssetHelper.slide1,
+      
       aligment: Alignment.centerRight,
     ),
     ItemIntroWidget(

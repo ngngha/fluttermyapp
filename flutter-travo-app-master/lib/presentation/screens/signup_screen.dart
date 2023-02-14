@@ -41,12 +41,9 @@ class SignUpScreenState extends State<SignUpScreen> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Image.asset('assets/images/logo.jpg', height: 150, width: 200),
-                const Text(
-                  'Tạo tài khoản',
-                  style: TextStyle(
-                    color: Colors.black45,
-                    fontSize: 18,
-                  ),
+                Text(
+                  'Create Account',
+                  style: Theme.of(context).textTheme.titleLarge,
                 ),
                 const SizedBox(
                   height: 30,
@@ -60,7 +57,7 @@ class SignUpScreenState extends State<SignUpScreen> {
                       decoration: InputDecoration(
                         border: OutlineInputBorder(),
                         contentPadding: EdgeInsets.only(top: 15),
-                        hintText: "Họ tên",
+                        label: Text("Username"),
                         prefixIcon: Icon(Icons.person, color: Colors.teal),
                       ),
                     ),
@@ -73,12 +70,12 @@ class SignUpScreenState extends State<SignUpScreen> {
                     child: TextFormField(
                       controller: emailController,
                       validator: (val) => val!.isEmpty || !val.contains("@")
-                          ? 'Phải là email hợp lệ'
+                          ? 'Must be a valid email'
                           : null,
                       decoration: InputDecoration(
                         border: OutlineInputBorder(),
                         contentPadding: EdgeInsets.only(top: 15),
-                        hintText: "Email đăng nhập",
+                        label: Text("Email"),
                         prefixIcon: Icon(Icons.mail, color: Colors.teal),
                       ),
                     ),
@@ -91,13 +88,12 @@ class SignUpScreenState extends State<SignUpScreen> {
                     child: TextFormField(
                       obscureText: _isObscure,
                       controller: passwordController,
-                      validator: (val) => val!.length < 6
-                          ? 'Mật khẩu phải có ít nhất 6 kí tự'
-                          : null,
+                      validator: (val) =>
+                          val!.length < 6 ? 'Must have 6+ character' : null,
                       decoration: InputDecoration(
                           border: const OutlineInputBorder(),
                           contentPadding: EdgeInsets.only(top: 15),
-                          hintText: "Mật khẩu",
+                          label: Text("Password"),
                           prefixIcon: const Icon(Icons.key, color: Colors.teal),
                           suffixIcon: IconButton(
                             icon: Icon(_isObscure
@@ -121,16 +117,16 @@ class SignUpScreenState extends State<SignUpScreen> {
                       controller: repasswordController,
                       validator: (value) {
                         if (value!.isEmpty || value.length < 6) {
-                          return 'Mật khẩu phải có ít nhất 6 kí tự';
+                          return 'Must have 6+ character';
                         } else if (value != passwordController.text) {
-                          return 'Mật khẩu không khớp';
+                          return 'Not match';
                         }
                         return null;
                       },
                       decoration: InputDecoration(
                           border: const OutlineInputBorder(),
                           contentPadding: EdgeInsets.only(top: 15),
-                          hintText: "Nhập lại mật khẩu",
+                          label: Text("Resign-password"),
                           prefixIcon: const Icon(Icons.key, color: Colors.teal),
                           suffixIcon: IconButton(
                             icon: Icon(_isObscure
@@ -157,31 +153,31 @@ class SignUpScreenState extends State<SignUpScreen> {
                         child: ElevatedButton(
                           style: ElevatedButton.styleFrom(
                               backgroundColor: Colors.teal,
-                              textStyle: const TextStyle(fontSize: 20)),
+                              textStyle:
+                                  Theme.of(context).textTheme.titleLarge),
                           onPressed: () async {
                             if (_formKey.currentState!.validate()) {
                               createUserEmailAndPassword();
                               ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
-                                    content: Text('Đăng kí thành công')),
+                                const SnackBar(content: Text('Sucess')),
                               );
                             }
                           },
-                          child: const Text('Đăng kí'),
+                          child: const Text('Sign Up'),
                         ),
                       ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: <Widget>[
                           const Text(
-                            "Đã có tài khoản?",
+                            "Already have a account?",
                           ),
                           MaterialButton(
                             onPressed: () {
                               Navigator.of(context)
                                   .pushNamed(SignInScreen.routeName);
                             },
-                            child: const Text("Đăng nhập",
+                            child: const Text("Sign In",
                                 style: TextStyle(
                                   color: Colors.teal,
                                 )),

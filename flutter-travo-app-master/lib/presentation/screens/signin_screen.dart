@@ -39,19 +39,17 @@ class SignInScreenState extends State<SignInScreen> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Image.asset('assets/images/logo.jpg', height: 150, width: 200),
-                const Text(
-                  'Xin chào,',
-                  style: TextStyle(
-                    color: Colors.teal,
-                    fontSize: 26,
-                  ),
+                Text(
+                  'Hello,',
+                  style: Theme.of(context).textTheme.headlineMedium,
+                  // TextStyle(
+                  //   color: Colors.teal,
+                  //   fontSize: 26,
+                  // ),
                 ),
-                const Text(
-                  'Hãy đăng nhập để tiếp tục',
-                  style: TextStyle(
-                    color: Colors.black45,
-                    fontSize: 18,
-                  ),
+                Text(
+                  'Please log in to continue',
+                  style: Theme.of(context).textTheme.titleLarge,
                 ),
                 const SizedBox(
                   height: 30,
@@ -63,12 +61,13 @@ class SignInScreenState extends State<SignInScreen> {
                     child: TextFormField(
                       controller: _emailController,
                       validator: (val) => val!.isEmpty || !val.contains("@")
-                          ? 'Phải là email hợp lệ'
+                          ? 'Must be a valid email'
                           : null,
                       decoration: InputDecoration(
                         contentPadding: EdgeInsets.only(top: 15),
                         border: OutlineInputBorder(),
-                        hintText: "Email đăng nhập",
+                        label: Text("Email"),
+                        // hintText: "Email",
                         prefixIcon: Icon(
                           Icons.email,
                           color: Colors.teal,
@@ -78,19 +77,19 @@ class SignInScreenState extends State<SignInScreen> {
                   ),
                 ),
                 Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 20),
+                  padding: const EdgeInsets.only(top: 20),
                   child: SizedBox(
                     width: 350,
                     child: TextFormField(
                       obscureText: _isObscure,
                       controller: _passwordController,
-                      validator: (val) => val!.length < 6
-                          ? 'Mật khẩu phải có ít nhất 6 kí tự'
-                          : null,
+                      validator: (val) =>
+                          val!.length <= 6 ? 'Must have 6+ character' : null,
                       decoration: InputDecoration(
                           border: const OutlineInputBorder(),
                           contentPadding: EdgeInsets.only(top: 15),
-                          hintText: "Mật khẩu",
+                          label: Text("Password"),
+                          // hintText: "Password",
                           prefixIcon: const Icon(Icons.key, color: Colors.teal),
                           suffixIcon: IconButton(
                             icon: Icon(_isObscure
@@ -105,47 +104,61 @@ class SignInScreenState extends State<SignInScreen> {
                     ),
                   ),
                 ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 20),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: <Widget>[
-                      SizedBox(
-                        width: 350,
-                        height: 50,
-                        child: ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.teal,
-                              textStyle: const TextStyle(fontSize: 20)),
-                          onPressed: () async {
-                            if (_formKey.currentState!.validate()) {
-                              signUserEmailAndPassword();
-                            }
-                          },
-                          child: const Text('Đăng nhập'),
+                // const SizedBox(
+                //   height: 10,
+                // ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    MaterialButton(
+                      onPressed: () {
+                        Navigator.of(context).pushNamed(SignUpScreen.routeName);
+                      },
+                      child: Text(
+                        "Forgot password?",
+                        style: Theme.of(context).textTheme.bodySmall,
+                      ),
+                    ),
+                  ],
+                ),
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: <Widget>[
+                    SizedBox(
+                      width: 350,
+                      height: 50,
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.teal,
+                            textStyle: Theme.of(context).textTheme.titleLarge),
+                        onPressed: () async {
+                          if (_formKey.currentState!.validate()) {
+                            signUserEmailAndPassword();
+                          }
+                        },
+                        child: const Text('Sign In'),
+                      ),
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: <Widget>[
+                        const Text(
+                          "Does not have a account?",
                         ),
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: <Widget>[
-                          const Text(
-                            "Chưa có tài khoản?",
-                          ),
-                          MaterialButton(
-                            onPressed: () {
-                              Navigator.of(context)
-                                  .pushNamed(SignUpScreen.routeName);
-                            },
-                            child: const Text("Đăng ký",
-                                style: TextStyle(
-                                  color: Colors.teal,
-                                )),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
+                        MaterialButton(
+                          onPressed: () {
+                            Navigator.of(context)
+                                .pushNamed(SignUpScreen.routeName);
+                          },
+                          child: const Text("Sign Up",
+                              style: TextStyle(
+                                color: Colors.teal,
+                              )),
+                        ),
+                      ],
+                    ),
+                  ],
                 ),
               ],
             ),
@@ -156,19 +169,20 @@ class SignInScreenState extends State<SignInScreen> {
   }
 
   void signUserEmailAndPassword() async {
-    if(mounted) {
+    if (mounted) {
       try {
         var userCredential = await FirebaseAuth.instance
             .signInWithEmailAndPassword(
-                email: _emailController.text, password: _passwordController.text);
+                email: _emailController.text,
+                password: _passwordController.text);
 
-        debugPrint(userCredential.toString());
         if (userCredential.user != null) {
-          SharedPreferences prefs = await SharedPreferences.getInstance();
-          prefs.setString('displayName', userCredential.user!.displayName!);
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(content: Text('Đăng nhập thành công')),
           );
+          SharedPreferences prefs = await SharedPreferences.getInstance();
+          prefs.setString('displayName', userCredential.user!.displayName!);
+
           Navigator.of(context).pushReplacementNamed(MainApp.routeName);
         }
       } catch (e) {
