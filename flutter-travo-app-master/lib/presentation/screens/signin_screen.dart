@@ -27,6 +27,7 @@ class SignInScreenState extends State<SignInScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return Scaffold(
         body: Form(
       key: _formKey,
@@ -41,7 +42,7 @@ class SignInScreenState extends State<SignInScreen> {
                 Image.asset('assets/images/logo.jpg', height: 150, width: 200),
                 Text(
                   'Hello,',
-                  style: Theme.of(context).textTheme.headlineMedium,
+                  style: theme.textTheme.headlineMedium,
                   // TextStyle(
                   //   color: Colors.teal,
                   //   fontSize: 26,
@@ -49,7 +50,7 @@ class SignInScreenState extends State<SignInScreen> {
                 ),
                 Text(
                   'Please log in to continue',
-                  style: Theme.of(context).textTheme.titleLarge,
+                  style: theme.textTheme.titleLarge,
                 ),
                 const SizedBox(
                   height: 30,
@@ -116,7 +117,7 @@ class SignInScreenState extends State<SignInScreen> {
                       },
                       child: Text(
                         "Forgot password?",
-                        style: Theme.of(context).textTheme.bodySmall,
+                        style: theme.textTheme.bodySmall,
                       ),
                     ),
                   ],
@@ -131,7 +132,7 @@ class SignInScreenState extends State<SignInScreen> {
                       child: ElevatedButton(
                         style: ElevatedButton.styleFrom(
                             backgroundColor: Colors.teal,
-                            textStyle: Theme.of(context).textTheme.titleLarge),
+                            textStyle: theme.textTheme.titleLarge),
                         onPressed: () async {
                           if (_formKey.currentState!.validate()) {
                             signUserEmailAndPassword();

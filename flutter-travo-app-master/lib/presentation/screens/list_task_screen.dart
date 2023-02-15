@@ -5,6 +5,7 @@ import 'package:travo_app_source/core/constants/dimension_constants.dart';
 import 'package:travo_app_source/data/model/task_model.dart';
 import 'package:travo_app_source/presentation/screens/task_screen_service.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:travo_app_source/presentation/widgets/app_bar_container.dart';
 
 class ListTask extends StatefulWidget {
   const ListTask({Key? key, this.taskModal}) : super(key: key);
@@ -22,72 +23,125 @@ class _ListTaskState extends State<ListTask> {
   }
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Danh sách nhiệm vụ'),
-        actions: [
-          IconButton(
-            onPressed: () {
-              Navigator.of(context).pushNamed(TaskService.routeName);
-            },
-            icon: Icon(Icons.add),
-          )
-        ],
+    final theme = Theme.of(context);
+    return AppBarContainer(
+    titleString: 'My Tasks',
+    title: Padding(
+      padding: EdgeInsets.symmetric(horizontal: kItemPadding),
+      child: Container(
+        child: Text('My Tasks'),
       ),
+    ),
+    child:
+     Scaffold(
+      // appBar: AppBar(
+      //   title: Padding(
+      //     padding: EdgeInsets.symmetric(horizontal: kItemPadding),
+      //     child: Row(
+      //       mainAxisAlignment: MainAxisAlignment.center,
+      //       children: [
+      //         Column(
+      //           // crossAxisAlignment: CrossAxisAlignment.,
+      //           children: [
+      //             Text(
+      //               'My Tasks',
+      //             ),
+      //           ],
+      //         ),
+      //       ],
+      //     ),
+          
+      //   ),
+      //   flexibleSpace: Stack(
+      //           children: [
+      //             Container(
+      //               decoration: BoxDecoration(
+      //                 gradient: const LinearGradient(
+      //                   colors: [
+      //                     Colors.teal,
+      //                     Color.fromARGB(255, 57, 128, 111)
+      //                   ],
+      //                 ),
+      //                 borderRadius: BorderRadius.only(
+      //                   bottomLeft: Radius.circular(25),
+      //                   bottomRight: Radius.circular(25),
+      //                 ),
+                      
+      //               ),
+      //             ),
+      //           ],
+      //         ),
+      //         // centerTitle: true,
+      //         // automaticallyImplyLeading: false,
+      //         elevation: 0,
+      //         toolbarHeight: 76,
+      //         backgroundColor: Colors.white,
+      //   // title: Text(''),
+      //   // toolbarHeight: 100,
+      // ),
       body: RefreshIndicator(
         onRefresh: refresh,
         child: Container(
-          padding: EdgeInsets.symmetric(
-              vertical: kMediumPadding, horizontal: kDefaultPadding),
+          // padding: EdgeInsets.symmetric(
+          //     vertical: kMediumPadding, horizontal: kDefaultPadding),
           child: FutureBuilder<List<Task>?>(
             future: readTaskInfo(auth.currentUser!.uid),
             builder: (context, snapshot) {
               if (snapshot.hasData) {
                 final tasks = snapshot.data!;
-                return ListView.separated(
+                return ListView.builder(
+                  padding: EdgeInsets.all(0),
                   itemCount: tasks.length,
                   itemBuilder: (context, index) {
-                    return GestureDetector(
-                      onTap: () {
-                        Navigator.of(context).pushNamed(TaskService.routeName,
-                            arguments: tasks[index]);
-                      },
-                      child: Container(
-                        padding: EdgeInsets.all(kDefaultPadding),
-                        decoration: BoxDecoration(
-                            color: Colors.teal.withOpacity(0.2),
-                            borderRadius: BorderRadius.circular(kItemPadding)),
-                        child: Row(
-                          children: [
-                            Icon(
-                              FontAwesomeIcons.thumbtack,
-                              color: Colors.teal,
-                            ),
-                            SizedBox(
-                              width: kDefaultPadding,
-                            ),
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  tasks[index].title,
-                                  style: Theme.of(context).textTheme.titleLarge,
+                    return Container(
+                      padding: EdgeInsets.only(bottom: 20),
+                      child: GestureDetector(
+                        onTap: () {
+                          Navigator.of(context).pushNamed(TaskService.routeName,
+                              arguments: tasks[index]);
+                        },
+                        child: Container(
+                          padding: EdgeInsets.all(kDefaultPadding),
+                          decoration: BoxDecoration(
+                              color: Colors.white,
+                              boxShadow: const [
+                                BoxShadow(
+                                  color: Colors.black26,
+                                  blurRadius: 5,
+                                  offset: Offset(2, 2),
                                 ),
-                                Text(
-                                  'Dang lam',
-                                  style:
-                                      Theme.of(context).textTheme.titleMedium,
-                                )
                               ],
-                            ),
-                            Spacer(),
-                          ],
+                              borderRadius:
+                                  BorderRadius.circular(kItemPadding)),
+                          child: Row(
+                            children: [
+                              Icon(
+                                FontAwesomeIcons.thumbtack,
+                                color: Colors.teal,
+                              ),
+                              SizedBox(
+                                width: kDefaultPadding,
+                              ),
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    tasks[index].title,
+                                    style: theme.textTheme.titleLarge,
+                                  ),
+                                  Text(
+                                    'Dang lam',
+                                    style: theme.textTheme.titleMedium,
+                                  )
+                                ],
+                              ),
+                              Spacer(),
+                            ],
+                          ),
                         ),
                       ),
                     );
                   },
-                  separatorBuilder: (BuildContext context, int index) =>
-                      const Divider(),
                 );
               } else if (snapshot.hasError) {
                 return Text(snapshot.toString());
@@ -99,6 +153,14 @@ class _ListTaskState extends State<ListTask> {
             },
           ),
         ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.of(context).pushNamed(TaskService.routeName);
+        },
+        tooltip: 'Increment',
+        child: const Icon(Icons.add),
+      ),
       ),
     );
   }

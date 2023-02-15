@@ -1,11 +1,16 @@
+import 'dart:developer';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:month_year_picker/month_year_picker.dart';
+import 'package:travo_app_source/core/constants/dimension_constants.dart';
+import 'package:travo_app_source/presentation/widgets/app_bar_container.dart';
 
 class CalendarScreen extends StatefulWidget {
   const CalendarScreen({Key? key}) : super(key: key);
+  static const String routeName = '/attendance_sreen';
 
   @override
   _CalendarScreenState createState() => _CalendarScreenState();
@@ -15,211 +20,191 @@ class _CalendarScreenState extends State<CalendarScreen> {
   double screenHeight = 0;
   double screenWidth = 0;
   final FirebaseAuth auth = FirebaseAuth.instance;
-  Color primary = const Color(0xffeef444c);
 
   String _month = DateFormat('MMMM').format(DateTime.now());
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     screenHeight = MediaQuery.of(context).size.height;
     screenWidth = MediaQuery.of(context).size.width;
 
-    return Scaffold(
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(20),
-        child: Column(
+    return AppBarContainer(
+      titleString: 'attend',
+      title: Padding(
+        padding: EdgeInsets.symmetric(horizontal: kItemPadding),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Container(
-              alignment: Alignment.centerLeft,
-              margin: const EdgeInsets.only(top: 32),
-              child: Text("My Attendance",
-                  style: Theme.of(context).textTheme.headlineSmall),
+            IconButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              icon: Icon(Icons.arrow_back),
+              color: Colors.white,
             ),
-            Stack(
-              children: [
-                Container(
-                  alignment: Alignment.centerLeft,
-                  margin: const EdgeInsets.only(top: 32),
-                  child: Text(
-                    _month,
-                      style: Theme.of(context).textTheme.titleLarge,
-                  ),
-                ),
-                Container(
-                  alignment: Alignment.centerRight,
-                  margin: const EdgeInsets.only(top: 32),
-                  child: GestureDetector(
-                    onTap: () async {
-                      final month = await showMonthYearPicker(
-                          context: context,
-                          initialDate: DateTime.now(),
-                          firstDate: DateTime(2023),
-                          lastDate: DateTime(2099),
-                          builder: (context, child) {
-                            return Theme(
-                              data: Theme.of(context).copyWith(
-                                colorScheme: ColorScheme.light(
-                                  primary: primary,
-                                  secondary: primary,
-                                  onSecondary: Colors.white,
-                                ),
-                                textButtonTheme: TextButtonThemeData(
-                                  style: TextButton.styleFrom(
-                                    primary: primary,
-                                  ),
-                                ),
-                                textTheme: const TextTheme(
-                                  headline4: TextStyle(
-                                    fontFamily: "NexaBold",
-                                  ),
-                                  overline: TextStyle(
-                                    fontFamily: "NexaBold",
-                                  ),
-                                  button: TextStyle(
-                                    fontFamily: "NexaBold",
-                                  ),
-                                ),
-                              ),
-                              child: child!,
-                            );
-                          });
-
-                      if (month != null) {
-                        setState(() {
-                          _month = DateFormat('MMMM').format(month);
-                        });
-                      }
-                    },
-                    child: Text(
-                      "Pick a Month",
-                        style: Theme.of(context).textTheme.titleLarge
-                    ),
-                  ),
+            Spacer(),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: const [
+                Text(
+                  'My Attendance',
                 ),
               ],
             ),
-            SizedBox(
-              height: screenHeight / 1.45,
-              child: StreamBuilder<QuerySnapshot>(
-                stream: FirebaseFirestore.instance
-                    .collection("Employee")
-                    .doc(auth.currentUser!.uid)
-                    .collection("Record")
-                    .snapshots(),
-                builder: (BuildContext context,
-                    AsyncSnapshot<QuerySnapshot> snapshot) {
-                  if (snapshot.hasData) {
-                    final snap = snapshot.data!.docs;
-                    return ListView.builder(
-                      itemCount: snap.length,
-                      itemBuilder: (context, index) {
-                        return DateFormat('MMMM')
-                                    .format(snap[index]['date'].toDate()) ==
-                                _month
-                            ? Container(
-                                margin: EdgeInsets.only(
-                                    top: index > 0 ? 12 : 0, left: 6, right: 6),
-                                height: 150,
-                                decoration: const BoxDecoration(
-                                  color: Colors.white,
-                                  boxShadow: [
-                                    BoxShadow(
-                                      color: Colors.black26,
-                                      blurRadius: 10,
-                                      offset: Offset(2, 2),
-                                    ),
-                                  ],
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(20)),
-                                ),
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: [
-                                    Expanded(
-                                      child: Container(
-                                        margin: const EdgeInsets.only(),
-                                        decoration: BoxDecoration(
-                                          color: primary,
-                                          borderRadius: const BorderRadius.all(
-                                              Radius.circular(20)),
-                                        ),
-                                        child: Center(
-                                          child: Text(
-                                            DateFormat('EE\ndd').format(
-                                                snap[index]['date'].toDate()),
-                                            style: TextStyle(
-                                              fontFamily: "NexaBold",
-                                              fontSize: screenWidth / 18,
-                                              color: Colors.white,
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                    Expanded(
-                                      child: Column(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.center,
-                                        children: [
-                                          Text(
-                                            "Check In",
-                                            style: TextStyle(
-                                              fontFamily: "NexaRegular",
-                                              fontSize: screenWidth / 20,
-                                              color: Colors.black54,
-                                            ),
-                                          ),
-                                          Text(
-                                            snap[index]['checkIn'],
-                                            style: TextStyle(
-                                              fontFamily: "NexaBold",
-                                              fontSize: screenWidth / 18,
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                    Expanded(
-                                      child: Column(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.center,
-                                        children: [
-                                          Text(
-                                            "Check Out",
-                                            style: TextStyle(
-                                              fontFamily: "NexaRegular",
-                                              fontSize: screenWidth / 20,
-                                              color: Colors.black54,
-                                            ),
-                                          ),
-                                          Text(
-                                            snap[index]['checkOut'],
-                                            style: TextStyle(
-                                              fontFamily: "NexaBold",
-                                              fontSize: screenWidth / 18,
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              )
-                            : const SizedBox();
-                      },
-                    );
-                  } else {
-                    return const SizedBox();
-                  }
-                },
-              ),
-            ),
+            Spacer(),
+            // Icon(
+            //   Icons.notifications,
+            //   color: Colors.white,
+            // ),
           ],
+        ),
+      ),
+      child: Scaffold(
+        body: SingleChildScrollView(
+          child: Column(
+            children: [
+              Stack(
+                children: [
+                  Container(
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      _month,
+                      style: theme.textTheme.titleLarge,
+                    ),
+                  ),
+                  Container(
+                    alignment: Alignment.centerRight,
+                    child: GestureDetector(
+                      onTap: () async {
+                        final month = await showMonthYearPicker(
+                            context: context,
+                            initialDate: DateTime.now(),
+                            firstDate: DateTime(2023),
+                            lastDate: DateTime(2099),
+                            builder: (context, child) {
+                              return Theme(
+                                data: theme.copyWith(),
+                                child: child!,
+                              );
+                            });
+
+                        if (month != null) {
+                          setState(() {
+                            _month = DateFormat('MMMM').format(month);
+                          });
+                        }
+                      },
+                      child: Text(
+                        "Pick a Month",
+                        style: theme.textTheme.titleLarge,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(
+                  height: screenHeight / 1.45,
+                  child: StreamBuilder<QuerySnapshot>(
+                    stream: FirebaseFirestore.instance
+                        .collection("users")
+                        .doc(auth.currentUser!.uid)
+                        .collection("Attend")
+                        .snapshots(),
+                    builder: (context, snapshot) {
+                      if (snapshot.hasData) {
+                        final snap = snapshot.data!.docs;
+                        return ListView.builder(
+                          itemCount: snap.length,
+                          itemBuilder: (context, index) {
+                            final getMonth = snap[index].id.split(' ')[1];
+                            final getDay = snap[index].id.split(' ')[0];
+                            return getMonth == _month
+                                ? Container(
+                                    margin: EdgeInsets.only(
+                                        top: 12, left: 6, right: 6),
+                                    height: 80,
+                                    decoration: const BoxDecoration(
+                                      color: Colors.white,
+                                      boxShadow: [
+                                        BoxShadow(
+                                          color: Colors.black26,
+                                          blurRadius: 5,
+                                          offset: Offset(2, 2),
+                                        ),
+                                      ],
+                                      borderRadius:
+                                          BorderRadius.all(Radius.circular(20)),
+                                    ),
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      children: [
+                                        Expanded(
+                                          child: Container(
+                                            margin: const EdgeInsets.only(),
+                                            decoration: BoxDecoration(
+                                              borderRadius:
+                                                  const BorderRadius.all(
+                                                      Radius.circular(20)),
+                                            ),
+                                            child: Center(
+                                              child: Text('Day $getDay',
+                                                  style: theme
+                                                      .textTheme.bodyLarge),
+                                            ),
+                                          ),
+                                        ),
+                                        Expanded(
+                                          child: Column(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.center,
+                                            children: [
+                                              Text("Check In",
+                                                  style: theme
+                                                      .textTheme.labelLarge),
+                                              Text(
+                                                snap[index]['checkIn'],
+                                                style:
+                                                    theme.textTheme.bodyLarge,
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                        Expanded(
+                                          child: Column(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.center,
+                                            children: [
+                                              Text("Check Out",
+                                                  style: theme
+                                                      .textTheme.bodyLarge),
+                                              Text(snap[index]['checkOut'],
+                                                  style: theme
+                                                      .textTheme.bodyLarge),
+                                            ],
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  )
+                                : const SizedBox(
+                                    child: Text('Does not have data yet'),
+                                  );
+                          },
+                        );
+                      }
+                      return SizedBox();
+                    },
+                  ))
+            ],
+          ),
         ),
       ),
     );

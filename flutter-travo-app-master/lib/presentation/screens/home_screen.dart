@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:travo_app_source/core/constants/textstyle_ext.dart';
 import 'package:travo_app_source/data/model/task_model.dart';
+import 'package:travo_app_source/presentation/screens/attendance_screen.dart';
 import 'package:travo_app_source/presentation/screens/list_project_screen.dart';
 import 'package:travo_app_source/presentation/screens/list_task_screen.dart';
 import 'package:travo_app_source/presentation/screens/profile_screen.dart';
@@ -25,9 +26,7 @@ class _HomeScreenState extends State<HomeScreen> {
   final FirebaseAuth auth = FirebaseAuth.instance;
   String checkIn = "--:--";
   String checkOut = "--:--";
-  void getId()async{
-    
-  }
+  void getId() async {}
   String dateFormatter = DateFormat.yMMMMd('en_US').format(DateTime.now());
   Widget _buildItemCategory(
       Widget icon, Color color, Function() onTap, String title) {
@@ -70,7 +69,7 @@ class _HomeScreenState extends State<HomeScreen> {
           .collection('users')
           .doc(snap.docs[0].id)
           .collection('Attend')
-          .doc(DateFormat('MMMM yyyy').format(DateTime.now()))
+          .doc(DateFormat('dd MMMM yyyy').format(DateTime.now()))
           .get();
       setState(() {
         checkIn = snap2['checkIn'];
@@ -88,6 +87,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     Future refresh() async {
       // await _loadResources(true);
     }
@@ -95,15 +95,16 @@ class _HomeScreenState extends State<HomeScreen> {
       titleString: 'home',
       title: Padding(
         padding: EdgeInsets.symmetric(horizontal: kItemPadding),
-        child: Row(
+        child: 
+        Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text('Xin chào, ${auth.currentUser!.displayName}!',
-                    style:
-                        TextStyles.defaultStyle.fontHeader.whiteTextColor.bold),
+                Text(
+                  'Hello, ${auth.currentUser!.displayName}!',
+                ),
                 Row(
                   children: [
                     Padding(
@@ -151,14 +152,20 @@ class _HomeScreenState extends State<HomeScreen> {
                 children: [
                   Padding(
                     padding: const EdgeInsets.only(top: 2),
-                    child: Text('In at ' + checkIn, style: Theme.of(context).textTheme.labelLarge,),
+                    child: Text(
+                      'In at ' + checkIn,
+                      style: theme.textTheme.labelLarge,
+                    ),
                   ),
                   SizedBox(
                     width: kItemPadding,
                   ),
                   Padding(
                     padding: const EdgeInsets.only(top: 2),
-                    child: Text('Out at ' + checkOut, style: Theme.of(context).textTheme.labelLarge,),
+                    child: Text(
+                      'Out at ' + checkOut,
+                      style: theme.textTheme.labelLarge,
+                    ),
                   ),
                 ],
               ),
@@ -179,7 +186,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   .collection('users')
                                   .doc(snap.docs[0].id)
                                   .collection('Attend')
-                                  .doc(DateFormat('MMMM yyyy')
+                                  .doc(DateFormat('dd MMMM yyyy')
                                       .format(DateTime.now()))
                                   .get();
 
@@ -193,7 +200,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                     .collection('users')
                                     .doc(snap.docs[0].id)
                                     .collection('Attend')
-                                    .doc(DateFormat('MMMM yyyy')
+                                    .doc(DateFormat('dd MMMM yyyy')
                                         .format(DateTime.now()))
                                     .update({
                                   'checkIn': checkIn,
@@ -209,11 +216,12 @@ class _HomeScreenState extends State<HomeScreen> {
                                     .collection('users')
                                     .doc(snap.docs[0].id)
                                     .collection('Attend')
-                                    .doc(DateFormat('MMMM yyyy')
+                                    .doc(DateFormat('dd MMMM yyyy')
                                         .format(DateTime.now()))
                                     .set({
-                                  'checkIn':
-                                      DateFormat('hh:mm').format(DateTime.now())
+                                  'checkIn': DateFormat('hh:mm')
+                                      .format(DateTime.now()),
+                                  'checkOut': "--:--"
                                 });
                               }
                               // print(DateFormat('dd MMMM yyyy').format(DateTime.now()));
@@ -224,7 +232,12 @@ class _HomeScreenState extends State<HomeScreen> {
                           )
                         : Column(
                             mainAxisAlignment: MainAxisAlignment.end,
-                            children: [Text('Already Check in/out', style: Theme.of(context).textTheme.labelLarge,)],
+                            children: [
+                              Text(
+                                'Already Check in/out',
+                                style: theme.textTheme.labelLarge,
+                              )
+                            ],
                           ),
                   ),
                 ],
@@ -245,8 +258,8 @@ class _HomeScreenState extends State<HomeScreen> {
                           Icon(FontAwesomeIcons.listCheck, color: Colors.teal),
                     ),
                     Colors.teal, () {
-                  Navigator.of(context).pushNamed(ListProject.routeName);
-                }, 'Dự án'),
+                  Navigator.of(context).pushNamed(CalendarScreen.routeName);
+                }, 'Attendance'),
               ),
               SizedBox(width: kDefaultPadding),
               Expanded(
@@ -271,7 +284,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                     Colors.teal, () {
                   Navigator.of(context).pushNamed(ProfileScreen.routeName);
-                }, 'Nhân viên'),
+                }, 'Employee'),
               ),
             ],
           ),
@@ -287,55 +300,61 @@ class _HomeScreenState extends State<HomeScreen> {
                 builder: (context, snapshot) {
                   if (snapshot.hasData) {
                     final tasks = snapshot.data!;
-                    return ListView.separated(
+                    return ListView.builder(
                       itemCount: tasks.length,
                       itemBuilder: (context, index) {
-                        return GestureDetector(
-                          onTap: () {
-                            Navigator.of(context).pushNamed(
-                                TaskService.routeName,
-                                arguments: tasks[index]);
-                          },
-                          child: Container(
-                            padding: EdgeInsets.all(kDefaultPadding),
-                            decoration: BoxDecoration(
-                                color: Colors.teal.withOpacity(0.2),
-                                borderRadius:
-                                    BorderRadius.circular(kItemPadding)),
-                            child: Row(
-                              children: [
-                                Icon(
-                                  FontAwesomeIcons.thumbtack,
-                                  color: Colors.teal,
-                                ),
-                                SizedBox(
-                                  width: kItemPadding,
-                                ),
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      tasks[index].title,
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .titleLarge,
+                        return Container(
+                          padding: EdgeInsets.only(bottom: 20),
+                          child: GestureDetector(
+                            onTap: () {
+                              Navigator.of(context).pushNamed(
+                                  TaskService.routeName,
+                                  arguments: tasks[index]);
+                            },
+                            child: Container(
+                              padding: EdgeInsets.all(kDefaultPadding),
+                              decoration: BoxDecoration(
+                                  // color: Colors.teal.withOpacity(0.2),
+                                  color: Colors.white,
+                                  boxShadow: const [
+                                    BoxShadow(
+                                      color: Colors.black26,
+                                      blurRadius: 5,
+                                      offset: Offset(2, 2),
                                     ),
-                                    Text(
-                                      'Dang lam',
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .titleMedium,
-                                    )
                                   ],
-                                ),
-                                Spacer(),
-                              ],
+                                  borderRadius:
+                                      BorderRadius.circular(kItemPadding)),
+                              child: Row(
+                                children: [
+                                  Icon(
+                                    FontAwesomeIcons.thumbtack,
+                                    color: Colors.teal,
+                                  ),
+                                  SizedBox(
+                                    width: kItemPadding,
+                                  ),
+                                  Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        tasks[index].title,
+                                        style: theme.textTheme.titleLarge,
+                                      ),
+                                      Text(
+                                        'Dang lam',
+                                        style: theme.textTheme.titleMedium,
+                                      )
+                                    ],
+                                  ),
+                                  Spacer(),
+                                ],
+                              ),
                             ),
                           ),
                         );
                       },
-                      separatorBuilder: (BuildContext context, int index) =>
-                          const Divider(),
                     );
                   } else if (snapshot.hasError) {
                     return Text(snapshot.toString());

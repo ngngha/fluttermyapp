@@ -29,6 +29,7 @@ class SignUpScreenState extends State<SignUpScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return Scaffold(
         body: Form(
       key: _formKey,
@@ -43,7 +44,7 @@ class SignUpScreenState extends State<SignUpScreen> {
                 Image.asset('assets/images/logo.jpg', height: 150, width: 200),
                 Text(
                   'Create Account',
-                  style: Theme.of(context).textTheme.titleLarge,
+                  style: theme.textTheme.titleLarge,
                 ),
                 const SizedBox(
                   height: 30,
@@ -154,7 +155,7 @@ class SignUpScreenState extends State<SignUpScreen> {
                           style: ElevatedButton.styleFrom(
                               backgroundColor: Colors.teal,
                               textStyle:
-                                  Theme.of(context).textTheme.titleLarge),
+                                  theme.textTheme.titleLarge),
                           onPressed: () async {
                             if (_formKey.currentState!.validate()) {
                               createUserEmailAndPassword();

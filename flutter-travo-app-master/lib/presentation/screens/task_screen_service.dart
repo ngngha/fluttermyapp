@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:travo_app_source/data/model/project_model.dart';
 import 'package:travo_app_source/data/model/task_model.dart';
+import 'package:travo_app_source/presentation/screens/list_task_screen.dart';
 
 class TaskService extends StatefulWidget {
   const TaskService({Key? key, this.taskModal}) : super(key: key);
@@ -50,9 +51,15 @@ class _TaskServiceState extends State<TaskService> {
                 actions: [
                   IconButton(
                     onPressed: () async {
-                      if (_formKey.currentState!.validate()) {
-                        deleteTask(name: taskTitleController!.text);
-                      }
+                      setState(() {
+                            
+                        if (_formKey.currentState!.validate()) {
+                          deleteTask(name: taskTitleController!.text);
+                          //     Navigator.of(context).pushNamed(TaskService.routeName).then((value) {setState(() {
+
+                          // });});
+                        }
+                      });
                     },
                     icon: Icon(Icons.delete),
                   )

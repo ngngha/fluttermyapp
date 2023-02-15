@@ -1,12 +1,15 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:travo_app_source/core/constants/dimension_constants.dart';
 import 'package:travo_app_source/core/helpers/asset_helper.dart';
 import 'package:travo_app_source/core/helpers/image_helper.dart';
 import 'package:travo_app_source/core/helpers/local_storage_helper.dart';
 import 'package:travo_app_source/data/model/user_model.dart';
+import 'package:travo_app_source/presentation/screens/add_project_screen.dart';
 import 'package:travo_app_source/presentation/screens/edit_profile_screen.dart';
 import 'package:travo_app_source/presentation/screens/signin_screen.dart';
+import 'package:travo_app_source/presentation/widgets/app_bar_container.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({Key? key, this.usersModal}) : super(key: key);
@@ -27,32 +30,34 @@ class ProfileScreenState extends State<ProfileScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Trang cá nhân'),
-        actions: widget.usersModal == null
-            ? [
-                IconButton(
-                  onPressed: () {
-                    Navigator.of(context)
-                        .pushNamed(EditProfileScreen.routeName);
-                  },
-                  icon: Icon(Icons.edit),
-                )
-              ]
-            : null,
+    return AppBarContainer(
+      titleString: 'profile',
+      title: Padding(
+        padding: EdgeInsets.symmetric(horizontal: kItemPadding),
+        child: Container(
+          child: Text('Profile'),
+        ),
       ),
-      body: FutureBuilder<Users?>(
-        future: readUserInfo(auth.currentUser!.uid),
-        builder: (context, snapshot) {
-          if (snapshot.hasData) {
-            return buildProject(snapshot.data as Users);
-          } else if (snapshot.hasError) {
-            return Text(snapshot.toString());
-          } else {
-            return Center(child: CircularProgressIndicator());
-          }
-        },
+      child: Scaffold(
+        body: FutureBuilder<Users?>(
+          future: readUserInfo(auth.currentUser!.uid),
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              return buildProject(snapshot.data as Users);
+            } else if (snapshot.hasError) {
+              return Text(snapshot.toString());
+            } else {
+              return Center(child: CircularProgressIndicator());
+            }
+          },
+        ),
+        floatingActionButton: FloatingActionButton(
+          onPressed: () {
+            Navigator.of(context).pushNamed(EditProfileScreen.routeName);
+          },
+          tooltip: 'Increment',
+          child: const Icon(Icons.edit),
+        ),
       ),
     );
   }

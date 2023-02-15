@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:month_year_picker/month_year_picker.dart';
 import 'package:travo_app_source/core/constants/color_palatte.dart';
 import 'package:travo_app_source/presentation/screens/main_app.dart';
 import 'package:travo_app_source/presentation/screens/splash_screen.dart';
@@ -36,12 +37,15 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'My App',
       theme: ThemeData(
-        brightness: Brightness.light,
-        primarySwatch: Colors.teal,
-        primaryColor: ColorPalette.primaryColor,
-        scaffoldBackgroundColor: ColorPalette.backgroundScaffoldColor,
-        dialogBackgroundColor: ColorPalette.backgroundScaffoldColor,
-      ),
+          brightness: Brightness.light,
+          primarySwatch: Colors.teal,
+          primaryColor: ColorPalette.primaryColor,
+          scaffoldBackgroundColor: ColorPalette.backgroundScaffoldColor,
+          dialogBackgroundColor: ColorPalette.backgroundScaffoldColor,
+          textTheme: TextTheme(
+            titleLarge: TextStyle(color: Colors.teal),
+            headlineSmall: TextStyle(color: Colors.white)
+          )),
       darkTheme: ThemeData(
         brightness: Brightness.dark,
       ),
@@ -57,6 +61,7 @@ class MyApp extends StatelessWidget {
                 return SplashScreen();
               },
             ),
+      localizationsDelegates: const [MonthYearPickerLocalizations.delegate],
     );
   }
 }
