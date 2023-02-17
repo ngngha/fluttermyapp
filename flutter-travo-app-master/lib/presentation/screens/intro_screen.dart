@@ -2,11 +2,11 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
-import 'package:travo_app_source/core/constants/dimension_constants.dart';
-import 'package:travo_app_source/core/constants/textstyle_ext.dart';
-import 'package:travo_app_source/core/helpers/asset_helper.dart';
-import 'package:travo_app_source/presentation/widgets/login_check.dart';
-import 'package:travo_app_source/presentation/widgets/item_intro_widget.dart';
+import 'package:job_manager/core/constants/dimension_constants.dart';
+import 'package:job_manager/core/constants/textstyle_ext.dart';
+import 'package:job_manager/core/helpers/asset_helper.dart';
+import 'package:job_manager/presentation/widgets/login_check.dart';
+import 'package:job_manager/presentation/widgets/item_intro_widget.dart';
 
 class IntroScreen extends StatefulWidget {
   const IntroScreen({Key? key}) : super(key: key);

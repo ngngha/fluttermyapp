@@ -1,8 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:travo_app_source/data/model/user_model.dart';
-import 'package:travo_app_source/presentation/screens/signin_screen.dart';
+import 'package:job_manager/data/model/user_model.dart';
+import 'package:job_manager/presentation/screens/signin_screen.dart';
 
 class SignUpScreen extends StatefulWidget {
   const SignUpScreen({Key? key}) : super(key: key);
@@ -208,7 +208,7 @@ class SignUpScreenState extends State<SignUpScreen> {
       final docUser = FirebaseFirestore.instance
           .collection('users')
           .doc(auth.currentUser!.uid);
-      final userInfo = Users(
+      final userInfo = UserModel(
         id: auth.currentUser!.uid,
         username: name,
         email: emailController.text,

@@ -1,9 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:travo_app_source/data/model/project_model.dart';
-import 'package:travo_app_source/data/model/task_model.dart';
-import 'package:travo_app_source/presentation/screens/list_task_screen.dart';
+import 'package:job_manager/data/model/project_model.dart';
+import 'package:job_manager/data/model/task_model.dart';
+import 'package:job_manager/presentation/widgets/app_bar_container.dart';
 
 class TaskService extends StatefulWidget {
   const TaskService({Key? key, this.taskModal}) : super(key: key);
@@ -41,169 +41,187 @@ class _TaskServiceState extends State<TaskService> {
   @override
   Widget build(BuildContext context) {
     // print(widget.taskModal);
-    return Scaffold(
-        appBar: widget.taskModal == null
-            ? AppBar(
-                title: Text('Tạo nhiệm vụ'),
-              )
-            : AppBar(
-                title: Text('Chỉnh sửa nhiệm vụ'),
-                actions: [
-                  IconButton(
-                    onPressed: () async {
-                      setState(() {
-                            
-                        if (_formKey.currentState!.validate()) {
-                          deleteTask(name: taskTitleController!.text);
-                          //     Navigator.of(context).pushNamed(TaskService.routeName).then((value) {setState(() {
-
-                          // });});
-                        }
-                      });
-                    },
-                    icon: Icon(Icons.delete),
-                  )
-                ],
-              ),
-        body: Form(
-          key: _formKey,
-          child: CustomScrollView(scrollDirection: Axis.vertical, slivers: [
-            SliverFillRemaining(
-              hasScrollBody: false,
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 35),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    StreamBuilder<List<Project>>(
-                      stream: readProject(),
-                      builder: ((context, snapshot) {
-                        if (!snapshot.hasData) {
-                          return const CircularProgressIndicator();
-                        } else {
-                          List<DropdownMenuItem<Project>> currentItems = [];
-                          snapshot.data?.forEach((element) {
-                            currentItems.add(
-                              DropdownMenuItem(
-                                value: element,
-                                child: Text(element.name),
-                              ),
-                            );
-                          });
-                          // Project? currentItem;
-                          return StatefulBuilder(builder: (context, setState) {
-                            return DropdownButton<Project>(
-                              value: selected_project,
-                              items: currentItems,
-                              onChanged: (value) {
-                                setState(() {
-                                  selected_project = value;
-                                });
-                              },
-                            );
-                          });
-                        }
-                      }),
+    return AppBarContainer(
+      title: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          IconButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+            icon: Icon(Icons.arrow_back),
+          ),
+          Spacer(),
+          widget.taskModal == null
+              ? Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: const [
+                    Text(
+                      'Create Project',
                     ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 10),
-                      child: SizedBox(
-                        width: 350,
-                        child: TextFormField(
-                          controller: taskTitleController,
-                          validator: (val) =>
-                              val!.isEmpty ? 'Không được bỏ trống' : null,
-                          decoration: InputDecoration(
-                              border: OutlineInputBorder(),
-                              hintText: 'Nhiệm vụ',
-                              prefixIcon: Icon(
-                                Icons.task,
-                                color: Colors.teal,
-                              )),
-                        ),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 10),
-                      child: SizedBox(
-                        width: 350,
-                        child: TextField(
-                          decoration: InputDecoration(
-                              border: OutlineInputBorder(),
-                              hintText: '${auth.currentUser!.displayName}',
-                              prefixIcon: Icon(
-                                Icons.person,
-                                color: Colors.teal,
-                              )),
-                        ),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 10),
-                      child: SizedBox(
-                        width: 350,
-                        child: TextFormField(
-                          minLines: 4,
-                          maxLines: 4,
-                          controller: taskDetailController,
-                          decoration: InputDecoration(
-                              border: OutlineInputBorder(),
-                              hintText: 'Công việc cụ thể'),
-                        ),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 60),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                        children: <Widget>[
-                          SizedBox(
-                            width: 350,
-                            height: 50,
-                            child: ElevatedButton(
-                              style: ElevatedButton.styleFrom(
-                                  backgroundColor: Colors.teal,
-                                  textStyle: const TextStyle(fontSize: 20)),
-                              onPressed: () async {
-                                if (_formKey.currentState!.validate()) {
-                                  widget.taskModal == null
-                                      ? createTask(
-                                          name: taskTitleController!.text)
-                                      : updateTask(
-                                          name: taskTitleController!.text);
-                                }
-                              },
-                              child: widget.taskModal == null
-                                  ? Text('Tạo mới')
-                                  : Text('Chỉnh sửa'),
-                            ),
-                          ),
-                        ],
-                      ),
+                  ],
+                )
+              : Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: const [
+                    Text(
+                      'Edit Project',
                     ),
                   ],
                 ),
+          Spacer(),
+          IconButton(
+            onPressed: () async {
+              if (_formKey.currentState!.validate()) {
+                deleteTask(name: taskTitleController!.text);
+              }
+            },
+            icon: Icon(Icons.delete),
+          ),
+        ],
+      ),
+      child: Scaffold(
+          body: Form(
+        key: _formKey,
+        child: CustomScrollView(scrollDirection: Axis.vertical, slivers: [
+          SliverFillRemaining(
+            hasScrollBody: false,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 35),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  StreamBuilder<List<Project>>(
+                    stream: readProject(),
+                    builder: ((context, snapshot) {
+                      if (!snapshot.hasData) {
+                        return const CircularProgressIndicator();
+                      } else {
+                        List<DropdownMenuItem<Project>> currentItems = [];
+                        snapshot.data?.forEach((element) {
+                          currentItems.add(
+                            DropdownMenuItem(
+                              value: element,
+                              child: Text(element.name),
+                            ),
+                          );
+                        });
+                        // Project? currentItem;
+                        return StatefulBuilder(builder: (context, setState) {
+                          return DropdownButton<Project>(
+                            value: selected_project,
+                            items: currentItems,
+                            onChanged: (value) {
+                              setState(() {
+                                selected_project = value;
+                              });
+                            },
+                          );
+                        });
+                      }
+                    }),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 10),
+                    child: SizedBox(
+                      width: 350,
+                      child: TextFormField(
+                        controller: taskTitleController,
+                        validator: (val) =>
+                            val!.isEmpty ? 'Không được bỏ trống' : null,
+                        decoration: InputDecoration(
+                            border: OutlineInputBorder(),
+                            hintText: 'Nhiệm vụ',
+                            prefixIcon: Icon(
+                              Icons.task,
+                              color: Colors.teal,
+                            )),
+                      ),
+                    ),
+                  ),
+                  // Padding(
+                  //   padding: const EdgeInsets.symmetric(vertical: 10),
+                  //   child: SizedBox(
+                  //     width: 350,
+                  //     child: TextField(
+                  //       decoration: InputDecoration(
+                  //           border: OutlineInputBorder(),
+                  //           hintText: '${auth.currentUser!.displayName}',
+                  //           prefixIcon: Icon(
+                  //             Icons.person,
+                  //             color: Colors.teal,
+                  //           )),
+                  //     ),
+                  //   ),
+                  // ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 10),
+                    child: SizedBox(
+                      width: 350,
+                      child: TextFormField(
+                        minLines: 4,
+                        maxLines: 4,
+                        controller: taskDetailController,
+                        decoration: InputDecoration(
+                            border: OutlineInputBorder(),
+                            hintText: 'Công việc cụ thể'),
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 60),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: <Widget>[
+                        SizedBox(
+                          width: 350,
+                          height: 50,
+                          child: ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                                backgroundColor: Colors.teal,
+                                textStyle: const TextStyle(fontSize: 20)),
+                            onPressed: () async {
+                              if (_formKey.currentState!.validate()) {
+                                widget.taskModal == null
+                                    ? createTask(
+                                        name: taskTitleController!.text)
+                                    : updateTask(
+                                        name: taskTitleController!.text);
+                              }
+                            },
+                            child: widget.taskModal == null
+                                ? Text('Tạo mới')
+                                : Text('Chỉnh sửa'),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
               ),
             ),
-          ]),
-        ));
+          ),
+        ]),
+      )),
+    );
   }
 
   Stream<List<Project>> readProject() => FirebaseFirestore.instance
-      .collection('project')
+      .collection('projects')
       .snapshots()
       .map((snapshot) =>
           snapshot.docs.map((doc) => Project.fromJson(doc.data())).toList());
   void createTask({required name}) async {
-    final docTask = FirebaseFirestore.instance.collection('task').doc();
+    final docTask = FirebaseFirestore.instance.collection('tasks').doc();
 
     final task = Task(
       id: docTask.id,
       projectId: selected_project!.id,
+      projectName: selected_project!.name,
       title: taskTitleController!.text,
-      employee: auth.currentUser?.displayName ?? '',
-      employeeId: auth.currentUser?.uid ?? '',
+      employee: auth.currentUser!.displayName ?? '',
+      employeeId: auth.currentUser!.uid ,
       detail: taskDetailController!.text,
     );
     final json = task.toJson();
@@ -215,19 +233,20 @@ class _TaskServiceState extends State<TaskService> {
   }
 
   void updateTask({required String name}) async {
-    final docProject = FirebaseFirestore.instance
-        .collection('task')
+    final docTask = FirebaseFirestore.instance
+        .collection('tasks')
         .doc(widget.taskModal!.id.toString());
     final task = Task(
       id: widget.taskModal!.id.toString(),
       projectId: selected_project!.id,
+      projectName: selected_project!.name,
       title: taskTitleController!.text,
-      employee: auth.currentUser?.displayName ?? '',
-      employeeId: auth.currentUser?.uid ?? '',
+      employee: auth.currentUser!.displayName ?? '',
+      employeeId: auth.currentUser!.uid,
       detail: taskDetailController!.text,
     );
     final json = task.toJson();
-    await docProject.update(json);
+    await docTask.update(json);
     Navigator.of(context).pop();
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(content: Text('Sửa thành công dự án')),
@@ -235,10 +254,10 @@ class _TaskServiceState extends State<TaskService> {
   }
 
   void deleteTask({required String name}) async {
-    final docProject = FirebaseFirestore.instance
-        .collection('task')
+    final docTask = FirebaseFirestore.instance
+        .collection('tasks')
         .doc(widget.taskModal!.id.toString());
-    await docProject.delete();
+    await docTask.delete();
     Navigator.of(context).pop();
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(content: Text('Đã xóa')),

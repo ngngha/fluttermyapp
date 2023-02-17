@@ -2,10 +2,10 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:month_year_picker/month_year_picker.dart';
-import 'package:travo_app_source/core/constants/color_palatte.dart';
-import 'package:travo_app_source/presentation/screens/main_app.dart';
-import 'package:travo_app_source/presentation/screens/splash_screen.dart';
-import 'package:travo_app_source/routes.dart';
+import 'package:job_manager/core/constants/color_palatte.dart';
+import 'package:job_manager/presentation/screens/main_app.dart';
+import 'package:job_manager/presentation/screens/splash_screen.dart';
+import 'package:job_manager/routes.dart';
 
 import 'core/helpers/size_config.dart';
 

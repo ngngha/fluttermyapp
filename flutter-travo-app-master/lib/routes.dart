@@ -1,18 +1,19 @@
 import 'package:flutter/material.dart';
-import 'package:travo_app_source/data/model/project_model.dart';
-import 'package:travo_app_source/data/model/task_model.dart';
-import 'package:travo_app_source/data/model/user_model.dart';
-import 'package:travo_app_source/presentation/screens/add_project_screen.dart';
-import 'package:travo_app_source/presentation/screens/edit_profile_screen.dart';
-import 'package:travo_app_source/presentation/screens/intro_screen.dart';
-import 'package:travo_app_source/presentation/screens/list_project_screen.dart';
-import 'package:travo_app_source/presentation/screens/list_task_screen.dart';
-import 'package:travo_app_source/presentation/screens/profile_screen.dart';
-import 'package:travo_app_source/presentation/screens/task_screen_service.dart';
-import 'package:travo_app_source/presentation/widgets/login_check.dart';
-import 'package:travo_app_source/presentation/screens/main_app.dart';
-import 'package:travo_app_source/presentation/screens/signin_screen.dart';
-import 'package:travo_app_source/presentation/screens/signup_screen.dart';
+import 'package:job_manager/data/model/project_model.dart';
+import 'package:job_manager/data/model/task_model.dart';
+import 'package:job_manager/data/model/user_model.dart';
+import 'package:job_manager/presentation/screens/add_project_screen.dart';
+import 'package:job_manager/presentation/screens/attendance_screen.dart';
+import 'package:job_manager/presentation/screens/edit_profile_screen.dart';
+import 'package:job_manager/presentation/screens/intro_screen.dart';
+import 'package:job_manager/presentation/screens/list_project_screen.dart';
+import 'package:job_manager/presentation/screens/list_task_screen.dart';
+import 'package:job_manager/presentation/screens/profile_screen.dart';
+import 'package:job_manager/presentation/screens/task_screen_service.dart';
+import 'package:job_manager/presentation/widgets/login_check.dart';
+import 'package:job_manager/presentation/screens/main_app.dart';
+import 'package:job_manager/presentation/screens/signin_screen.dart';
+import 'package:job_manager/presentation/screens/signup_screen.dart';
 
 final Map<String, WidgetBuilder> routes = {
   IntroScreen.routeName: (context) => IntroScreen(),
@@ -20,9 +21,10 @@ final Map<String, WidgetBuilder> routes = {
   SignInScreen.routeName: (context) => SignInScreen(),
   SignUpScreen.routeName: (context) => SignUpScreen(),
   MainApp.routeName: (context) => MainApp(),
+  CalendarScreen.routeName: (context) => CalendarScreen(),
 };
 
-MaterialPageRoute<dynamic>? generateRoutes(RouteSettings settings) {
+ MaterialPageRoute<dynamic>? generateRoutes(RouteSettings settings) {
   switch (settings.name) {
     case (ListProject.routeName):
       final project =
@@ -61,24 +63,25 @@ MaterialPageRoute<dynamic>? generateRoutes(RouteSettings settings) {
         ),
       );
     case (ProfileScreen.routeName):
-      final users =
-          settings.arguments == null ? null : (settings.arguments as Users);
+      final user =
+          settings.arguments == null ? null : (settings.arguments as UserModel);
       return MaterialPageRoute<dynamic>(
         settings: settings,
         builder: (context) => ProfileScreen(
-          usersModal: users,
+          userModel: user,
         ),
       );
     case (EditProfileScreen.routeName):
-      final users =
-          settings.arguments == null ? null : (settings.arguments as Users);
+      final user =
+          settings.arguments == null ? null : (settings.arguments as UserModel);
       return MaterialPageRoute<dynamic>(
         settings: settings,
         builder: (context) => EditProfileScreen(
-          usersModal: users,
+          userModel: user,
         ),
       );
     default:
       return null;
   }
 }
+ 

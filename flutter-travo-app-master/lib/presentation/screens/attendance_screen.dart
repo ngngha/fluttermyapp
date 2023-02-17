@@ -1,12 +1,10 @@
-import 'dart:developer';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:month_year_picker/month_year_picker.dart';
-import 'package:travo_app_source/core/constants/dimension_constants.dart';
-import 'package:travo_app_source/presentation/widgets/app_bar_container.dart';
+import 'package:job_manager/core/constants/dimension_constants.dart';
+import 'package:job_manager/presentation/widgets/app_bar_container.dart';
 
 class CalendarScreen extends StatefulWidget {
   const CalendarScreen({Key? key}) : super(key: key);
@@ -21,7 +19,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
   double screenWidth = 0;
   final FirebaseAuth auth = FirebaseAuth.instance;
 
-  String _month = DateFormat('MMMM').format(DateTime.now());
+  String _month = DateFormat('MMMM yyyy').format(DateTime.now());
 
   @override
   Widget build(BuildContext context) {
@@ -30,35 +28,30 @@ class _CalendarScreenState extends State<CalendarScreen> {
     screenWidth = MediaQuery.of(context).size.width;
 
     return AppBarContainer(
-      titleString: 'attend',
-      title: Padding(
-        padding: EdgeInsets.symmetric(horizontal: kItemPadding),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            IconButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              icon: Icon(Icons.arrow_back),
-              color: Colors.white,
-            ),
-            Spacer(),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: const [
-                Text(
-                  'My Attendance',
-                ),
-              ],
-            ),
-            Spacer(),
-            // Icon(
-            //   Icons.notifications,
-            //   color: Colors.white,
-            // ),
-          ],
-        ),
+      title: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          IconButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+            icon: Icon(Icons.arrow_back),
+          ),
+          Spacer(),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: const [
+              Text(
+                'My Attendance',
+              ),
+            ],
+          ),
+          Spacer(),
+          Icon(
+            Icons.notifications,
+            color: Colors.transparent,
+          ),
+        ],
       ),
       child: Scaffold(
         body: SingleChildScrollView(
@@ -91,7 +84,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
 
                         if (month != null) {
                           setState(() {
-                            _month = DateFormat('MMMM').format(month);
+                            _month = DateFormat('MMMM yyyy').format(month);
                           });
                         }
                       },
@@ -118,8 +111,10 @@ class _CalendarScreenState extends State<CalendarScreen> {
                           itemCount: snap.length,
                           itemBuilder: (context, index) {
                             final getMonth = snap[index].id.split(' ')[1];
+                            final getYear = snap[index].id.split(' ')[2];
                             final getDay = snap[index].id.split(' ')[0];
-                            return getMonth == _month
+                            final getMY = '${getMonth} ${getYear}';
+                            return getMY == _month
                                 ? Container(
                                     margin: EdgeInsets.only(
                                         top: 12, left: 6, right: 6),
@@ -194,9 +189,9 @@ class _CalendarScreenState extends State<CalendarScreen> {
                                       ],
                                     ),
                                   )
-                                : const SizedBox(
-                                    child: Text('Does not have data yet'),
-                                  );
+                                : SizedBox(
+                                    // child: Text('Does not have data yet'),
+                                    );
                           },
                         );
                       }

@@ -1,4 +1,4 @@
-name: travo_app_source
+name: job_manager
 description: A new Flutter project.
 
 # The following line prevents the package from being accidentally published to
@@ -47,6 +47,7 @@ dependencies:
   multi_select_flutter: ^2.1.0
   intl: ^0.17.0
   month_year_picker: ^0.2.0+3
+  image_picker: ^0.8.6+1
 
 dev_dependencies:
   flutter_test:

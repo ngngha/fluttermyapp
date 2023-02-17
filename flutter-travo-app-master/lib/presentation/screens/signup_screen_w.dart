@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:travo_app_source/core/constants/dimension_constants.dart';
-import 'package:travo_app_source/core/helpers/asset_helper.dart';
+import 'package:job_manager/core/constants/dimension_constants.dart';
+import 'package:job_manager/core/helpers/asset_helper.dart';
 
 import '../widgets/login_header_widget.dart';
 

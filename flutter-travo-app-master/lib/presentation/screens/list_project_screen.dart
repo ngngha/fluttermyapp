@@ -1,10 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:travo_app_source/core/constants/dimension_constants.dart';
-import 'package:travo_app_source/data/model/project_model.dart';
-import 'package:travo_app_source/presentation/screens/add_project_screen.dart';
+import 'package:job_manager/core/constants/dimension_constants.dart';
+import 'package:job_manager/data/model/project_model.dart';
+import 'package:job_manager/presentation/screens/add_project_screen.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:travo_app_source/presentation/widgets/app_bar_container.dart';
+import 'package:job_manager/presentation/widgets/app_bar_container.dart';
 
 class ListProject extends StatefulWidget {
   const ListProject({Key? key}) : super(key: key);
@@ -21,12 +21,12 @@ class _ListProjectState extends State<ListProject> {
   @override
   Widget build(BuildContext context) {
     return AppBarContainer(
-      titleString: 'listProject',
+      // titleString: 'listProject',
       title: Padding(
         padding: EdgeInsets.symmetric(horizontal: kItemPadding),
-        child: Container(
-          child: Text('List Project'),
-        ),
+        child: 
+          Text('List Project'),
+        
       ),
       child: Scaffold(
         body: RefreshIndicator(
@@ -35,12 +35,12 @@ class _ListProjectState extends State<ListProject> {
             stream: readProject(),
             builder: (context, snapshot) {
               if (snapshot.hasData) {
-                final projects = snapshot.data!;
+                final project = snapshot.data!;
                 return ListView(
                   padding: EdgeInsets.all(0),
                   // padding: EdgeInsets.symmetric(
                   //     vertical: kMediumPadding, horizontal: kDefaultPadding),
-                  children: projects.map(buildProject).toList(),
+                  children: project.map(buildProject).toList(),
                 );
               } else if (snapshot.hasError) {
                 return Text(snapshot.toString());
@@ -62,7 +62,7 @@ class _ListProjectState extends State<ListProject> {
   }
 
   Stream<List<Project>> readProject() => FirebaseFirestore.instance
-      .collection('project')
+      .collection('projects')
       .snapshots()
       .map((snapshot) =>
           snapshot.docs.map((doc) => Project.fromJson(doc.data())).toList());
@@ -81,7 +81,7 @@ class _ListProjectState extends State<ListProject> {
                   BoxShadow(
                     color: Colors.black26,
                     blurRadius: 5,
-                    offset: Offset(2, 2),
+                    offset: Offset(0, 2),
                   ),
                 ],
                 // color: Colors.grey.withOpacity(0.2),

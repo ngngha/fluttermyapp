@@ -1,7 +1,7 @@
 class Task {
   String id;
   String projectId;
-  // String projectName;
+  String projectName;
   String title;
   String employee;
   String employeeId;
@@ -11,7 +11,7 @@ class Task {
   Task(
       {this.id = '',
       required this.projectId,
-      // required this.projectName,
+      required this.projectName,
       required this.title,
       required this.employee,
       required this.employeeId,
@@ -22,7 +22,7 @@ class Task {
   Map<String, dynamic> toJson() => {
         'id': id,
         'projectId': projectId,
-        // 'projectName': projectName,
+        'projectName': projectName,
         'title': title,
         'employee': employee,
         'employeeId': employeeId,
@@ -31,7 +31,7 @@ class Task {
   static Task fromJson(Map<String, dynamic> json) => Task(
         id: json['id'],
         projectId: json['projectId'],
-        // projectName: json['projectName'],
+        projectName: json['projectName'],
         title: json['title'],
         employee: json['employee'],
         employeeId: json['employeeId'],

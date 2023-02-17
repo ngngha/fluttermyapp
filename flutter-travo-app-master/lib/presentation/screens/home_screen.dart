@@ -2,14 +2,13 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:travo_app_source/core/constants/textstyle_ext.dart';
-import 'package:travo_app_source/data/model/task_model.dart';
-import 'package:travo_app_source/presentation/screens/attendance_screen.dart';
-import 'package:travo_app_source/presentation/screens/list_project_screen.dart';
-import 'package:travo_app_source/presentation/screens/list_task_screen.dart';
-import 'package:travo_app_source/presentation/screens/profile_screen.dart';
-import 'package:travo_app_source/presentation/screens/task_screen_service.dart';
-import 'package:travo_app_source/presentation/widgets/app_bar_container.dart';
+import 'package:job_manager/core/constants/textstyle_ext.dart';
+import 'package:job_manager/data/model/task_model.dart';
+import 'package:job_manager/presentation/screens/attendance_screen.dart';
+import 'package:job_manager/presentation/screens/list_task_screen.dart';
+import 'package:job_manager/presentation/screens/profile_screen.dart';
+import 'package:job_manager/presentation/screens/task_screen_service.dart';
+import 'package:job_manager/presentation/widgets/app_bar_container.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import '../../core/constants/dimension_constants.dart';
@@ -81,8 +80,8 @@ class _HomeScreenState extends State<HomeScreen> {
         checkOut = "--:--";
       });
     }
-    print(checkIn);
-    print(checkOut);
+    // print(checkIn);
+    // print(checkOut);
   }
 
   @override
@@ -95,8 +94,7 @@ class _HomeScreenState extends State<HomeScreen> {
       titleString: 'home',
       title: Padding(
         padding: EdgeInsets.symmetric(horizontal: kItemPadding),
-        child: 
-        Row(
+        child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Column(
@@ -254,8 +252,10 @@ class _HomeScreenState extends State<HomeScreen> {
                     SizedBox(
                       width: kDefaultIconSize,
                       height: kDefaultIconSize,
-                      child:
-                          Icon(FontAwesomeIcons.listCheck, color: Colors.teal),
+                      child: Icon(
+                        FontAwesomeIcons.solidCalendarDays,
+                        color: Colors.teal,
+                      ),
                     ),
                     Colors.teal, () {
                   Navigator.of(context).pushNamed(CalendarScreen.routeName);
@@ -295,75 +295,26 @@ class _HomeScreenState extends State<HomeScreen> {
           Expanded(
             child: RefreshIndicator(
               onRefresh: refresh,
-              child: FutureBuilder<List<Task>?>(
-                future: readTaskInfo(auth.currentUser!.uid),
-                builder: (context, snapshot) {
-                  if (snapshot.hasData) {
-                    final tasks = snapshot.data!;
-                    return ListView.builder(
-                      itemCount: tasks.length,
-                      itemBuilder: (context, index) {
-                        return Container(
-                          padding: EdgeInsets.only(bottom: 20),
-                          child: GestureDetector(
-                            onTap: () {
-                              Navigator.of(context).pushNamed(
-                                  TaskService.routeName,
-                                  arguments: tasks[index]);
-                            },
-                            child: Container(
-                              padding: EdgeInsets.all(kDefaultPadding),
-                              decoration: BoxDecoration(
-                                  // color: Colors.teal.withOpacity(0.2),
-                                  color: Colors.white,
-                                  boxShadow: const [
-                                    BoxShadow(
-                                      color: Colors.black26,
-                                      blurRadius: 5,
-                                      offset: Offset(2, 2),
-                                    ),
-                                  ],
-                                  borderRadius:
-                                      BorderRadius.circular(kItemPadding)),
-                              child: Row(
-                                children: [
-                                  Icon(
-                                    FontAwesomeIcons.thumbtack,
-                                    color: Colors.teal,
-                                  ),
-                                  SizedBox(
-                                    width: kItemPadding,
-                                  ),
-                                  Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        tasks[index].title,
-                                        style: theme.textTheme.titleLarge,
-                                      ),
-                                      Text(
-                                        'Dang lam',
-                                        style: theme.textTheme.titleMedium,
-                                      )
-                                    ],
-                                  ),
-                                  Spacer(),
-                                ],
-                              ),
-                            ),
-                          ),
-                        );
-                      },
-                    );
-                  } else if (snapshot.hasError) {
-                    return Text(snapshot.toString());
-                  } else {
-                    return Center(
-                      child: Text('Bạn chưa có nhiệm vụ nào'),
-                    );
-                  }
-                },
+              child: Container(
+                padding: EdgeInsets.only(top: 10),
+                child: StreamBuilder<List<Task>>(
+                  stream: readTaskInfo(auth.currentUser!.uid),
+                  builder: (context, snapshot) {
+                    if (snapshot.hasData) {
+                      final task = snapshot.data!;
+                      return ListView(
+                        padding: EdgeInsets.all(0),
+                        // padding: EdgeInsets.symmetric(
+                        //     vertical: kMediumPadding, horizontal: kDefaultPadding),
+                        children: task.map(buildProject).toList(),
+                      );
+                    } else if (snapshot.hasError) {
+                      return Text(snapshot.toString());
+                    } else {
+                      return Center(child: CircularProgressIndicator());
+                    }
+                  },
+                ),
               ),
             ),
           ),
@@ -372,15 +323,54 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Future<List<Task>?> readTaskInfo(String employeeId) async {
-    final result = await FirebaseFirestore.instance
-        .collection('task')
-        .where('employeeId', isEqualTo: employeeId)
-        .get();
-
-    final List<Task> list =
-        result.docs.map((e) => Task.fromJson(e.data())).toList();
-
-    return list.isEmpty ? null : list;
-  }
+  Stream<List<Task>> readTaskInfo(String employeeId) =>
+      FirebaseFirestore.instance.collection('tasks').snapshots().map(
+          (snapshot) => snapshot.docs
+              .map((employeeId) => Task.fromJson(employeeId.data()))
+              .toList());
+  Widget buildProject(Task task) => Container(
+        padding: EdgeInsets.symmetric(vertical: 10, horizontal: 5),
+        child: GestureDetector(
+          onTap: () {
+            Navigator.of(context)
+                .pushNamed(TaskService.routeName, arguments: task);
+          },
+          child: Container(
+            padding: EdgeInsets.all(kDefaultPadding),
+            decoration: BoxDecoration(
+                color: Colors.white,
+                boxShadow: const [
+                  BoxShadow(
+                    color: Colors.black26,
+                    blurRadius: 5,
+                    offset: Offset(0, 2),
+                  ),
+                ],
+                // color: Colors.grey.withOpacity(0.2),
+                borderRadius: BorderRadius.circular(kItemPadding)),
+            child: Row(
+              children: [
+                Icon(FontAwesomeIcons.thumbtack, color: Colors.teal),
+                SizedBox(
+                  width: kDefaultPadding,
+                ),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      task.title,
+                      style: Theme.of(context).textTheme.titleLarge,
+                    ),
+                    Text(
+                      task.employee + ' status',
+                      style: Theme.of(context).textTheme.titleMedium,
+                    ),
+                  ],
+                ),
+                Spacer(),
+              ],
+            ),
+          ),
+        ),
+      );
 }

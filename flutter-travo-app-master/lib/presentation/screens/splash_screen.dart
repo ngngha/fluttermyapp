@@ -76,9 +76,9 @@
 // }
 
 import 'package:flutter/material.dart';
-import 'package:travo_app_source/core/helpers/local_storage_helper.dart';
-import 'package:travo_app_source/presentation/screens/intro_screen.dart';
-import 'package:travo_app_source/presentation/screens/main_app.dart';
+import 'package:job_manager/core/helpers/local_storage_helper.dart';
+import 'package:job_manager/presentation/screens/intro_screen.dart';
+import 'package:job_manager/presentation/screens/main_app.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({Key? key}) : super(key: key);

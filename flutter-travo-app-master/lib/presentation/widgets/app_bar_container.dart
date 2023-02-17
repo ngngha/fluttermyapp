@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:travo_app_source/core/constants/color_palatte.dart';
-import 'package:travo_app_source/core/constants/dimension_constants.dart';
-import 'package:travo_app_source/core/constants/textstyle_ext.dart';
+import 'package:job_manager/core/constants/color_palatte.dart';
+import 'package:job_manager/core/constants/dimension_constants.dart';
+import 'package:job_manager/core/constants/textstyle_ext.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class AppBarContainer extends StatelessWidget {
