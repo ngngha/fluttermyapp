@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:job_manager/core/constants/dimension_constants.dart';
 import 'package:job_manager/core/helpers/asset_helper.dart';
 import 'package:job_manager/core/helpers/image_helper.dart';
-import 'package:job_manager/core/helpers/local_storage_helper.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:job_manager/data/model/user_model.dart';
 import 'package:job_manager/presentation/screens/edit_profile_screen.dart';
 import 'package:job_manager/presentation/screens/signin_screen.dart';
@@ -30,18 +30,36 @@ class ProfileScreenState extends State<ProfileScreen> {
   @override
   Widget build(BuildContext context) {
     return AppBarContainer(
-      title: Padding(
-        padding: EdgeInsets.symmetric(horizontal: kItemPadding),
-        child: Text('Profile'),
+      title: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Icon(
+            Icons.edit,
+            color: Colors.transparent,
+          ),
+          
+          Spacer(),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: const [
+              Text(
+                'Profile',
+              ),
+            ],
+          ),
+          Spacer(),
+          IconButton(
+            onPressed: () {
+              Navigator.of(context).pushNamed(EditProfileScreen.routeName);
+            },
+            icon: Icon(Icons.edit),
+          ),
+        ],
       ),
       child: Scaffold(
-        body:
-            // StreamBuilder<List<UserModel?>>(
-            SingleChildScrollView(
+        body: SingleChildScrollView(
           child: FutureBuilder<UserModel?>(
-            future:
-                // stream:
-                readUserInfo(auth.currentUser!.uid),
+            future: readUserInfo(auth.currentUser!.uid),
             builder: (context, snapshot) {
               if (snapshot.hasData) {
                 return buildProject(snapshot.data as UserModel);
@@ -53,68 +71,16 @@ class ProfileScreenState extends State<ProfileScreen> {
             },
           ),
         ),
-        floatingActionButton: FloatingActionButton(
-          onPressed: () {
-            Navigator.of(context).pushNamed(EditProfileScreen.routeName);
-          },
-          tooltip: 'Increment',
-          child: const Icon(Icons.edit),
-        ),
+        // floatingActionButton: FloatingActionButton(
+        //   onPressed: () {
+        //     Navigator.of(context).pushNamed(EditProfileScreen.routeName);
+        //   },
+        //   tooltip: 'Increment',
+        //   child: const Icon(Icons.edit),
+        // ),
       ),
     );
   }
-
-  Stream<List<UserModel?>> readUserInfo1(String id) => FirebaseFirestore
-      .instance
-      .collection('users')
-      .snapshots()
-      .map((snapshot) =>
-          snapshot.docs.map((id) => UserModel.fromJson(id.data())).toList());
-  // Widget buildProject(Project project) => Container(
-  //       padding: EdgeInsets.only(bottom: 20),
-  //       child: GestureDetector(
-  //         onTap: () {
-  //           Navigator.of(context)
-  //               .pushNamed(AddProject.routeName, arguments: project);
-  //         },
-  //         child: Container(
-  //           padding: EdgeInsets.all(kDefaultPadding),
-  //           decoration: BoxDecoration(
-  //               color: Colors.white,
-  //               boxShadow: const [
-  //                 BoxShadow(
-  //                   color: Colors.black26,
-  //                   blurRadius: 5,
-  //                   offset: Offset(0, 2),
-  //                 ),
-  //               ],
-  //               // color: Colors.grey.withOpacity(0.2),
-  //               borderRadius: BorderRadius.circular(kItemPadding)),
-  //           child: Row(
-  //             children: [
-  //               Icon(FontAwesomeIcons.listCheck, color: Colors.teal),
-  //               SizedBox(
-  //                 width: kDefaultPadding,
-  //               ),
-  //               Column(
-  //                 crossAxisAlignment: CrossAxisAlignment.start,
-  //                 children: [
-  //                   Text(
-  //                     project.name,
-  //                     style: Theme.of(context).textTheme.titleLarge,
-  //                   ),
-  //                   Text(
-  //                     project.user + ' status',
-  //                     style: Theme.of(context).textTheme.titleMedium,
-  //                   ),
-  //                 ],
-  //               ),
-  //               Spacer(),
-  //             ],
-  //           ),
-  //         ),
-  //       ),
-  //     );
 
   Future<UserModel?> readUserInfo(String id) async {
     final result = await FirebaseFirestore.instance
@@ -139,13 +105,12 @@ class ProfileScreenState extends State<ProfileScreen> {
                 AssetHelper.person,
               ),
             ),
-            SizedBox(
-              height: 20,
-            ),
+            Padding(padding: EdgeInsets.all(5)),
+            // Text(user.level, style: TextStyle(fontSize: 16)),
+            Padding(padding: EdgeInsets.all(5)),
             Text(user.email,
-                style: TextStyle(
-                  color: Colors.teal, fontSize: 18
-                )),
+                style: TextStyle(color: Colors.teal, fontSize: 18)),
+
             SizedBox(
               height: 20,
               width: 200,
@@ -153,8 +118,142 @@ class ProfileScreenState extends State<ProfileScreen> {
                 color: Colors.teal.shade700,
               ),
             ),
-            // Text(user.email),
-            // Text(user.detail),
+            Padding(padding: EdgeInsets.all(10)),
+            Column(
+              children: [
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Icon(
+                      Icons.person,
+                      size: 30,
+                    ),
+                    SizedBox(
+                      width: kDefaultPadding,
+                    ),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text('Username'),
+                        Text(
+                          user.username,
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold, fontSize: 16),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+                SizedBox(
+                  height: 20,
+                  width: 200,
+                ),
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Icon(
+                      Icons.email,
+                      size: 30,
+                    ),
+                    SizedBox(
+                      width: kDefaultPadding,
+                    ),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text('Email'),
+                        Text(
+                          user.email,
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold, fontSize: 16),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+                SizedBox(
+                  height: 20,
+                  width: 200,
+                ),
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Icon(
+                      Icons.phone,
+                      size: 30,
+                    ),
+                    SizedBox(
+                      width: kDefaultPadding,
+                    ),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text('Phone'),
+                        Text(
+                          user.phoneNumber,
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold, fontSize: 16),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+                SizedBox(
+                  height: 20,
+                  width: 200,
+                ),
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Icon(
+                        FontAwesomeIcons.venusMars,
+                      ),
+                    SizedBox(
+                      width: kDefaultPadding,
+                    ),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text('Gender'),
+                        Text(
+                          user.gender,
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold, fontSize: 16),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+                SizedBox(
+                  height: 20,
+                  width: 200,
+                ),
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Icon(
+                      Icons.description,
+                      size: 30,
+                    ),
+                    SizedBox(
+                      width: kDefaultPadding,
+                    ),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text('Description'),
+                        Text(
+                          user.detail,
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold, fontSize: 16),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ],
+            ),
+            Padding(padding: EdgeInsets.all(30)),
             SizedBox(
               width: 350,
               height: 50,
@@ -163,6 +262,7 @@ class ProfileScreenState extends State<ProfileScreen> {
                     backgroundColor: Colors.teal,
                     textStyle: const TextStyle(fontSize: 20)),
                 onPressed: () async {
+                  print('3463${auth.currentUser!.email}');
                   logOut();
                 },
                 child: const Text('Đăng xuất'),
@@ -171,9 +271,11 @@ class ProfileScreenState extends State<ProfileScreen> {
           ],
         ),
       );
+
   void logOut() async {
-    LocalStorageHelper.setValue('ignoreIntro', false);
-    await FirebaseAuth.instance.signOut();
+    // LocalStorageHelper.setValue('ignoreIntro', false);
+    await auth.signOut();
+
     Navigator.of(context).pushReplacement(
         MaterialPageRoute(builder: ((context) => SignInScreen())));
   }

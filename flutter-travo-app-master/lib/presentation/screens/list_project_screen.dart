@@ -49,6 +49,7 @@ class _ListProjectState extends State<ListProject> {
               }
             },
           ),
+          
         ),
         floatingActionButton: FloatingActionButton(
           onPressed: () {
@@ -106,6 +107,7 @@ class _ListProjectState extends State<ListProject> {
                   ],
                 ),
                 Spacer(),
+                
               ],
             ),
           ),

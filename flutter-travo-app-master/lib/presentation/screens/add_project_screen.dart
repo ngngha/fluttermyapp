@@ -1,8 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:job_manager/core/constants/dimension_constants.dart';
 import 'package:job_manager/data/model/project_model.dart';
-import 'package:job_manager/data/model/task_model.dart';
 import 'package:job_manager/data/model/user_model.dart';
 import 'package:job_manager/presentation/widgets/app_bar_container.dart';
 
@@ -103,10 +101,10 @@ class _AddProjectState extends State<AddProject> {
                       child: TextFormField(
                         controller: projectNameController,
                         validator: (val) =>
-                            val!.isEmpty ? 'Không được bỏ trống' : null,
+                            val!.isEmpty ? 'Field Project Name cannot be empty.' : null,
                         decoration: InputDecoration(
                             border: OutlineInputBorder(),
-                            hintText: 'Tên dự án',
+                            hintText: 'Project Name',
                             prefixIcon: Icon(
                               Icons.task,
                               color: Colors.teal,
@@ -137,7 +135,9 @@ class _AddProjectState extends State<AddProject> {
                               setState(() {
                                 selected_user = value;
                               });
+                            
                             },
+                            // validator: (value)=> value == null ? 'field required': null,
                           );
                         });
                       }
@@ -153,7 +153,7 @@ class _AddProjectState extends State<AddProject> {
                         controller: projectDetailController,
                         decoration: InputDecoration(
                             border: OutlineInputBorder(),
-                            hintText: 'Mô tả sơ bộ dự án'),
+                            hintText: 'Description Project'),
                       ),
                     ),
                   ),
@@ -181,8 +181,8 @@ class _AddProjectState extends State<AddProject> {
                               }
                             },
                             child: widget.projectModal == null
-                                ? Text('Thêm mới')
-                                : Text('Chỉnh sửa'),
+                                ? Text('Add')
+                                : Text('Edit'),
                           ),
                         ),
                       ],

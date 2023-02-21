@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:job_manager/core/constants/dimension_constants.dart';
 import 'package:job_manager/data/model/task_model.dart';
+import 'package:job_manager/presentation/screens/signin_screen.dart';
 import 'package:job_manager/presentation/screens/task_screen_service.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:job_manager/presentation/widgets/app_bar_container.dart';
@@ -23,7 +24,7 @@ class _ListTaskState extends State<ListTask> {
   }
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
+    
     return AppBarContainer(
       titleString: 'My Tasks',
       title: Padding(
@@ -45,7 +46,7 @@ class _ListTaskState extends State<ListTask> {
                     padding: EdgeInsets.all(0),
                     // padding: EdgeInsets.symmetric(
                     //     vertical: kMediumPadding, horizontal: kDefaultPadding),
-                    children: task.map(buildProject).toList(),
+                    children: task.map(buildTask).toList(),
                   );
                 } else if (snapshot.hasError) {
                   return Text(snapshot.toString());
@@ -68,11 +69,12 @@ class _ListTaskState extends State<ListTask> {
   }
 
   Stream<List<Task>> readTaskInfo(String employeeId) =>
-      FirebaseFirestore.instance.collection('tasks').snapshots().map(
+      FirebaseFirestore.instance.collection('tasks').where('employeeId', isEqualTo: employeeId).snapshots().map(
           (snapshot) => snapshot.docs
-              .map((employeeId) => Task.fromJson(employeeId.data()))
+              .map((employeeId)  => Task.fromJson(employeeId.data()))
               .toList());
-  Widget buildProject(Task task) => Container(
+              
+  Widget buildTask(Task task) => Container(
         padding: EdgeInsets.only(bottom: 20),
         child: GestureDetector(
           onTap: () {
@@ -112,9 +114,31 @@ class _ListTaskState extends State<ListTask> {
                   ],
                 ),
                 Spacer(),
+                SizedBox(
+              width: 350,
+              height: 50,
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.teal,
+                    textStyle: const TextStyle(fontSize: 20)),
+                onPressed: () async {
+                  print('3463${auth.currentUser!.email}');
+                  logOut();
+                },
+                child: const Text('Đăng xuất'),
+              ),
+            ),
               ],
             ),
+            
           ),
         ),
       );
+      void logOut() async {
+    // LocalStorageHelper.setValue('ignoreIntro', false);
+    await auth.signOut();
+
+    Navigator.of(context).pushReplacement(
+        MaterialPageRoute(builder: ((context) => SignInScreen())));
+  }
 }

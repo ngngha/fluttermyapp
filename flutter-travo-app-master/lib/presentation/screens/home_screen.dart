@@ -22,8 +22,8 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  final FirebaseAuth auth = FirebaseAuth.instance;
   String checkIn = "--:--";
+  final FirebaseAuth auth = FirebaseAuth.instance;
   String checkOut = "--:--";
   void getId() async {}
   String dateFormatter = DateFormat.yMMMMd('en_US').format(DateTime.now());
@@ -324,7 +324,7 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Stream<List<Task>> readTaskInfo(String employeeId) =>
-      FirebaseFirestore.instance.collection('tasks').snapshots().map(
+      FirebaseFirestore.instance.collection('tasks').where('employeeId', isEqualTo: employeeId).snapshots().map(
           (snapshot) => snapshot.docs
               .map((employeeId) => Task.fromJson(employeeId.data()))
               .toList());

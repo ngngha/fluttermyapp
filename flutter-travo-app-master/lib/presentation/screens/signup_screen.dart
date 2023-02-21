@@ -203,7 +203,7 @@ class SignUpScreenState extends State<SignUpScreen> {
               email: emailController.text, password: passwordController.text);
       final user = FirebaseAuth.instance.currentUser;
       final name = usernameController.text;
-      await userCredential.user?.updateDisplayName(name);
+      await userCredential.user!.updateDisplayName(name);
       user!.updateDisplayName(usernameController.text);
       final docUser = FirebaseFirestore.instance
           .collection('users')
@@ -212,6 +212,9 @@ class SignUpScreenState extends State<SignUpScreen> {
         id: auth.currentUser!.uid,
         username: name,
         email: emailController.text,
+        detail: '',
+        gender: '',
+        phoneNumber: '',
       );
       final json = userInfo.toJson();
       await docUser.set(json);

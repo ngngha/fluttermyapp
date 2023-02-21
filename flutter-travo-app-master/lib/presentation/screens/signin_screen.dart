@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -27,6 +29,7 @@ class SignInScreenState extends State<SignInScreen> {
 
   @override
   Widget build(BuildContext context) {
+
     final theme = Theme.of(context);
     return Scaffold(
         body: Form(
@@ -171,7 +174,7 @@ class SignInScreenState extends State<SignInScreen> {
   }
 
   void signUserEmailAndPassword() async {
-    if (mounted) {
+    // if (mounted) {
       try {
         var userCredential = await FirebaseAuth.instance
             .signInWithEmailAndPassword(
@@ -197,6 +200,6 @@ class SignInScreenState extends State<SignInScreen> {
         }
         debugPrint(e.toString());
       }
-    }
+    // }
   }
 }

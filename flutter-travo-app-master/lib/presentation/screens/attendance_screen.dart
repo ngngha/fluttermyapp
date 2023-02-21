@@ -3,7 +3,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:month_year_picker/month_year_picker.dart';
-import 'package:job_manager/core/constants/dimension_constants.dart';
 import 'package:job_manager/presentation/widgets/app_bar_container.dart';
 
 class CalendarScreen extends StatefulWidget {
@@ -113,7 +112,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
                             final getMonth = snap[index].id.split(' ')[1];
                             final getYear = snap[index].id.split(' ')[2];
                             final getDay = snap[index].id.split(' ')[0];
-                            final getMY = '${getMonth} ${getYear}';
+                            final getMY = '$getMonth $getYear';
                             return getMY == _month
                                 ? Container(
                                     margin: EdgeInsets.only(

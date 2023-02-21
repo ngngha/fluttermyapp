@@ -21,8 +21,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   final FirebaseAuth auth = FirebaseAuth.instance;
   final FirebaseFirestore firestore = FirebaseFirestore.instance;
   List filterState = [];
-  final _formKey = GlobalKey<FormState>();
-  UserModel? selected_user;
+  // final _formKey = GlobalKey<FormState>();
+  // UserModel? selected_user;
   TextEditingController? userNameController;
   TextEditingController? emailController;
   TextEditingController? userDetailController;
@@ -170,7 +170,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     Icon(
-                      Icons.person,
+                      Icons.email,
                       size: 30,
                     ),
                     SizedBox(
@@ -197,7 +197,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     Icon(
-                      Icons.person,
+                      Icons.account_circle,
                       size: 30,
                     ),
                     SizedBox(
@@ -208,7 +208,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                       children: [
                         Text('Level'),
                         Text(
-                          user.level,
+                          user.email,
                           style: TextStyle(
                               fontWeight: FontWeight.bold, fontSize: 16),
                         ),
@@ -224,7 +224,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     Icon(
-                      Icons.person,
+                      Icons.description,
                       size: 30,
                     ),
                     SizedBox(
@@ -233,7 +233,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text('Detail'),
+                        Text('Description'),
                         Text(
                           user.detail,
                           style: TextStyle(
@@ -276,6 +276,9 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     final docUserInfo = FirebaseFirestore.instance
         .collection('users')
         .doc(widget.userModel!.id.toString());
+    // final docUserInfoauth = FirebaseAuth.instance
+    //     .collection('users')
+    //     .doc(widget.userModel!.id.toString());
     final user = UserModel(
       id: widget.userModel!.id.toString(),
       username: userNameController!.text,
