@@ -1,12 +1,13 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:job_manager/data/model/project_model.dart';
+import 'package:job_manager/data/model/task_model.dart';
 import 'package:job_manager/data/model/user_model.dart';
 import 'package:job_manager/presentation/widgets/app_bar_container.dart';
 
 class AddProject extends StatefulWidget {
-  const AddProject({Key? key, this.projectModal})
-      : super(key: key);
+  const AddProject({Key? key, this.projectModal}) : super(key: key);
   static const String routeName = '/add_project_screen';
   final Project? projectModal;
 
@@ -17,8 +18,10 @@ class AddProject extends StatefulWidget {
 class _AddProjectState extends State<AddProject> {
   final _formKey = GlobalKey<FormState>();
   UserModel? selected_user;
+  
   TextEditingController? userController;
   TextEditingController? projectNameController;
+  // final password= FirebaseAuth.instance.currentUser!.updatePassword(projectNameController!.text);
   TextEditingController? projectDetailController;
   @override
   void initState() {
@@ -68,19 +71,19 @@ class _AddProjectState extends State<AddProject> {
                   ],
                 ),
           Spacer(),
-          Icon(
+          widget.projectModal == null ? Icon(
             Icons.delete,
             color: Colors.transparent,
+          ):
+          IconButton(
+            onPressed: () async {
+              if (_formKey.currentState!.validate()) {
+                deleteProject(name: projectNameController!.text);
+              }
+            },
+            icon: Icon(Icons.delete),
+            // color: Colors.transparent,
           ),
-          // IconButton(
-          //   onPressed: () async {
-          //     if (_formKey.currentState!.validate()) {
-          //       deleteProject(name: projectNameController!.text);
-          //     }
-          //   },
-          //   icon: Icon(Icons.delete),
-          //   color: Colors.transparent,
-          // ),
         ],
       ),
       child: Scaffold(
@@ -100,8 +103,9 @@ class _AddProjectState extends State<AddProject> {
                       width: 350,
                       child: TextFormField(
                         controller: projectNameController,
-                        validator: (val) =>
-                            val!.isEmpty ? 'Field Project Name cannot be empty.' : null,
+                        validator: (val) => val!.isEmpty
+                            ? 'Field Project Name cannot be empty.'
+                            : null,
                         decoration: InputDecoration(
                             border: OutlineInputBorder(),
                             hintText: 'Project Name',
@@ -135,7 +139,6 @@ class _AddProjectState extends State<AddProject> {
                               setState(() {
                                 selected_user = value;
                               });
-                            
                             },
                             // validator: (value)=> value == null ? 'field required': null,
                           );
@@ -213,9 +216,6 @@ class _AddProjectState extends State<AddProject> {
     );
     final json = project.toJson();
     await docProject.set(json);
-    // ScaffoldMessenger.of(context).showSnackBar(
-    //   const SnackBar(content: Text('Thêm thành công dự án')),
-    // );
     Navigator.of(context).pop();
   }
 
@@ -233,23 +233,38 @@ class _AddProjectState extends State<AddProject> {
     await docProject.update(json);
     Navigator.of(context).pop();
     ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('Sửa thành công dự án')),
+      const SnackBar(content: Text('Saved edit')),
     );
   }
 
-//   void deleteProject({required String name}) async {
-//     final docProject = FirebaseFirestore.instance
-//         .collection('project')
-//         .doc(widget.projectModal!.id.toString());
-//     // final docTask = FirebaseFirestore.instance
-//     //     .collection('task')
-//     //     .doc(widget.taskModal!.projectId.toString());
-// // if(taskModel){};
-//     await docProject.delete();
-//     // await docTask.delete();
-//     Navigator.of(context).pop();
-//     ScaffoldMessenger.of(context).showSnackBar(
-//       const SnackBar(content: Text('Đã xóa')),
-//     );
-//   }
+  void deleteProject({required String name}) async {
+    final docProject = FirebaseFirestore.instance
+        .collection('projects')
+        .doc(widget.projectModal!.id.toString());
+    final docTaskProject = FirebaseFirestore.instance
+        .collection('tasks')
+        .doc(widget.projectModal!.id.toString());
+    await docProject.delete();
+    await docTaskProject.delete();
+    deleteByProjectId(widget.projectModal!.id.toString());
+    Navigator.of(context).pop();
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text('Deleted')),
+    );
+  }
+
+  void deleteByProjectId(String projectId) async {
+    List? filterState;
+    final result = await FirebaseFirestore.instance
+        .collection('tasks')
+        .where('projectId', isEqualTo: projectId)
+        .get();
+    filterState = result.docs.map((e) => e.data()).map((el) {
+      final element = el;
+      Task taskModel = Task.fromJson(element);
+      final docUser =
+          FirebaseFirestore.instance.collection('tasks').doc(taskModel.id);
+      docUser.delete();
+    }).toList();
+  }
 }

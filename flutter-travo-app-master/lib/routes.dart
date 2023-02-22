@@ -5,6 +5,7 @@ import 'package:job_manager/data/model/user_model.dart';
 import 'package:job_manager/presentation/screens/add_project_screen.dart';
 import 'package:job_manager/presentation/screens/attendance_screen.dart';
 import 'package:job_manager/presentation/screens/edit_profile_screen.dart';
+import 'package:job_manager/presentation/screens/forgot_password.dart';
 import 'package:job_manager/presentation/screens/intro_screen.dart';
 import 'package:job_manager/presentation/screens/list_project_screen.dart';
 import 'package:job_manager/presentation/screens/list_task_screen.dart';
@@ -17,7 +18,8 @@ import 'package:job_manager/presentation/screens/signup_screen.dart';
 
 final Map<String, WidgetBuilder> routes = {
   IntroScreen.routeName: (context) => IntroScreen(),
-  LoginCheck.routeName: (context) => LoginCheck(),
+  ForgotPasswordScreen.routeName: (context) => ForgotPasswordScreen(),
+  // LoginCheck.routeName: (context) => LoginCheck(),
   SignInScreen.routeName: (context) => SignInScreen(),
   SignUpScreen.routeName: (context) => SignUpScreen(),
   MainApp.routeName: (context) => MainApp(),

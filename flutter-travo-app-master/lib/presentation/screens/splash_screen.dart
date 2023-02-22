@@ -79,6 +79,7 @@ import 'package:flutter/material.dart';
 import 'package:job_manager/core/helpers/local_storage_helper.dart';
 import 'package:job_manager/presentation/screens/intro_screen.dart';
 import 'package:job_manager/presentation/screens/main_app.dart';
+import 'package:job_manager/presentation/screens/splash_services.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({Key? key}) : super(key: key);
@@ -89,25 +90,26 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
+  SplashServices splashScreen = SplashServices();
   @override
   void initState() {
     super.initState();
-
-    _routeToIntroScreen();
+    splashScreen.isLogin(context);
+    // _routeToIntroScreen();
   }
 
-  void _routeToIntroScreen() async {
-    final ignoreIntro = LocalStorageHelper.getValue('ignoreIntro') as bool?;
-    await Future.delayed(Duration(milliseconds: 1000));
-    if (ignoreIntro ?? false) {
-      Navigator.of(context).pushReplacementNamed(MainApp.routeName);
-    } else {
-      LocalStorageHelper.setValue('ignoreIntro', true);
-      if (mounted) {
-        Navigator.of(context).pushReplacementNamed(IntroScreen.routeName);
-      }
-    }
-  }
+  // void _routeToIntroScreen() async {
+  //   final ignoreIntro = LocalStorageHelper.getValue('ignoreIntro') as bool?;
+  //   await Future.delayed(Duration(milliseconds: 1000));
+  //   if (ignoreIntro ?? false) {
+  //     Navigator.of(context).pushReplacementNamed(MainApp.routeName);
+  //   } else {
+  //     LocalStorageHelper.setValue('ignoreIntro', true);
+  //     if (mounted) {
+  //       Navigator.of(context).pushReplacementNamed(IntroScreen.routeName);
+  //     }
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {

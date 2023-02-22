@@ -114,31 +114,31 @@ class _ListTaskState extends State<ListTask> {
                   ],
                 ),
                 Spacer(),
-                SizedBox(
-              width: 350,
-              height: 50,
-              child: ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.teal,
-                    textStyle: const TextStyle(fontSize: 20)),
-                onPressed: () async {
-                  print('3463${auth.currentUser!.email}');
-                  logOut();
-                },
-                child: const Text('Đăng xuất'),
-              ),
-            ),
+            //     SizedBox(
+            //   width: 350,
+            //   height: 50,
+            //   child: ElevatedButton(
+            //     style: ElevatedButton.styleFrom(
+            //         backgroundColor: Colors.teal,
+            //         textStyle: const TextStyle(fontSize: 20)),
+            //     onPressed: () async {
+            //       print('3463${auth.currentUser!.email}');
+            //       logOut();
+            //     },
+            //     child: const Text('Đăng xuất'),
+            //   ),
+            // ),
               ],
             ),
             
           ),
         ),
       );
-      void logOut() async {
-    // LocalStorageHelper.setValue('ignoreIntro', false);
-    await auth.signOut();
+  //     void logOut() async {
+  //   // LocalStorageHelper.setValue('ignoreIntro', false);
+  //   await auth.signOut();
 
-    Navigator.of(context).pushReplacement(
-        MaterialPageRoute(builder: ((context) => SignInScreen())));
-  }
+  //   Navigator.of(context).pushReplacement(
+  //       MaterialPageRoute(builder: ((context) => SignInScreen())));
+  // }
 }

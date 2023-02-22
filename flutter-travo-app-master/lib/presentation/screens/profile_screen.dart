@@ -21,7 +21,7 @@ class ProfileScreen extends StatefulWidget {
 class ProfileScreenState extends State<ProfileScreen> {
   final FirebaseAuth auth = FirebaseAuth.instance;
   final FirebaseFirestore firestore = FirebaseFirestore.instance;
-  List filterState = [];
+
   @override
   void initState() {
     super.initState();
@@ -37,7 +37,6 @@ class ProfileScreenState extends State<ProfileScreen> {
             Icons.edit,
             color: Colors.transparent,
           ),
-          
           Spacer(),
           Column(
             crossAxisAlignment: CrossAxisAlignment.center,
@@ -99,13 +98,10 @@ class ProfileScreenState extends State<ProfileScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            CircleAvatar(
-              radius: 50,
-              child: ImageHelper.loadFromAsset(
-                AssetHelper.person,
-              ),
-            ),
-            Padding(padding: EdgeInsets.all(5)),
+            // Stack(
+            //   children:
+            // ),
+            // Padding(padding: EdgeInsets.all(5)),
             // Text(user.level, style: TextStyle(fontSize: 16)),
             Padding(padding: EdgeInsets.all(5)),
             Text(user.email,
@@ -206,8 +202,8 @@ class ProfileScreenState extends State<ProfileScreen> {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     Icon(
-                        FontAwesomeIcons.venusMars,
-                      ),
+                      FontAwesomeIcons.venusMars,
+                    ),
                     SizedBox(
                       width: kDefaultPadding,
                     ),
@@ -262,10 +258,10 @@ class ProfileScreenState extends State<ProfileScreen> {
                     backgroundColor: Colors.teal,
                     textStyle: const TextStyle(fontSize: 20)),
                 onPressed: () async {
-                  print('3463${auth.currentUser!.email}');
+                  // print('3463${auth.currentUser!.email}');
                   logOut();
                 },
-                child: const Text('Đăng xuất'),
+                child: const Text('Sign out'),
               ),
             ),
           ],

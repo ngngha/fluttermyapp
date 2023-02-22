@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:job_manager/presentation/screens/forgot_password.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:job_manager/presentation/screens/main_app.dart';
 import 'package:job_manager/presentation/screens/signup_screen.dart';
@@ -19,7 +20,7 @@ class SignInScreenState extends State<SignInScreen> {
   final _formKey = GlobalKey<FormState>();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-
+  bool isLoading = false;
   late FirebaseAuth auth;
 
   @override
@@ -29,7 +30,6 @@ class SignInScreenState extends State<SignInScreen> {
 
   @override
   Widget build(BuildContext context) {
-
     final theme = Theme.of(context);
     return Scaffold(
         body: Form(
@@ -117,7 +117,7 @@ class SignInScreenState extends State<SignInScreen> {
                   children: [
                     MaterialButton(
                       onPressed: () {
-                        Navigator.of(context).pushNamed(SignUpScreen.routeName);
+                        Navigator.of(context).pushNamed(ForgotPasswordScreen.routeName);
                       },
                       child: Text(
                         "Forgot password?",
@@ -142,7 +142,13 @@ class SignInScreenState extends State<SignInScreen> {
                             signUserEmailAndPassword();
                           }
                         },
-                        child: const Text('Sign In'),
+                        child: Center(
+                            child: isLoading
+                                ? CircularProgressIndicator(
+                                    strokeWidth: 3,
+                                    color: Colors.white,
+                                  )
+                                : Text('Sign In')),
                       ),
                     ),
                     Row(
@@ -175,31 +181,32 @@ class SignInScreenState extends State<SignInScreen> {
 
   void signUserEmailAndPassword() async {
     // if (mounted) {
-      try {
-        var userCredential = await FirebaseAuth.instance
-            .signInWithEmailAndPassword(
-                email: _emailController.text,
-                password: _passwordController.text);
+    try {
+      var userCredential = await FirebaseAuth.instance
+          .signInWithEmailAndPassword(
+              email: _emailController.text, password: _passwordController.text);
 
-        if (userCredential.user != null) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('Đăng nhập thành công')),
-          );
-          SharedPreferences prefs = await SharedPreferences.getInstance();
-          prefs.setString('displayName', userCredential.user!.displayName!);
-
-          Navigator.of(context).pushReplacementNamed(MainApp.routeName);
-        }
-      } catch (e) {
-        if (mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-                content: Text(
-                    'Tài khoản không tồn tại, hãy đăng ký để có thể đăng nhập')),
-          );
-        }
-        debugPrint(e.toString());
+      if (userCredential.user != null) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Đăng nhập thành công')),
+        );
+        SharedPreferences prefs = await SharedPreferences.getInstance();
+        prefs.setString('displayName', userCredential.user!.displayName!);
+        setState(() {
+          isLoading = true;
+        });
+        Navigator.of(context).pushReplacementNamed(MainApp.routeName);
       }
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+              content: Text(
+                  'Tài khoản không tồn tại, hãy đăng ký để có thể đăng nhập')),
+        );
+      }
+      debugPrint(e.toString());
+    }
     // }
   }
 }

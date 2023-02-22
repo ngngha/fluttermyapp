@@ -154,11 +154,11 @@ class SignUpScreenState extends State<SignUpScreen> {
                         child: ElevatedButton(
                           style: ElevatedButton.styleFrom(
                               backgroundColor: Colors.teal,
-                              textStyle:
-                                  theme.textTheme.titleLarge),
+                              textStyle: theme.textTheme.titleLarge),
                           onPressed: () async {
                             if (_formKey.currentState!.validate()) {
                               createUserEmailAndPassword();
+                              updatePassword();
                               ScaffoldMessenger.of(context).showSnackBar(
                                 const SnackBar(content: Text('Sucess')),
                               );
@@ -175,6 +175,7 @@ class SignUpScreenState extends State<SignUpScreen> {
                           ),
                           MaterialButton(
                             onPressed: () {
+                              
                               Navigator.of(context)
                                   .pushNamed(SignInScreen.routeName);
                             },
@@ -185,6 +186,25 @@ class SignUpScreenState extends State<SignUpScreen> {
                           ),
                         ],
                       ),
+                      // Row(
+                      //   mainAxisAlignment: MainAxisAlignment.end,
+                      //   children: <Widget>[
+                      //     const Text(
+                      //       "Update?",
+                      //     ),
+                      //     MaterialButton(
+                      //       onPressed: () {
+                      //         updatePassword();
+                      //         // Navigator.of(context)
+                      //         //     .pushNamed(.routeName);
+                      //       },
+                      //       child: const Text("Update",
+                      //           style: TextStyle(
+                      //             color: Colors.teal,
+                      //           )),
+                      //     ),
+                      //   ],
+                      // ),
                     ],
                   ),
                 ),
@@ -225,6 +245,20 @@ class SignUpScreenState extends State<SignUpScreen> {
         debugPrint('User mail is confirmed');
       }
       debugPrint(userCredential.toString());
+    } catch (e) {
+      debugPrint(e.toString());
+    }
+  }
+
+  void updatePassword() async {
+    try {
+      final user = FirebaseAuth.instance.currentUser;
+      final passwordChange = usernameController.text;
+      await user!.updatePassword(passwordChange);
+      user!.updatePassword(usernameController.text);
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Saved change')),
+      );
     } catch (e) {
       debugPrint(e.toString());
     }

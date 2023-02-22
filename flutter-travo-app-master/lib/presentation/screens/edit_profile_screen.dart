@@ -1,9 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:job_manager/core/constants/dimension_constants.dart';
-import 'package:job_manager/core/helpers/asset_helper.dart';
-import 'package:job_manager/core/helpers/image_helper.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:job_manager/core/helpers/local_storage_helper.dart';
 import 'package:job_manager/data/model/user_model.dart';
 import 'package:job_manager/presentation/screens/signin_screen.dart';
@@ -18,25 +16,33 @@ class EditProfileScreen extends StatefulWidget {
 }
 
 class _EditProfileScreenState extends State<EditProfileScreen> {
+  final _formKey = GlobalKey<FormState>();
   final FirebaseAuth auth = FirebaseAuth.instance;
-  final FirebaseFirestore firestore = FirebaseFirestore.instance;
-  List filterState = [];
-  // final _formKey = GlobalKey<FormState>();
-  // UserModel? selected_user;
-  TextEditingController? userNameController;
-  TextEditingController? emailController;
+  // final FirebaseFirestore firestore = FirebaseFirestore.instance;
+  // List filterState = [];
+  TextEditingController? usernameController;
+  TextEditingController? userEmailController;
+  TextEditingController? userGenderController;
+  TextEditingController? phoneNumberController;
   TextEditingController? userDetailController;
   @override
   void initState() {
     if (widget.userModel != null) {
-      userNameController =
+      usernameController =
           TextEditingController(text: widget.userModel!.username);
-      emailController = TextEditingController(text: widget.userModel!.email);
+      userEmailController =
+          TextEditingController(text: widget.userModel!.email);
+      userGenderController =
+          TextEditingController(text: widget.userModel!.gender);
+      phoneNumberController =
+          TextEditingController(text: widget.userModel!.phoneNumber);
       userDetailController =
           TextEditingController(text: widget.userModel!.detail);
     } else {
-      userNameController = TextEditingController();
-      emailController = TextEditingController();
+      usernameController = TextEditingController();
+      userEmailController = TextEditingController();
+      userGenderController = TextEditingController();
+      phoneNumberController = TextEditingController();
       userDetailController = TextEditingController();
     }
     super.initState();
@@ -44,6 +50,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
 
   @override
   Widget build(BuildContext context) {
+    print(widget.userModel);
     return AppBarContainer(
       title: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -71,199 +78,224 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
         ],
       ),
       child: Scaffold(
-        body:
-            // StreamBuilder<List<UserModel?>>(
-            SingleChildScrollView(
-          child: FutureBuilder<UserModel?>(
-            future:
-                // stream:
-                readUserInfo(auth.currentUser!.uid),
-            builder: (context, snapshot) {
-              if (snapshot.hasData) {
-                return buildProject(snapshot.data as UserModel);
-              } else if (snapshot.hasError) {
-                return Text(snapshot.toString());
-              } else {
-                return Center(child: CircularProgressIndicator());
-              }
-            },
+          body: Form(
+        key: _formKey,
+        child: CustomScrollView(scrollDirection: Axis.vertical, slivers: [
+          SliverFillRemaining(
+            hasScrollBody: false,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 35),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  // Padding(
+                  //   padding: const EdgeInsets.symmetric(vertical: 10),
+                  //   child: SizedBox(
+                  //     width: 350,
+                  //     child: TextFormField(
+                  //       controller: phoneNumberController,
+                  //       validator: (val) =>
+                  //           val!.isEmpty ? 'This field cannot be empty.' : null,
+                  //       decoration: InputDecoration(
+                  //           border: OutlineInputBorder(),
+                  //           hintText: 'sjhf',
+                  //           prefixIcon: Icon(
+                  //             Icons.person,
+                  //           )),
+                  //     ),
+                  //   ),
+                  // ),
+                  // Padding(
+                  //   padding: const EdgeInsets.symmetric(vertical: 10),
+                  //   child: SizedBox(
+                  //     width: 350,
+                  //     child: TextFormField(
+                  //       controller: phoneNumberController,
+                  //       validator: (val) =>
+                  //           val!.isEmpty ? 'This field cannot be empty.' : null,
+                  //       decoration: InputDecoration(
+                  //           border: OutlineInputBorder(),
+                  //           hintText: 'Email',
+                  //           prefixIcon: Icon(
+                  //             Icons.email,
+                  //           )),
+                  //     ),
+                  //   ),
+                  // ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 10),
+                    child: SizedBox(
+                      width: 350,
+                      child: TextFormField(
+                        controller: phoneNumberController,
+                        validator: (val) =>
+                            val!.isEmpty ? 'This field cannot be empty.' : null,
+                        decoration: InputDecoration(
+                            border: OutlineInputBorder(),
+                            hintText: 'Phone number',
+                            prefixIcon: Icon(
+                              Icons.phone,
+                            )),
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 10),
+                    child: SizedBox(
+                      width: 350,
+                      child: TextFormField(
+                        controller: userGenderController,
+                        validator: (val) =>
+                            val!.isEmpty ? 'This field cannot be empty.' : null,
+                        decoration: InputDecoration(
+                          border: OutlineInputBorder(),
+                          hintText: 'Gender',
+                          prefixIcon: Icon(
+                            FontAwesomeIcons.venusMars,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 10),
+                    child: SizedBox(
+                      width: 350,
+                      child: TextFormField(
+                        minLines: 4,
+                        maxLines: 4,
+                        controller: userDetailController,
+                        decoration: InputDecoration(
+                            border: OutlineInputBorder(),
+                            hintText: 'Description user'),
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 60),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: <Widget>[
+                        SizedBox(
+                          width: 350,
+                          height: 50,
+                          child: ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                                backgroundColor: Colors.teal,
+                                textStyle: const TextStyle(fontSize: 20)),
+                            onPressed: () async {
+                              // final name = projectNameController.text;
+                              if (_formKey.currentState!.validate()) {
+                                updateUserProfile(id: auth.currentUser!.uid);
+                              }
+                            },
+                            child: Text('Save edit'),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
           ),
-        ),
-      ),
+        ]),
+      )),
     );
   }
 
-  Stream<List<UserModel?>> readUserInfo1(String id) => FirebaseFirestore
-      .instance
-      .collection('users')
-      .snapshots()
-      .map((snapshot) =>
-          snapshot.docs.map((id) => UserModel.fromJson(id.data())).toList());
-
-  Future<UserModel?> readUserInfo(String id) async {
-    final result = await FirebaseFirestore.instance
+  void updateUserProfile({required String id}) async {
+    final docUser = FirebaseFirestore.instance
         .collection('users')
-        .where('id', isEqualTo: id)
-        .get();
-
-    final List<UserModel> list =
-        result.docs.map((e) => UserModel.fromJson(e.data())).toList();
-
-    return list.isEmpty ? null : list.first;
+        .doc(widget.userModel!.id.toString());
+    final user = UserModel(
+      id: widget.userModel!.id.toString(),
+      // name: projectNameController!.text,
+      // user: selected_user!.username,
+      detail: userDetailController!.text,
+    );
+    final json = user.toJson();
+    await docUser.update(json);
+    Navigator.of(context).pop();
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text('Saved user info')),
+    );
   }
+  // Stream<List<UserModel?>> readUserInfo1(String id) => FirebaseFirestore
+  //     .instance
+  //     .collection('users')
+  //     .snapshots()
+  //     .map((snapshot) =>
+  //         snapshot.docs.map((id) => UserModel.fromJson(id.data())).toList());
 
-  Widget buildProject(UserModel user) => Align(
-        alignment: Alignment.center,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            CircleAvatar(
-              radius: 50,
-              child: ImageHelper.loadFromAsset(
-                AssetHelper.person,
-              ),
-            ),
-            Padding(padding: EdgeInsets.all(5)),
-            // Text(user.level, style: TextStyle(fontSize: 16)),
-            Padding(padding: EdgeInsets.all(5)),
-            Text(user.email,
-                style: TextStyle(color: Colors.teal, fontSize: 18)),
+  // Future<UserModel?> readUserInfo(String id) async {
+  //   final result = await FirebaseFirestore.instance
+  //       .collection('users')
+  //       .where('id', isEqualTo: id)
+  //       .get();
 
-            SizedBox(
-              height: 20,
-              width: 200,
-              child: Divider(
-                color: Colors.teal.shade700,
-              ),
-            ),
-            Padding(padding: EdgeInsets.all(10)),
-            Column(
-              children: [
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Icon(
-                      Icons.person,
-                      size: 30,
-                    ),
-                    SizedBox(
-                      width: kDefaultPadding,
-                    ),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text('Username'),
-                        Text(
-                          user.username,
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold, fontSize: 16),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-                SizedBox(
-                  height: 20,
-                  width: 200,
-                ),
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Icon(
-                      Icons.email,
-                      size: 30,
-                    ),
-                    SizedBox(
-                      width: kDefaultPadding,
-                    ),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text('Email'),
-                        Text(
-                          user.email,
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold, fontSize: 16),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-                SizedBox(
-                  height: 20,
-                  width: 200,
-                ),
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Icon(
-                      Icons.account_circle,
-                      size: 30,
-                    ),
-                    SizedBox(
-                      width: kDefaultPadding,
-                    ),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text('Level'),
-                        Text(
-                          user.email,
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold, fontSize: 16),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-                SizedBox(
-                  height: 20,
-                  width: 200,
-                ),
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Icon(
-                      Icons.description,
-                      size: 30,
-                    ),
-                    SizedBox(
-                      width: kDefaultPadding,
-                    ),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text('Description'),
-                        Text(
-                          user.detail,
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold, fontSize: 16),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              ],
-            ),
-            Padding(padding: EdgeInsets.all(30)),
-            // SizedBox(
-            //   width: 350,
-            //   height: 50,
-            //   child: ElevatedButton(
-            //     style: ElevatedButton.styleFrom(
-            //         backgroundColor: Colors.teal,
-            //         textStyle: const TextStyle(fontSize: 20)),
-            //     onPressed: () async {
-            //       if (_formKey.currentState!.validate()) {
-            //         updateUserInfo(id: user.id);
-            //       }
-            //     },
-            //     child: const Text('Submit'),
-            //   ),
-            // ),
-          ],
-        ),
-      );
+  //   final List<UserModel> list =
+  //       result.docs.map((e) => UserModel.fromJson(e.data())).toList();
+
+  //   return list.isEmpty ? null : list.first;
+  // }
+
+  // Widget buildProject(UserModel user) => Align(
+  //       alignment: Alignment.center,
+  //       child: Column(
+  //         mainAxisAlignment: MainAxisAlignment.center,
+  //         children: [
+  //           CircleAvatar(
+  //             radius: 50,
+  //             child: ImageHelper.loadFromAsset(
+  //               AssetHelper.person,
+  //             ),
+  //           ),
+  //           Padding(padding: EdgeInsets.all(5)),
+  //           Text(user.email,
+  //               style: TextStyle(color: Colors.teal, fontSize: 18)),
+  //           SizedBox(
+  //             height: 20,
+  //             width: 200,
+  //             child: Divider(
+  //               color: Colors.teal.shade700,
+  //             ),
+  //           ),
+  //           Padding(padding: EdgeInsets.all(10)),
+  //           Padding(
+  //                   padding: const EdgeInsets.symmetric(vertical: 10),
+  //                   child: SizedBox(
+  //                     width: 350,
+  //                     child: TextFormField(
+  //                       minLines: 4,
+  //                       maxLines: 4,
+  //                       controller: us,
+  //                       decoration: InputDecoration(
+  //                           border: OutlineInputBorder(),
+  //                           hintText: 'Description Project'),
+  //                     ),
+  //                   ),
+  //                 ),
+  //           Padding(padding: EdgeInsets.all(30)),
+  //           // SizedBox(
+  //           //   width: 350,
+  //           //   height: 50,
+  //           //   child: ElevatedButton(
+  //           //     style: ElevatedButton.styleFrom(
+  //           //         backgroundColor: Colors.teal,
+  //           //         textStyle: const TextStyle(fontSize: 20)),
+  //           //     onPressed: () async {
+  //           //       if (_formKey.currentState!.validate()) {
+  //           //         updateUserInfo(id: user.id);
+  //           //       }
+  //           //     },
+  //           //     child: const Text('Submit'),
+  //           //   ),
+  //           // ),
+  //         ],
+  //       ),
+  //     );
 
   void logOut() async {
     LocalStorageHelper.setValue('ignoreIntro', false);
@@ -281,8 +313,6 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     //     .doc(widget.userModel!.id.toString());
     final user = UserModel(
       id: widget.userModel!.id.toString(),
-      username: userNameController!.text,
-      email: emailController!.text,
       detail: userDetailController!.text,
     );
     final json = user.toJson();
