@@ -7,6 +7,7 @@ import 'package:job_manager/presentation/screens/attendance_screen.dart';
 import 'package:job_manager/presentation/screens/edit_profile_screen.dart';
 import 'package:job_manager/presentation/screens/forgot_password.dart';
 import 'package:job_manager/presentation/screens/intro_screen.dart';
+import 'package:job_manager/presentation/screens/list_employee.dart';
 import 'package:job_manager/presentation/screens/list_project_screen.dart';
 import 'package:job_manager/presentation/screens/list_task_screen.dart';
 import 'package:job_manager/presentation/screens/profile_screen.dart';
@@ -24,6 +25,7 @@ final Map<String, WidgetBuilder> routes = {
   SignUpScreen.routeName: (context) => SignUpScreen(),
   MainApp.routeName: (context) => MainApp(),
   CalendarScreen.routeName: (context) => CalendarScreen(),
+  ListEmployee.routeName: (context) => ListEmployee(),
 };
 
  MaterialPageRoute<dynamic>? generateRoutes(RouteSettings settings) {

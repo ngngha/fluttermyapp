@@ -3,7 +3,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:job_manager/core/constants/dimension_constants.dart';
 import 'package:job_manager/data/model/task_model.dart';
-import 'package:job_manager/presentation/screens/signin_screen.dart';
 import 'package:job_manager/presentation/screens/task_screen_service.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:job_manager/presentation/widgets/app_bar_container.dart';
@@ -34,27 +33,23 @@ class _ListTaskState extends State<ListTask> {
       child: Scaffold(
         body: RefreshIndicator(
           onRefresh: refresh,
-          child: Container(
-            // padding: EdgeInsets.symmetric(
-            //     vertical: kMediumPadding, horizontal: kDefaultPadding),
-            child: StreamBuilder<List<Task>>(
-              stream: readTaskInfo(auth.currentUser!.uid),
-              builder: (context, snapshot) {
-                if (snapshot.hasData) {
-                  final task = snapshot.data!;
-                  return ListView(
-                    padding: EdgeInsets.all(0),
-                    // padding: EdgeInsets.symmetric(
-                    //     vertical: kMediumPadding, horizontal: kDefaultPadding),
-                    children: task.map(buildTask).toList(),
-                  );
-                } else if (snapshot.hasError) {
-                  return Text(snapshot.toString());
-                } else {
-                  return Center(child: CircularProgressIndicator());
-                }
-              },
-            ),
+          child: StreamBuilder<List<Task>>(
+            stream: readTaskInfo(auth.currentUser!.uid),
+            builder: (context, snapshot) {
+              if (snapshot.hasData) {
+                final task = snapshot.data!;
+                return ListView(
+                  padding: EdgeInsets.all(0),
+                  // padding: EdgeInsets.symmetric(
+                  //     vertical: kMediumPadding, horizontal: kDefaultPadding),
+                  children: task.map(buildTask).toList(),
+                );
+              } else if (snapshot.hasError) {
+                return Text(snapshot.toString());
+              } else {
+                return Center(child: CircularProgressIndicator());
+              }
+            },
           ),
         ),
         floatingActionButton: FloatingActionButton(

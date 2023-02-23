@@ -5,6 +5,7 @@ import 'package:intl/intl.dart';
 import 'package:job_manager/core/constants/textstyle_ext.dart';
 import 'package:job_manager/data/model/task_model.dart';
 import 'package:job_manager/presentation/screens/attendance_screen.dart';
+import 'package:job_manager/presentation/screens/list_employee.dart';
 import 'package:job_manager/presentation/screens/list_task_screen.dart';
 import 'package:job_manager/presentation/screens/profile_screen.dart';
 import 'package:job_manager/presentation/screens/task_screen_service.dart';
@@ -283,7 +284,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       child: Icon(FontAwesomeIcons.user, color: Colors.teal),
                     ),
                     Colors.teal, () {
-                  Navigator.of(context).pushNamed(ProfileScreen.routeName);
+                  Navigator.of(context).pushNamed(ListEmployee.routeName);
                 }, 'Employee'),
               ),
             ],

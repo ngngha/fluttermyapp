@@ -17,21 +17,18 @@ class EditProfileScreen extends StatefulWidget {
 
 class _EditProfileScreenState extends State<EditProfileScreen> {
   final _formKey = GlobalKey<FormState>();
-  final FirebaseAuth auth = FirebaseAuth.instance;
-  // final FirebaseFirestore firestore = FirebaseFirestore.instance;
-  // List filterState = [];
-  TextEditingController? usernameController;
-  TextEditingController? userEmailController;
-  TextEditingController? userGenderController;
-  TextEditingController? phoneNumberController;
-  TextEditingController? userDetailController;
+  String currentUserId = FirebaseAuth.instance.currentUser!.uid;
+  String? currentUserEmail = FirebaseAuth.instance.currentUser!.email;
+  User? currentUser = FirebaseAuth.instance.currentUser;
+  late TextEditingController usernameController;
+  late TextEditingController userGenderController;
+  late TextEditingController phoneNumberController;
+  late TextEditingController userDetailController;
   @override
   void initState() {
     if (widget.userModel != null) {
       usernameController =
           TextEditingController(text: widget.userModel!.username);
-      userEmailController =
-          TextEditingController(text: widget.userModel!.email);
       userGenderController =
           TextEditingController(text: widget.userModel!.gender);
       phoneNumberController =
@@ -40,7 +37,6 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
           TextEditingController(text: widget.userModel!.detail);
     } else {
       usernameController = TextEditingController();
-      userEmailController = TextEditingController();
       userGenderController = TextEditingController();
       phoneNumberController = TextEditingController();
       userDetailController = TextEditingController();
@@ -50,7 +46,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
 
   @override
   Widget build(BuildContext context) {
-    print(widget.userModel);
+    // print(currentUserId);
+    // User? currentUser = auth.currentUser;
     return AppBarContainer(
       title: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -88,89 +85,12 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  // Padding(
-                  //   padding: const EdgeInsets.symmetric(vertical: 10),
-                  //   child: SizedBox(
-                  //     width: 350,
-                  //     child: TextFormField(
-                  //       controller: phoneNumberController,
-                  //       validator: (val) =>
-                  //           val!.isEmpty ? 'This field cannot be empty.' : null,
-                  //       decoration: InputDecoration(
-                  //           border: OutlineInputBorder(),
-                  //           hintText: 'sjhf',
-                  //           prefixIcon: Icon(
-                  //             Icons.person,
-                  //           )),
-                  //     ),
-                  //   ),
-                  // ),
-                  // Padding(
-                  //   padding: const EdgeInsets.symmetric(vertical: 10),
-                  //   child: SizedBox(
-                  //     width: 350,
-                  //     child: TextFormField(
-                  //       controller: phoneNumberController,
-                  //       validator: (val) =>
-                  //           val!.isEmpty ? 'This field cannot be empty.' : null,
-                  //       decoration: InputDecoration(
-                  //           border: OutlineInputBorder(),
-                  //           hintText: 'Email',
-                  //           prefixIcon: Icon(
-                  //             Icons.email,
-                  //           )),
-                  //     ),
-                  //   ),
-                  // ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 10),
-                    child: SizedBox(
-                      width: 350,
-                      child: TextFormField(
-                        controller: phoneNumberController,
-                        validator: (val) =>
-                            val!.isEmpty ? 'This field cannot be empty.' : null,
-                        decoration: InputDecoration(
-                            border: OutlineInputBorder(),
-                            hintText: 'Phone number',
-                            prefixIcon: Icon(
-                              Icons.phone,
-                            )),
-                      ),
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 10),
-                    child: SizedBox(
-                      width: 350,
-                      child: TextFormField(
-                        controller: userGenderController,
-                        validator: (val) =>
-                            val!.isEmpty ? 'This field cannot be empty.' : null,
-                        decoration: InputDecoration(
-                          border: OutlineInputBorder(),
-                          hintText: 'Gender',
-                          prefixIcon: Icon(
-                            FontAwesomeIcons.venusMars,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 10),
-                    child: SizedBox(
-                      width: 350,
-                      child: TextFormField(
-                        minLines: 4,
-                        maxLines: 4,
-                        controller: userDetailController,
-                        decoration: InputDecoration(
-                            border: OutlineInputBorder(),
-                            hintText: 'Description user'),
-                      ),
-                    ),
-                  ),
+                  streamBuilderEditUserName(
+                      currentUser, "username", "Username"),
+                  streamBuilderEditPhone(
+                      currentUser, "phoneNumber", "Phone number"),
+                  streamBuilderEditGender(currentUser, "gender", "Gender"),
+                  streamBuilderEditInfo(currentUser, "detail", "Detail"),
                   Padding(
                     padding: const EdgeInsets.symmetric(vertical: 60),
                     child: Column(
@@ -185,9 +105,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                                 backgroundColor: Colors.teal,
                                 textStyle: const TextStyle(fontSize: 20)),
                             onPressed: () async {
-                              // final name = projectNameController.text;
                               if (_formKey.currentState!.validate()) {
-                                updateUserProfile(id: auth.currentUser!.uid);
+                                updateUserProfile(id: currentUserId);
                               }
                             },
                             child: Text('Save edit'),
@@ -206,14 +125,15 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   }
 
   void updateUserProfile({required String id}) async {
-    final docUser = FirebaseFirestore.instance
-        .collection('users')
-        .doc(widget.userModel!.id.toString());
+    final docUser =
+        FirebaseFirestore.instance.collection('users').doc(currentUserId);
     final user = UserModel(
-      id: widget.userModel!.id.toString(),
-      // name: projectNameController!.text,
-      // user: selected_user!.username,
-      detail: userDetailController!.text,
+      id: currentUserId,
+      username: usernameController.text,
+      email: currentUserEmail ?? "",
+      phoneNumber: phoneNumberController.text,
+      gender: userGenderController.text,
+      detail: userDetailController.text,
     );
     final json = user.toJson();
     await docUser.update(json);
@@ -222,104 +142,115 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
       const SnackBar(content: Text('Saved user info')),
     );
   }
-  // Stream<List<UserModel?>> readUserInfo1(String id) => FirebaseFirestore
-  //     .instance
-  //     .collection('users')
-  //     .snapshots()
-  //     .map((snapshot) =>
-  //         snapshot.docs.map((id) => UserModel.fromJson(id.data())).toList());
 
-  // Future<UserModel?> readUserInfo(String id) async {
-  //   final result = await FirebaseFirestore.instance
-  //       .collection('users')
-  //       .where('id', isEqualTo: id)
-  //       .get();
+  StreamBuilder<DocumentSnapshot<Map<String, dynamic>>>
+      streamBuilderEditUserName(
+          User? currentUser, String name, String labelName) {
+    return StreamBuilder<DocumentSnapshot<Map<String, dynamic>>>(
+      stream: getUserInfo(),
+      builder: (context, snapshot) {
+        if (!snapshot.hasData) {
+          return const Center(child: CircularProgressIndicator());
+        }
+        if (usernameController.text.isNotEmpty) {
+          currentUser!.updateDisplayName(usernameController.text);
+        }
+        return TextFormField(
+          controller: usernameController,
+          validator: (val) => val!.isEmpty
+              ? 'Field can not be empty'
+              : null,
+          decoration: InputDecoration(
+              labelText: labelName,
+              border: const OutlineInputBorder(),
+              prefixIcon: Icon(
+                Icons.person,
+              )),
+        );
+      },
+    );
+  }
 
-  //   final List<UserModel> list =
-  //       result.docs.map((e) => UserModel.fromJson(e.data())).toList();
+  StreamBuilder<DocumentSnapshot<Map<String, dynamic>>> streamBuilderEditPhone(
+      User? currentUser, String name, String labelName) {
+    return StreamBuilder<DocumentSnapshot<Map<String, dynamic>>>(
+      stream: getUserInfo(),
+      builder: (context, snapshot) {
+        if (!snapshot.hasData) {
+          return const Center(child: CircularProgressIndicator());
+        }
+        return TextFormField(
+          controller: phoneNumberController,
+          validator: (val) => val!.isEmpty ||
+                  !RegExp(r'^\s*(?:\+?(\d{1,3}))?[-. (]*(\d{3})[-. )]*(\d{3})[-. ]*(\d{4})(?: *x(\d+))?\s*$')
+                      .hasMatch(val)
+              ? 'Must be a valid phone number'
+              : null,
+          decoration: InputDecoration(
+              labelText: labelName,
+              border: const OutlineInputBorder(),
+              prefixIcon: Icon(
+                Icons.phone,
+              )),
+        );
+      },
+    );
+  }
 
-  //   return list.isEmpty ? null : list.first;
-  // }
+  StreamBuilder<DocumentSnapshot<Map<String, dynamic>>> streamBuilderEditGender(
+      User? currentUser, String name, String labelName) {
+    return StreamBuilder<DocumentSnapshot<Map<String, dynamic>>>(
+      stream: getUserInfo(),
+      builder: (context, snapshot) {
+        if (!snapshot.hasData) {
+          return const Center(child: CircularProgressIndicator());
+        }
+        return TextField(
+          controller: userGenderController,
+          decoration: InputDecoration(
+              labelText: labelName,
+              border: const OutlineInputBorder(),
+              prefixIcon: Icon(
+                FontAwesomeIcons.venusMars,
+              )),
+        );
+      },
+    );
+  }
 
-  // Widget buildProject(UserModel user) => Align(
-  //       alignment: Alignment.center,
-  //       child: Column(
-  //         mainAxisAlignment: MainAxisAlignment.center,
-  //         children: [
-  //           CircleAvatar(
-  //             radius: 50,
-  //             child: ImageHelper.loadFromAsset(
-  //               AssetHelper.person,
-  //             ),
-  //           ),
-  //           Padding(padding: EdgeInsets.all(5)),
-  //           Text(user.email,
-  //               style: TextStyle(color: Colors.teal, fontSize: 18)),
-  //           SizedBox(
-  //             height: 20,
-  //             width: 200,
-  //             child: Divider(
-  //               color: Colors.teal.shade700,
-  //             ),
-  //           ),
-  //           Padding(padding: EdgeInsets.all(10)),
-  //           Padding(
-  //                   padding: const EdgeInsets.symmetric(vertical: 10),
-  //                   child: SizedBox(
-  //                     width: 350,
-  //                     child: TextFormField(
-  //                       minLines: 4,
-  //                       maxLines: 4,
-  //                       controller: us,
-  //                       decoration: InputDecoration(
-  //                           border: OutlineInputBorder(),
-  //                           hintText: 'Description Project'),
-  //                     ),
-  //                   ),
-  //                 ),
-  //           Padding(padding: EdgeInsets.all(30)),
-  //           // SizedBox(
-  //           //   width: 350,
-  //           //   height: 50,
-  //           //   child: ElevatedButton(
-  //           //     style: ElevatedButton.styleFrom(
-  //           //         backgroundColor: Colors.teal,
-  //           //         textStyle: const TextStyle(fontSize: 20)),
-  //           //     onPressed: () async {
-  //           //       if (_formKey.currentState!.validate()) {
-  //           //         updateUserInfo(id: user.id);
-  //           //       }
-  //           //     },
-  //           //     child: const Text('Submit'),
-  //           //   ),
-  //           // ),
-  //         ],
-  //       ),
-  //     );
+  StreamBuilder<DocumentSnapshot<Map<String, dynamic>>> streamBuilderEditInfo(
+      User? currentUser, String name, String labelName) {
+    return StreamBuilder<DocumentSnapshot<Map<String, dynamic>>>(
+      stream: getUserInfo(),
+      builder: (context, snapshot) {
+        if (!snapshot.hasData) {
+          return const Center(child: CircularProgressIndicator());
+        }
+        return TextField(
+          controller: userDetailController,
+          decoration: InputDecoration(
+              labelText: labelName,
+              border: const OutlineInputBorder(),
+              prefixIcon: Icon(
+                Icons.description,
+              )),
+        );
+      },
+    );
+  }
+
+  Stream<DocumentSnapshot<Map<String, dynamic>>> getUserInfo() {
+    var collection = FirebaseFirestore.instance
+        .collection("users")
+        .doc(currentUserId)
+        .snapshots();
+    return collection;
+  }
 
   void logOut() async {
     LocalStorageHelper.setValue('ignoreIntro', false);
     await FirebaseAuth.instance.signOut();
     Navigator.of(context).pushReplacement(
         MaterialPageRoute(builder: ((context) => SignInScreen())));
-  }
-
-  void updateUserInfo({required String id}) async {
-    final docUserInfo = FirebaseFirestore.instance
-        .collection('users')
-        .doc(widget.userModel!.id.toString());
-    // final docUserInfoauth = FirebaseAuth.instance
-    //     .collection('users')
-    //     .doc(widget.userModel!.id.toString());
-    final user = UserModel(
-      id: widget.userModel!.id.toString(),
-      detail: userDetailController!.text,
-    );
-    final json = user.toJson();
-    await docUserInfo.update(json);
-    Navigator.of(context).pop();
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('Sửa thành công dự án')),
-    );
   }
 }

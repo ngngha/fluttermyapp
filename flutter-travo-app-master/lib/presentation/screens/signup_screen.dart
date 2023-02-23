@@ -255,7 +255,7 @@ class SignUpScreenState extends State<SignUpScreen> {
       final user = FirebaseAuth.instance.currentUser;
       final passwordChange = usernameController.text;
       await user!.updatePassword(passwordChange);
-      user!.updatePassword(usernameController.text);
+      user.updatePassword(usernameController.text);
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Saved change')),
       );

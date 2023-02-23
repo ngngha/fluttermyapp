@@ -1,5 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:confirm_dialog/confirm_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:job_manager/data/model/project_model.dart';
 import 'package:job_manager/data/model/task_model.dart';
@@ -18,7 +18,7 @@ class AddProject extends StatefulWidget {
 class _AddProjectState extends State<AddProject> {
   final _formKey = GlobalKey<FormState>();
   UserModel? selected_user;
-  
+ bool isLoading = false;
   TextEditingController? userController;
   TextEditingController? projectNameController;
   // final password= FirebaseAuth.instance.currentUser!.updatePassword(projectNameController!.text);
@@ -77,8 +77,21 @@ class _AddProjectState extends State<AddProject> {
           ):
           IconButton(
             onPressed: () async {
-              if (_formKey.currentState!.validate()) {
+              if (await confirm(
+                      context,
+                      title: const Text('Please Confirm'),
+                      content: Text(
+                          "Are you sure you want to delete '${projectNameController!.text}' ?"),
+                      textOK: const Text('Confirm'),
+                      textCancel: const Text('Cancel'),
+                    )) {
+                      setState(() {
+                        isLoading = true;
+                      });
                 deleteProject(name: projectNameController!.text);
+                setState(() {
+                        isLoading = false;
+                      });
               }
             },
             icon: Icon(Icons.delete),
@@ -87,7 +100,7 @@ class _AddProjectState extends State<AddProject> {
         ],
       ),
       child: Scaffold(
-          body: Form(
+          body: isLoading ? CircularProgressIndicator() : Form(
         key: _formKey,
         child: CustomScrollView(scrollDirection: Axis.vertical, slivers: [
           SliverFillRemaining(
@@ -241,11 +254,11 @@ class _AddProjectState extends State<AddProject> {
     final docProject = FirebaseFirestore.instance
         .collection('projects')
         .doc(widget.projectModal!.id.toString());
-    final docTaskProject = FirebaseFirestore.instance
-        .collection('tasks')
-        .doc(widget.projectModal!.id.toString());
+    // final docTaskProject = FirebaseFirestore.instance
+    //     .collection('tasks')
+    //     .doc(widget.projectModal!.id.toString());
     await docProject.delete();
-    await docTaskProject.delete();
+    // await docTaskProject.delete();
     deleteByProjectId(widget.projectModal!.id.toString());
     Navigator.of(context).pop();
     ScaffoldMessenger.of(context).showSnackBar(

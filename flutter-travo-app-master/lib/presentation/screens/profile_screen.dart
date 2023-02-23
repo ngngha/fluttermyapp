@@ -21,7 +21,6 @@ class ProfileScreen extends StatefulWidget {
 class ProfileScreenState extends State<ProfileScreen> {
   final FirebaseAuth auth = FirebaseAuth.instance;
   final FirebaseFirestore firestore = FirebaseFirestore.instance;
-
   @override
   void initState() {
     super.initState();
@@ -82,6 +81,7 @@ class ProfileScreenState extends State<ProfileScreen> {
   }
 
   Future<UserModel?> readUserInfo(String id) async {
+    setState(() {});
     final result = await FirebaseFirestore.instance
         .collection('users')
         .where('id', isEqualTo: id)
